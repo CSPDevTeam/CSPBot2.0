@@ -41,6 +41,12 @@ CSPBot::CSPBot(QWidget *parent)
     shadow_effect->setBlurRadius(10);
     ui.background->setGraphicsEffect(shadow_effect);
 
+    //滚动条
+    vector<QScrollBar*> bars = { ui.ServerLog->verticalScrollBar(),ui.botconsole->verticalScrollBar() };
+    for (QScrollBar* bar : bars) {
+        setAllScrollbar(bar);
+    }
+
     //阴影设置
     vector<QWidget*> buttons = {
         ui.ServerLog,
@@ -65,6 +71,8 @@ CSPBot::CSPBot(QWidget *parent)
     ui.version->setText("V" + Helper::stdString2QString(version));
 
     //////// Bind ////////
+    //注册并绑定
+    qRegisterMetaType<StringMap>("StringMap");
     //翻页按钮
     connect(ui.mainPage, SIGNAL(clicked()), this, SLOT(switchPage()));
     connect(ui.playerPage, SIGNAL(clicked()), this, SLOT(switchPage()));
@@ -78,7 +86,20 @@ CSPBot::CSPBot(QWidget *parent)
 
     //绑定事件
     connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
-    //connect(this, SIGNAL(ilog()), this, SLOT(insertLog()));
+    connect(this,SIGNAL(signalStartServer()), this, SLOT(startServer()));
+    
+    //Server类按钮
+    connect(ui.start, SIGNAL(clicked()), this, SLOT(startServer()));
+    connect(ui.stop, SIGNAL(clicked()), this, SLOT(stopServer()));
+    connect(ui.forceStop, SIGNAL(clicked()), this, SLOT(forceStopServer()));
+    connect(ui.clear, SIGNAL(clicked()), this, SLOT(clear_console()));
+    connect(ui.ServerCmd, SIGNAL(clicked()), this, SLOT(startCmd())); //绑定启动cmd
+    connect(ui.runCmd, SIGNAL(clicked()), this, SLOT(insertCmd())); //绑定运行命令
+
+    //绑定快捷键
+    connect(this, SIGNAL(runCommand()), this, SLOT(insertCmd())); //绑定回车输入命令
+    connect(this, SIGNAL(runCmd()), ui.ServerCmd, SLOT(click())); //绑定启动cmd
+
 
     //////// Mirai ////////
     mirai = new Mirai();
@@ -90,6 +111,11 @@ CSPBot::CSPBot(QWidget *parent)
     connect(loggerReader, SIGNAL(updateLog(QString)), this, SLOT(insertLog(QString)));
     loggerReader->start();
     connectMirai();
+
+    /////// Other /////////
+    ui.inputCmd->setEnabled(false);
+    ui.runCmd->setEnabled(false);
+    ui.ServerLog->setEnabled(false);
 
 }
 
@@ -268,18 +294,20 @@ void CSPBot::on_actionMinimize_triggered()
 }
 void CSPBot::on_actionClose_triggered()
 {
-    c_pAnimation->setTargetObject(this);
-    c_pOpacity->setOpacity(0);
-    setGraphicsEffect(c_pOpacity);
-    c_pAnimation->setTargetObject(c_pOpacity);
-    c_pAnimation->setPropertyName("opacity");
-    c_pAnimation->setStartValue(1);
-    c_pAnimation->setEndValue(0);
-    c_pAnimation->start();
+    if (checkClose()) {
+        c_pAnimation->setTargetObject(this);
+        c_pOpacity->setOpacity(0);
+        setGraphicsEffect(c_pOpacity);
+        c_pAnimation->setTargetObject(c_pOpacity);
+        c_pAnimation->setPropertyName("opacity");
+        c_pAnimation->setStartValue(1);
+        c_pAnimation->setEndValue(0);
+        c_pAnimation->start();
+    }
 }
 
-void CSPBot::closeEvent(QCloseEvent* event) {
-    /*if (server != nullptr && server->started) {
+bool CSPBot::checkClose() {
+    if (server != nullptr && server->started) {
         auto temp = QMessageBox::warning(
             this,
             u8"警告",
@@ -289,19 +317,152 @@ void CSPBot::closeEvent(QCloseEvent* event) {
         if (temp == QMessageBox::Yes)
         {
             server->forceStopServer();
-            Callbacker cbe(EventCode::onStop);
+            /*Callbacker cbe(EventCode::onStop);
             if (cbe.callback()) {
                 event->accept();
             }
             else {
                 event->ignore();
-            }
-
+            }*/
         }
         else
         {
-            event->ignore();
+            return false;
         }
+    }
+    return true;
+}
 
-    }*/
+///////////////////////////////////////////// Server /////////////////////////////////////////////
+//构造Server
+void CSPBot::buildServer(int mode) {
+    server = new Server(mode,this);
+    //绑定检测器
+    connect(server, SIGNAL(insertBDSLog(QString)), this, SLOT(slotInsertBDSLog(QString)));
+    connect(server, SIGNAL(OtherCallback(QString,StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
+    connect(server, SIGNAL(chenableForce(bool)), this, SLOT(slotChenableForce(bool)));
+    connect(server, SIGNAL(chLabel(QString, QString)), this, SLOT(slotChLabel(QString, QString)));
+    connect(server, SIGNAL(changeStatus(bool)), this, SLOT(slotChangeStatus(bool)));
+    //启动Server线程
+    server->start();
+}
+
+//插入BDS日志
+void CSPBot::slotInsertBDSLog(QString log) {
+    ui.ServerLog->setReadOnly(false);
+    ui.ServerLog->append(log);
+    ui.ServerLog->setReadOnly(true);
+}; 
+
+//Callback
+void CSPBot::slotOtherCallback(QString listener, StringMap args) {
+    
+}; 
+
+//更改状态
+void CSPBot::slotChangeStatus(bool a) {
+    if (a) {
+        ui.ServerStatus->setText(u8"状态: 已启动");
+    }
+    else {
+        ui.ServerStatus->setText(u8"状态: 未启动");
+    }
+}; 
+
+//更改标签
+void CSPBot::slotChLabel(QString title, QString content) {
+    if (title == "world") {
+        ui.ServerWorld->setText(u8"世界:" + content);
+    }
+    else if (title == "version") {
+        ui.ServerVersion->setText(u8"版本:" + content);
+    }
+    else if (title == "difficult") {
+        ui.ServerDifficult->setText(u8"难度:" + content);
+    }
+}; 
+
+//更改强制停止状态
+void CSPBot::slotChenableForce(bool a) {
+    ui.forceStop->setEnabled(a);
+    if (a) {
+        /*ui.change->setText(u8"停止");*/
+        ui.stop->setEnabled(true);
+        ui.start->setEnabled(false);
+        ui.inputCmd->setEnabled(true);
+        ui.runCmd->setEnabled(true);
+    }
+    else {
+        /*ui.change->setText(u8"启动");*/
+        ui.stop->setEnabled(false);
+        ui.start->setEnabled(true);
+        ui.inputCmd->setEnabled(false);
+        ui.runCmd->setEnabled(false);
+    }
+}; 
+
+//开启服务器
+void CSPBot::startServer() {
+    buildServer(0);
+    ui.stop->setEnabled(true);
+    slotInsertBDSLog(u8"[CSPBot] 已向进程发出启动命令");
+    ui.start->setEnabled(false);
+}
+
+//开启Cmd
+void CSPBot::startCmd() {
+    buildServer(1);
+    ui.stop->setEnabled(true);
+    slotInsertBDSLog(u8"<font style=\"color:#FFCC66;\">!!![WARNNING] [CSPBot] 您已进入<font color=\"#008000\">CMD</font>调试模式. [WARNNING]!!!</font>");
+    slotInsertBDSLog(u8"[CSPBot] 已向进程发出启动命令");
+    ui.start->setEnabled(false);
+}
+
+//关闭服务器
+void CSPBot::stopServer() {
+    server->stopServer();
+    slotInsertBDSLog(u8"[CSPBot] 已向进程发出终止命令");
+    ui.stop->setEnabled(false);
+    ui.start->setEnabled(true);
+}
+
+//强制停止进程
+void CSPBot::forceStopServer() {
+    auto temp = QMessageBox::warning(this, u8"警告", u8"服务器还在运行，你是否要强制停止?", QMessageBox::Yes | QMessageBox::No);
+    if (temp == QMessageBox::Yes)
+    {
+        server->forceStopServer();
+        ui.ServerLog->append(u8"[CSPBot] 已向进程发出强制终止命令");
+    }
+}
+
+//清空日志
+void CSPBot::clear_console() {
+    ui.ServerLog->setText("");
+}
+
+//插入命令
+void CSPBot::insertCmd() {
+    try {
+        string cmd = Helper::QString2stdString(ui.inputCmd->text());
+        if (cmd != "") {
+            ui.inputCmd->setText("");
+            server->sendCmd(cmd + "\n");
+        }
+    }
+    catch (...) {
+
+    }
+}
+
+///////////////////////////////////////////// Keyboard /////////////////////////////////////////////
+void CSPBot::keyPressEvent(QKeyEvent* e)
+{
+    if (e->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier) && e->key() == Qt::Key_C)
+    {
+        emit runCmd();
+    }
+    else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
+        emit runCommand();
+    }
 }

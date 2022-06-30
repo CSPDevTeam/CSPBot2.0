@@ -46,7 +46,16 @@ bool Server::createServer()
 	si.hStdInput = g_hChildStd_IN_Rd;
 	si.hStdError = g_hChildStd_OUT_Wr;
 	si.hStdOutput = g_hChildStd_OUT_Wr;
-	std:string s("runner.bat");
+	std:string s;
+
+	//判断启动模式
+	if (startMode == 0) {
+		s = "runner.bat";
+	}
+	else if (startMode == 1) {
+		s = "cmd.exe";
+	}
+
 	wstring widstr = std::wstring(s.begin(), s.end());
 	LPWSTR path = (LPWSTR)widstr.c_str();
 	bRet = CreateProcess(NULL, path, NULL, NULL, TRUE, NULL, NULL, NULL, &si, &this->pi);
@@ -64,16 +73,22 @@ bool Server::createServer()
 	return true;
 }
 
-void catchInfo(QString line);
 void selfCatchLine(QString line);
 
 //Server主启动
 void Server::run() {
 	createServer();
+	//绑定检测器
 	ServerPoll* sp = new ServerPoll();
+	connect(sp, SIGNAL(insertBDSLog(QString)), this, SLOT(slotInsertBDSLog(QString)));
+	connect(sp, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
+	connect(sp, SIGNAL(changeStatus(bool)), this, SLOT(slotChangeStatus(bool)));
+	connect(sp, SIGNAL(chLabel(QString, QString)), this, SLOT(slotChLabel(QString, QString)));
+	connect(sp, SIGNAL(chenableForce(bool)), this, SLOT(slotChenableForce(bool)));
+	//启动检测器
 	sp->start();
 	if (started) {
-		window->OtherCallback("onServerStart");
+		emit OtherCallback("onServerStart");
 		while (ReadFile(this->g_hChildStd_OUT_Rd, this->ReadBuff, 8192, &this->ReadNum, NULL))
 		{
 			if (started) {
@@ -94,7 +109,7 @@ void Server::run() {
 						QString qline = Helper::stdString2QString(_line);
 						QString coloredLine = fmtConsole::getColoredLine(_line);
 						if (coloredLine != "") {
-							window->ipipelog(Helper::QString2stdString(coloredLine));
+							emit insertBDSLog(coloredLine);
 						}
 					}
 				}
@@ -110,7 +125,7 @@ void Server::run() {
 						//Callback 
 						std::unordered_map<string, string> p;
 						p.emplace("line", _line);
-						window->OtherCallback("onConsoleUpdate", p);
+						emit OtherCallback("onConsoleUpdate", p);
 					}
 				}
 			}
@@ -152,7 +167,7 @@ bool Server::sendCmd(string cmd) {
 		//Callback
 		std::unordered_map<string, string> p;
 		p.emplace("cmd", cmd);
-		window->OtherCallback("onSendCommand", p);
+		emit OtherCallback("onSendCommand", p);
 
 		if (!WriteFile(this->g_hChildStd_IN_Wr, cmd.c_str(), cmd.length(), &this->ReadNum, NULL))
 		{
@@ -200,13 +215,13 @@ void ServerPoll::run() {
 		bool poll = server->getPoll();
 		if (!poll) {
 			server->started = false;
-			window->ipipelog(u8"[CSPBot] 进程已终止.");
-			window->OtherCallback("onServerStop");
-			window->changeStatus(false);
-			window->chenableForce(false);
-			window->chLabel("world", "Unkown");
-			window->chLabel("version", "Unkown");
-			window->chLabel("difficult", "Unkown");
+			emit insertBDSLog(u8"[CSPBot] 进程已终止.");
+			emit OtherCallback("onServerStop");
+			emit changeStatus(false);
+			emit chenableForce(false);
+			emit chLabel("world", "Unkown");
+			emit chLabel("version", "Unkown");
+			emit chLabel("difficult", "Unkown");
 
 			//Callback
 			if (server->normalStop) {
@@ -219,13 +234,14 @@ void ServerPoll::run() {
 			break;
 		}
 		else {
-			window->changeStatus(true);
+			emit changeStatus(true);
+			emit chenableForce(true);
 		}
 		Sleep(1 * 1000);
 	}
 }
 
-void catchInfo(QString line) {
+void Server::catchInfo(QString line) {
 	QRegExp world("worlds\\/(.+)\\/db");
 	QRegExp version("Version\\s(.+)");
 	QRegExp PID("PID\\s(.+)[?]");
@@ -237,8 +253,7 @@ void catchInfo(QString line) {
 	int join_pos = Join.indexIn(line);
 	int difficult_pos = Difficult.indexIn(line);
 	if (world_pos > -1) {
-		string world_string = Helper::QString2stdString(world.cap(1));
-		window->chLabel("world", world_string);
+		emit chLabel("world", world.cap(1));
 	}
 	else if (version_pos > -1) {
 		string version_raw = Helper::QString2stdString(version.cap(1));
@@ -250,14 +265,14 @@ void catchInfo(QString line) {
 			}
 		}
 		string version_string = version_raw;
-		window->chLabel("version", version_string);
+		emit chLabel("version", Helper::stdString2QString(version_string));
 	}
 	else if (pid_pos > -1) {
-		window->ipipelog(u8"[CSPBot] 提示:已有一个PID为" + Helper::QString2stdString(PID.cap(1)) + u8"的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
+		QString msg = Helper::stdString2QString(u8"[CSPBot] 提示:已有一个PID为") + PID.cap(1) + Helper::stdString2QString(u8"的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
+		emit insertBDSLog(msg);
 	}
 	else if (difficult_pos > -1) {
-		string difficult_string = Helper::QString2stdString(Difficult.cap(2));
-		window->chLabel("difficult", difficult_string);
+		emit chLabel("difficult", Difficult.cap(2));
 	}
 	else if (join_pos > -1) {
 		Bind::bindXuid(Helper::QString2stdString(Join.cap(1)), Helper::QString2stdString(Join.cap(2)));

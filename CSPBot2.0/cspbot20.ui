@@ -696,6 +696,26 @@ padding-left:3px;</string>
         <string>占用: 0%</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="ServerCmd">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+      <zorder>ServerCmd</zorder>
+      <zorder>ServerStatus</zorder>
+      <zorder>ServerVersion</zorder>
+      <zorder>ServerDifficult</zorder>
+      <zorder>ServerWorld</zorder>
+      <zorder>ServerRanTime</zorder>
+      <zorder>ServerUsed</zorder>
      </widget>
      <widget class="QLineEdit" name="inputCmd">
       <property name="geometry">

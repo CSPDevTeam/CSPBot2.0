@@ -24,8 +24,15 @@ protected:
 	void run();
 signals:
 	void insertBDSLog(QString log); //插入BDS日志
+	void OtherCallback(QString listener, StringMap args = {}); //Callback
+	void changeStatus(bool a); //更改状态
+	void chLabel(QString title, QString content); //更改标签
+	void chenableForce(bool a); //更改强制停止状态
+
 public:
-	Server(QObject* parent = NULL) {};
+	Server(int mode=0,QObject* parent = NULL) {
+		startMode = mode;
+	};
 	~Server() {};
 	bool started = false;
 	bool normalStop = false;
@@ -44,6 +51,26 @@ public:
 	HANDLE g_hChildStd_OUT_Rd = NULL;
 	HANDLE g_hChildStd_OUT_Wr = NULL;
 	DEBUG_EVENT de;
+private:
+	void catchInfo(QString line); //抓取信息
+	int startMode = 0;
+
+private slots:
+	inline void slotInsertBDSLog(QString log) {
+		emit insertBDSLog(log);
+	}; //插入BDS日志
+	inline void slotOtherCallback(QString listener, StringMap args = {}) {
+		emit OtherCallback(listener, args);
+	}; //Callback
+	inline void slotChangeStatus(bool a) {
+		emit changeStatus(a);
+	}; //更改状态
+	inline void slotChLabel(QString title, QString content) {
+		emit chLabel(title, content);
+	}; //更改标签
+	inline void slotChenableForce(bool a) {
+		emit chenableForce(a);
+	}; //更改强制停止状态
 };
 
 class ServerPoll :public QThread
@@ -56,4 +83,10 @@ public:
 	~ServerPoll() {};
 signals:
 	void stoped();
+	void insertBDSLog(QString log); //插入BDS日志
+	void OtherCallback(QString listener, StringMap args = {}); //Callback
+	void changeStatus(bool a); //更改状态
+	void chLabel(QString title, QString content); //更改标签
+	void chenableForce(bool a); //更改强制停止状态
+
 };

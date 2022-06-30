@@ -125,10 +125,7 @@ void Command::CustomCmd(string cmd, string group) {
 		}
 	}
 	else if (Action_Type == "start") {
-		server = new Server();
-		server->start();
-		window->chenableForce(true);
-		window->ipipelog(u8"[CSPBot] 已向进程发出启动命令");
+		
 	}
 	else if (Action_Type == "stop") {
 		if (server->started) {
@@ -147,6 +144,7 @@ void Command::CustomCmd(string cmd, string group) {
 			}
 			num++;
 		}
-		window->CommandCallback(Action_Type, args);
+		//window->CommandCallback(Action_Type, args);
 	}
 }
+

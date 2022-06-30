@@ -276,7 +276,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 	json msg_json = json::parse(msg);
 	string syncId = msg_json["syncId"].get<string>();
 	mirai_logger.debug(msg_json.dump());
-	window->PacketCallback(msg);
+	//window->PacketCallback(msg);
 	//µÇÂ¼°ü
 	if (syncId == "1") {
 		//ÉèÖÃUserImage
@@ -396,7 +396,7 @@ void Mirai::sendGroupMsg(string group, string msg, bool callback) {
 		std::unordered_map<string, string> args;
 		args.emplace("group", group);
 		args.emplace("msg", msg);
-		window->OtherCallback("onSendMsg", args);
+		emit OtherCallback("onSendMsg", args);
 		wsc->sendTextMsg(mj);
 	}
 
@@ -408,7 +408,7 @@ void Mirai::recallMsg(string target, bool callback) {
 		string mj = "{\"syncId\": 3,\"command\" : \"recall\",\"subCommand\":null,\"content\":{\"target\":" + target + "}}";
 		std::unordered_map<string, string> args;
 		args.emplace("target", target);
-		window->OtherCallback("onRecall", args);
+		emit OtherCallback("onRecall", args);
 		wsc->sendTextMsg(mj);
 	}
 }
