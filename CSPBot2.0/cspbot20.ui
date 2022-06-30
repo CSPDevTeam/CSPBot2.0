@@ -1,0 +1,1073 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1040</width>
+    <height>660</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="background" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>1021</width>
+     <height>641</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:white;
+border-radius:10px</string>
+   </property>
+   <widget class="QWidget" name="option" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>181</width>
+      <height>641</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:#f0f3f8;
+border-top-left-radius:10px;
+border-top-right-radius:0px;
+border-bottom-right-radius:0px;
+border-bottom-left-radius:10px;</string>
+    </property>
+    <widget class="QLabel" name="userImage">
+     <property name="geometry">
+      <rect>
+       <x>45</x>
+       <y>40</y>
+       <width>90</width>
+       <height>90</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC Black</family>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:white;
+border-radius:45px</string>
+     </property>
+     <property name="text">
+      <string>用户未登录</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Main">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>260</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color:#f0f3f8;
+	color:#666666;
+	border-radius:10px;
+	qproperty-iconSize: 32px 32px;
+}
+
+QPushButton:hover{
+	background-color:#e0e6ee;
+	border-radius:10px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>  软件主页</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>:/Chargesoftware/Images/Home_gray.svg</normaloff>:/Chargesoftware/Images/Home_gray.svg</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="mainPage">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/*QPushButton{
+	background-color:#f0f3f8;
+	color:#666666;
+	border-radius:10px;
+	qproperty-iconSize: 32px 32px;
+}
+
+QPushButton:hover{
+	background-color:#e0e6ee;
+	border-radius:10px;
+}*/;
+background-color:#ccdff8;
+color:#666666;
+border-radius:10px;
+qproperty-iconSize: 32px 32px;
+</string>
+     </property>
+     <property name="text">
+      <string>  控制终端</string>
+     </property>
+     <property name="icon">
+      <iconset resource="cspbot20.qrc">
+       <normaloff>:/icon/Images/主页.svg</normaloff>:/icon/Images/主页.svg</iconset>
+     </property>
+    </widget>
+    <widget class="QLabel" name="user">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>137</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC Black</family>
+       <pointsize>11</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:#707071;</string>
+     </property>
+     <property name="text">
+      <string>用户未登录</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="playerPage">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>260</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color:#f0f3f8;
+	color:#666666;
+	border-radius:10px;
+	qproperty-iconSize: 32px 32px;
+}
+
+QPushButton:hover{
+	background-color:#e0e6ee;
+	border-radius:10px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>  玩家管理</string>
+     </property>
+     <property name="icon">
+      <iconset resource="cspbot20.qrc">
+       <normaloff>:/icon/Images/用户管理.svg</normaloff>:/icon/Images/用户管理.svg</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="regularPage">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>320</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color:#f0f3f8;
+	color:#666666;
+	border-radius:10px;
+	qproperty-iconSize: 32px 32px;
+}
+
+QPushButton:hover{
+	background-color:#e0e6ee;
+	border-radius:10px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>  正则管理</string>
+     </property>
+     <property name="icon">
+      <iconset resource="cspbot20.qrc">
+       <normaloff>:/icon/Images/正则式.svg</normaloff>:/icon/Images/正则式.svg</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pluginPage">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>380</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color:#f0f3f8;
+	color:#666666;
+	border-radius:10px;
+	qproperty-iconSize: 32px 32px;
+}
+
+QPushButton:hover{
+	background-color:#e0e6ee;
+	border-radius:10px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>  插件管理</string>
+     </property>
+     <property name="icon">
+      <iconset resource="cspbot20.qrc">
+       <normaloff>:/icon/Images/插件.svg</normaloff>:/icon/Images/插件.svg</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="logPage">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>440</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color:#f0f3f8;
+	color:#666666;
+	border-radius:10px;
+	qproperty-iconSize: 32px 32px;
+}
+
+QPushButton:hover{
+	background-color:#e0e6ee;
+	border-radius:10px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>  日志输出</string>
+     </property>
+     <property name="icon">
+      <iconset resource="cspbot20.qrc">
+       <normaloff>:/icon/Images/文本.svg</normaloff>:/icon/Images/文本.svg</iconset>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Icon">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>580</y>
+       <width>160</width>
+       <height>46</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans SC Black</family>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:#2b85fb;
+</string>
+     </property>
+     <property name="text">
+      <string>CSPBot</string>
+     </property>
+     <property name="icon">
+      <iconset resource="cspbot20.qrc">
+       <normaloff>:/icon/Images/Main.svg</normaloff>:/icon/Images/Main.svg</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>55</width>
+       <height>55</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QLabel" name="version">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>HarmonyOS Sans Medium</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:#666666;</string>
+     </property>
+     <property name="text">
+      <string>V%Version%</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QStackedWidget" name="main">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>30</y>
+      <width>820</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>HarmonyOS Sans</family>
+     </font>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="Control">
+     <widget class="QTextEdit" name="ServerLog">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>791</width>
+        <height>441</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:#484848;
+color:white;</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="controlWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>499</y>
+        <width>231</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:10px;
+background-color:#D1F2F7;</string>
+      </property>
+      <widget class="QPushButton" name="start">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>启动</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="stop">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>停止</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="forceStop">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>10</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>强制停止</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="clear">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>50</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>清屏</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="statusWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>499</y>
+        <width>551</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:10px;
+background-color:#D1F7E9;</string>
+      </property>
+      <widget class="QLabel" name="ServerStatus">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>201</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>状态: 未启动</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ServerVersion">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>201</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>版本: Unkown</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ServerDifficult">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>50</y>
+         <width>161</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>难度: Unkown</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ServerWorld">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>10</y>
+         <width>161</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>世界: Unkown</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ServerRanTime">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>10</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>运行: 0m</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ServerUsed">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>50</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>占用: 0%</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLineEdit" name="inputCmd">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>458</y>
+        <width>741</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:#FFC0CB;
+border-radius:5px;
+padding-left:10px;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="runCmd">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>458</y>
+        <width>41</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>25</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:#CD5C5C;
+border-radius:10px;
+color:white;</string>
+      </property>
+      <property name="text">
+       <string>◀</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Player">
+     <widget class="QTableView" name="playerAdmin">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>5</y>
+        <width>791</width>
+        <height>591</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Regular">
+     <widget class="QTableView" name="regularAdmin">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>5</y>
+        <width>791</width>
+        <height>591</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Plugin">
+     <widget class="QListView" name="pluginAdmin">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>5</y>
+        <width>791</width>
+        <height>591</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="BotLog">
+     <widget class="QTextEdit" name="botconsole">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>811</width>
+        <height>511</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:#484848;
+color:white;</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="consoleWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>530</y>
+        <width>251</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:10px;
+background-color:#D1F2F7;</string>
+      </property>
+      <widget class="QPushButton" name="consoleSave">
+       <property name="geometry">
+        <rect>
+         <x>15</x>
+         <y>15</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>保存日志</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="consoleClear">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>15</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>清空日志</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="websocketWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>530</y>
+        <width>551</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:10px;
+background-color:#D1F7E9;</string>
+      </property>
+      <widget class="QPushButton" name="disConnect">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>15</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>断开链接</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="connect">
+       <property name="geometry">
+        <rect>
+         <x>105</x>
+         <y>15</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:white;
+border-radius:5px;</string>
+       </property>
+       <property name="text">
+        <string>建立链接</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="websocketStatus">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>15</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>状态: 未连接</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="websocketMsg">
+       <property name="geometry">
+        <rect>
+         <x>305</x>
+         <y>15</y>
+         <width>120</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>消息:0发;0收</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="websocketConnectedTime">
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>15</y>
+         <width>111</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>HarmonyOS Sans SC</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color:#80FDA8;
+border-radius:5px;
+padding-left:3px;</string>
+       </property>
+       <property name="text">
+        <string>连接时间:0m</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="min">
+    <property name="geometry">
+     <rect>
+      <x>945</x>
+      <y>-6</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Webdings</family>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+	font-family:&quot;Webdings&quot;;
+	text-align:top;
+	border:none;
+	font-size:20px;
+	color:#666666;
+}
+QPushButton:hover{
+	color:#3681ff
+}
+
+</string>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="close">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>0</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Webdings</family>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+	font-family:&quot;Webdings&quot;;
+	text-align:top;
+	border:none;
+	font-size:20px;
+	color:#666666;
+}
+QPushButton:hover{
+	color:#3681ff
+}
+
+</string>
+    </property>
+    <property name="text">
+     <string>r</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="cspbot20.qrc"/>
+ </resources>
+ <connections/>
+</ui>

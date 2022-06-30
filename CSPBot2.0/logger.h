@@ -1,0 +1,157 @@
+#pragma once
+#include <string>
+#include <sstream>
+#include <iostream>
+#include "cspbot20.h"
+#include "server.h"
+#include "global.h"
+#include <filesystem>
+#include <FMT/chrono.h>
+#include <FMT/color.h>
+#include <FMT/core.h>
+#include <FMT/os.h>
+#include <FMT/printf.h>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <utility>
+#include <magic_enum.hpp>
+#include "helper.h"
+
+std::string getConfig(std::string key);
+class Logger {
+public:
+	inline Logger(std::string moduleName) {
+		Module = moduleName;
+	}
+
+	template <typename... Args>
+	inline void info(std::string msg, const Args&... args) {
+		try {
+			std::string str = fmt::format(msg, args...);
+			if (getLevel() <= 2) {
+				q.push(
+					"< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + str + "\n</font>"
+				);
+			}
+		}
+		catch (...) {
+			if (getLevel() <= 2) {
+				q.push(
+					"< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + msg + "\n</font>"
+				);
+			}
+		}
+
+	};
+	template <typename... Args>
+	inline void error(std::string msg, const Args&... args) {
+		try {
+			std::string str = fmt::format(msg, args...);
+			if (getLevel() <= 4) {
+				q.push(
+					"< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + str + "\n</font>"
+				);
+			}
+		}
+		catch (...) {
+			if (getLevel() <= 4) {
+				q.push(
+					"< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + msg + "\n</font>"
+				);
+			}
+		}
+	};
+	template <typename... Args>
+	inline void warn(std::string msg, const Args&... args) {
+		try {
+			std::string str = fmt::format(msg, args...);
+			if (getLevel() <= 3) {
+				q.push(
+					"< font color = \"#FFCC66\">" + getTime() + " W /" + Module + ": " + str + "\n</font>"
+				);
+			}
+		}
+		catch (...) {
+			if (getLevel() <= 3) {
+				q.push(
+					"< font color = \"#FFCC66\">" + getTime() + " W /" + Module + ": " + msg + "\n</font>"
+				);
+			}
+		}
+
+	};
+	template <typename... Args>
+	inline void debug(std::string msg, const Args&... args) {
+		try {
+			std::string str = fmt::format(msg, args...);
+			if (getLevel() <= 1) {
+				q.push(
+					"< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + str + "\n</font>"
+				);
+			}
+		}
+		catch (...) {
+			if (getLevel() <= 1) {
+				q.push(
+					"< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + msg + "\n</font>"
+				);
+			}
+		}
+	};
+private:
+	inline std::string getTime() {
+		time_t tt = time(NULL);
+		struct tm* t = localtime(&tt);
+		std::ostringstream buffer;
+		std::string s = std::to_string(t->tm_sec);
+		if (s.length() == 1) {
+			s = "0" + s;
+		}
+		buffer << t->tm_year + 1900 << "-" << t->tm_mon + 1 << "-" << t->tm_mday << " " << t->tm_hour << ":" << t->tm_min << ":" << s;
+		std::string time = buffer.str();
+		return time;
+	};
+
+	inline int getLevel() {
+		std::string level = getConfig("LoggerLevel");
+		if (level == "info") {
+			return 2;
+		}
+		else if (level == "warn") {
+			return 3;
+		}
+		else if (level == "error") {
+			return 4;
+		}
+		else {
+			return 1;
+		}
+	};
+
+	std::string Module = "";
+};
+
+namespace fmtConsole {
+	std::string getCPUUsed();
+	std::string FmtConsoleRegular(std::string cmd);
+	std::string FmtGroupRegular(
+		std::string qqid,
+		std::string qqnick,
+		std::string cmd
+	);
+	QString getColoredLine(std::string line);
+}
+
+class LoggerReader :public QThread
+{
+	Q_OBJECT
+protected:
+	void run();
+signals:
+	void updateLog(QString log); //Êä³öÈÕÖ¾
+public:
+	LoggerReader(QObject* parent = NULL) {};
+	~LoggerReader() {};
+};

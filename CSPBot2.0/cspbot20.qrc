@@ -1,0 +1,19 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>../Images/Main.svg</file>
+    <file>../Images/用户管理.svg</file>
+    <file>../Images/主页.svg</file>
+    <file>../Images/插件.svg</file>
+    <file>../Images/文本.svg</file>
+    <file>../Images/正则式.svg</file>
+  </qresource>
+  <qresource prefix="a">
+    <file>../Images/a/1.png</file>
+    <file>../Images/a/2.png</file>
+    <file>../Images/a/3.png</file>
+    <file>../Images/a/4.png</file>
+    <file>../Images/a/addpage.png</file>
+    <file>../Images/a/subpage.png</file>
+    <file>../Images/a/tiao.png</file>
+  </qresource>
+</RCC>

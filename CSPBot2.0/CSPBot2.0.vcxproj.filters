@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="cspbot20.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="websocketClient.cpp">
+      <Filter>Source File\Websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="logger.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source File">
+      <UniqueIdentifier>{52713ed6-0cf2-4a45-8f24-52af2711f022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Head File">
+      <UniqueIdentifier>{78c035b9-2802-4686-8ba6-582ea4e44a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource File">
+      <UniqueIdentifier>{984474c1-aa25-4e49-a98c-021c6b05b584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Head File\Websocket">
+      <UniqueIdentifier>{b26da137-1716-4d57-a145-1083859505e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Websocket">
+      <UniqueIdentifier>{7f8c84ed-c74c-47a1-bc10-e699d6aaa809}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="cspbot20.h">
+      <Filter>Head File</Filter>
+    </QtMoc>
+    <QtMoc Include="..\Include\mysysinfo\mysysinfo.h">
+      <Filter>Head File</Filter>
+    </QtMoc>
+    <QtMoc Include="server.h">
+      <Filter>Head File</Filter>
+    </QtMoc>
+    <QtMoc Include="logger.h">
+      <Filter>Head File</Filter>
+    </QtMoc>
+    <QtMoc Include="websocketClient.h">
+      <Filter>Head File\Websocket</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="cspbot20.qrc">
+      <Filter>Resource File</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CSPBot2.0.rc">
+      <Filter>Resource File</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CSPBot2.0.ico">
+      <Filter>Resource File</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="cspbot20.ui">
+      <Filter>Resource File</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Head File</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Head File</Filter>
+    </ClInclude>
+    <ClInclude Include="helper.h">
+      <Filter>Head File</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
