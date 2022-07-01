@@ -1,5 +1,7 @@
 #pragma once
 #include <queue>
+#include "qstring.h"
+#include <QQueue>
 
 class CSPBot;
 extern CSPBot* window;
@@ -16,7 +18,11 @@ extern MySysInfo* mysysinfo;
 class WsClient;
 extern WsClient* wsc;
 
-extern std::queue<std::string> q;
+class CommandAPI;
+extern CommandAPI* command;
+
+
+extern QQueue<QString> q;
 
 extern std::string version;
 extern int configVersion;

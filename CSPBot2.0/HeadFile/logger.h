@@ -31,15 +31,15 @@ public:
 		try {
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 2) {
-				q.push(
-					"< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + str + "\n</font>"
+				pushToQueue(
+					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + str + "\n</font>"
 				);
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 2) {
-				q.push(
-					"< font color = \"#008000\">" + getTime() + " I /" + Module + ": " + msg + "\n</font>"
+				pushToQueue(
+					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + msg + "\n</font>"
 				);
 			}
 		}
@@ -50,15 +50,15 @@ public:
 		try {
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 4) {
-				q.push(
-					"< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + str + "\n</font>"
+				pushToQueue(
+					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + str + "\n</font>"
 				);
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 4) {
-				q.push(
-					"< font color = \"#FF0000\">" + getTime() + " E /" + Module + ": " + msg + "\n</font>"
+				pushToQueue(
+					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + msg + "\n</font>"
 				);
 			}
 		}
@@ -68,15 +68,15 @@ public:
 		try {
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 3) {
-				q.push(
-					"< font color = \"#FFCC66\">" + getTime() + " W /" + Module + ": " + str + "\n</font>"
+				pushToQueue(
+					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + str + "\n</font>"
 				);
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 3) {
-				q.push(
-					"< font color = \"#FFCC66\">" + getTime() + " W /" + Module + ": " + msg + "\n</font>"
+				pushToQueue(
+					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + msg + "\n</font>"
 				);
 			}
 		}
@@ -87,21 +87,22 @@ public:
 		try {
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 1) {
-				q.push(
-					"< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + str + "\n</font>"
+				pushToQueue(
+					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + str + "\n</font>"
 				);
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 1) {
-				q.push(
-					"< font color = \"#6699FF\">" + getTime() + " D /" + Module + ": " + msg + "\n</font>"
+				pushToQueue(
+					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + msg + "\n</font>"
 				);
 			}
 		}
 	};
-private:
-	inline std::string getTime() {
+
+	//获取格式化时间
+	inline static std::string getTime() {
 		time_t tt = time(NULL);
 		struct tm* t = localtime(&tt);
 		std::ostringstream buffer;
@@ -109,10 +110,12 @@ private:
 		if (s.length() == 1) {
 			s = "0" + s;
 		}
-		buffer << t->tm_year + 1900 << "-" << t->tm_mon + 1 << "-" << t->tm_mday << " " << t->tm_hour << ":" << t->tm_min << ":" << s;
-		std::string time = buffer.str();
-		return time;
+		std::string timeString = fmt::format("{}-{}-{} {}:{}:{}", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, s);
+		return timeString;
 	};
+
+private:
+	
 
 	inline int getLevel() {
 		std::string level = getConfig("LoggerLevel");
@@ -128,6 +131,10 @@ private:
 		else {
 			return 1;
 		}
+	};
+
+	inline void pushToQueue(std::string log) {
+		q.enqueue(Helper::stdString2QString(log));
 	};
 
 	std::string Module = "";

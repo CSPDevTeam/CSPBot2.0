@@ -5,7 +5,6 @@
 #include <windows.h>
 #include <fstream>
 
-
 //////////////////////////////////////////// HeadFile ////////////////////////////////////////////
 #include <yaml-cpp/yaml.h>
 #include <Nlohmann/json.hpp>
@@ -128,21 +127,6 @@ namespace Helper{
 	}
 }
 
-namespace Basic {
-	class Command {
-	public:
-		static std::vector<std::string> SplitCommand(const std::string& parent);
-		static void CustomCmd(std::string cmd, std::string group);
-	};
-}
-
-//消息结构体
-struct Message {
-	std::string group;
-	std::string qqNum;
-	std::string message;
-	std::string qqNick;
-};
 
 namespace Motd {
 	inline HMODULE h = LoadLibraryA("Motd.dll");
@@ -242,7 +226,7 @@ enum regularAction { Console, Group, Command };
 enum regularFrom { group, console };
 struct Regular {
 	QString regular;
-	std::string action;
+	QString action;
 	regularAction type;
 	regularFrom from;
 	bool permission;

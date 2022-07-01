@@ -19,10 +19,10 @@ admin:
 stopCmd: stop
 
 #最低输出等级
-LoggerLevel: info
+LoggerLevel: debug
 
 #控制台自动染色
 ConsoleColor: true
 
 #配置文件版本(勿动)
-Version: 2
+Version: 3

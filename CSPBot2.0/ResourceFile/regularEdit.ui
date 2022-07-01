@@ -212,7 +212,7 @@ padding-left:10px;</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
+      <y>160</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -240,7 +240,7 @@ qproperty-iconSize: 32px 32px;</string>
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>200</y>
+      <y>160</y>
       <width>381</width>
       <height>31</height>
      </rect>
@@ -267,7 +267,7 @@ padding-left:10px;</string>
      <rect>
       <x>20</x>
       <y>260</y>
-      <width>131</width>
+      <width>91</width>
       <height>41</height>
      </rect>
     </property>
@@ -293,9 +293,9 @@ qproperty-iconSize: 32px 32px;
    <widget class="QPushButton" name="cancel">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>130</x>
       <y>260</y>
-      <width>131</width>
+      <width>91</width>
       <height>41</height>
      </rect>
     </property>
@@ -379,9 +379,9 @@ QPushButton:hover{
    <widget class="QPushButton" name="regularTest">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>240</x>
       <y>260</y>
-      <width>131</width>
+      <width>101</width>
       <height>41</height>
      </rect>
     </property>
@@ -404,110 +404,32 @@ qproperty-iconSize: 32px 32px;
      <string>正则测试</string>
     </property>
    </widget>
-   <widget class="QLabel" name="runLabel">
+   <widget class="QPushButton" name="remove">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>160</y>
-      <width>71</width>
-      <height>31</height>
+      <x>360</x>
+      <y>260</y>
+      <width>101</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>HarmonyOS Sans SC</family>
-      <pointsize>10</pointsize>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color:#ccdff8;
 color:#666666;
 border-radius:10px;
-qproperty-iconSize: 32px 32px;</string>
+qproperty-iconSize: 32px 32px;
+</string>
     </property>
     <property name="text">
-     <string>执行</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="runConsole">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>160</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>HarmonyOS Sans SC</family>
-      <pointsize>13</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:#f0f3f8;
-border-radius:10px;
-padding-left:10px;</string>
-    </property>
-    <property name="text">
-     <string>控制台</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="runGroup">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>160</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>HarmonyOS Sans SC</family>
-      <pointsize>13</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:#f0f3f8;
-border-radius:10px;
-padding-left:10px;</string>
-    </property>
-    <property name="text">
-     <string>群聊</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="runCommand">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>160</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>HarmonyOS Sans SC</family>
-      <pointsize>13</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:#f0f3f8;
-border-radius:10px;
-padding-left:10px;</string>
-    </property>
-    <property name="text">
-     <string>命令</string>
+     <string>删除</string>
     </property>
    </widget>
   </widget>

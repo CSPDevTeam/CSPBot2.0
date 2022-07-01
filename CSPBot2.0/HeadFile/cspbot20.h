@@ -8,6 +8,7 @@
 
 //Type
 typedef std::unordered_map<std::string, std::string> StringMap;
+typedef time_t mTime;
 
 class CSPBot : public QMainWindow
 {
@@ -17,6 +18,14 @@ class CSPBot : public QMainWindow
 public:
     CSPBot(QWidget *parent = Q_NULLPTR);
 
+    inline void publickStartSever(){
+        emit signalStartServer();
+    }
+
+    inline void publicStartLogger() {
+        emit signalStartLogger();
+    }
+
 
 ///////////////////////////////////////////// Signals /////////////////////////////////////////////
 signals:
@@ -24,6 +33,8 @@ signals:
     void runCmd(); //启动Cmd
     void runCommand(); //运行命令
     void signalStartServer(); //开启服务器
+    void signalStartLogger(); //开启Logger服务
+
 
 ///////////////////////////////////////////// Slot /////////////////////////////////////////////
 private slots:
@@ -32,6 +43,7 @@ private slots:
     void switchPage();//切换函数
     void insertLog(QString a);//Logger 槽函数
     void setUserImage(QString qqNum, QString qqNick); //设置头像
+    void startLogger(); //启动日志
 
     /////////////// Server //////////////////
     //ServerRebackSlot
@@ -49,6 +61,29 @@ private slots:
     void insertCmd(); //插入命令
     //void PacketCallback(std::string a);
     //void CommandCallback(std::string a, std::vector<std::string> b);
+
+    /////////////// Mirai //////////////////
+    void slotConnectMirai(); //连接Mirai
+    void slotDisConnectMirai(); //断开Mirai
+    
+
+    /////////////// Console //////////////////
+    void slotSaveConsole(); //保存控制台文件
+    void slotClearConsole(); //清空控制台
+    void slotUpdateSendRecive(int send, int recive); //更新收发
+    void slotConnected(mTime time); //更新时间
+
+    /////////////// Global //////////////////
+    void slotTimerFunc(); //Timer启动函数
+
+    /////////////// Table //////////////////
+    void clickRegularTable(QModelIndex index);
+    void doubleClickedRegularTable(QModelIndex index);
+    void newRegular(); //新建正则
+
+    /////// Table ///////
+    void InitPlayerTableView();
+    void InitRegularTableView();
     
 
 ///////////////////////////////////////////// Private /////////////////////////////////////////////
@@ -75,6 +110,11 @@ private:
 
     /////// Keyboard ///////
     void keyPressEvent(QKeyEvent* e);
+
+    /////// Keyboard ///////
+    mTime mGetTime;
+
+    
 
     //////// UI ////////
     Ui::Form ui;

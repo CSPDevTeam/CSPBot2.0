@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1040</width>
-    <height>660</height>
+    <height>661</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -371,7 +371,7 @@ QPushButton:hover{
      </font>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="Control">
      <widget class="QTextEdit" name="ServerLog">
@@ -733,8 +733,47 @@ color:white;</string>
         <x>10</x>
         <y>5</y>
         <width>791</width>
-        <height>591</height>
+        <height>541</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTableView QTableCornerButton::section {
+    color: white;
+    background-color: rgb(64, 64, 64);
+    border: 0px;
+    border-radius:10px;
+    border-color: rgb(64, 64, 64);
+ }
+
+ QTableView {
+    color: black;
+    gridline-color: black;
+    background-color: rgb(255, 255, 255);
+	alternate-background-color: rgb(233, 248, 254);
+    selection-color: black;
+    selection-background-color: #ccdff8;
+    border-radius: 10px;
+    padding: 4px 4px;	
+}
+
+QHeaderView {
+    color: white;
+    background-color: rgba(255, 170,0,90);
+    border-radius:10px 10px 0 0;
+    min-height:40px;
+}
+
+QHeaderView::section {
+    color: white;
+    background-color: rgba(255, 170, 0,90);;
+    border-radius:10px;
+} </string>
       </property>
      </widget>
     </widget>
@@ -745,10 +784,89 @@ color:white;</string>
         <x>10</x>
         <y>5</y>
         <width>791</width>
-        <height>591</height>
+        <height>531</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTableView QTableCornerButton::section {
+    color: white;
+    background-color: rgb(64, 64, 64);
+    border: 0px;
+    border-radius:10px;
+    border-color: rgb(64, 64, 64);
+ }
+
+ QTableView {
+    color: black;
+    gridline-color: black;
+    background-color: rgb(255, 255, 255);
+	alternate-background-color: rgb(233, 248, 254);
+    selection-color: black;
+    selection-background-color: #ccdff8;
+    border-radius: 10px;
+    padding: 4px 4px;	
+}
+
+QHeaderView {
+    color: white;
+    background-color: rgba(255, 170,0,90);
+    border-radius:10px 10px 0 0;
+    min-height:40px;
+}
+
+QHeaderView::section {
+    color: white;
+    background-color: rgba(255, 170, 0,90);;
+    border-radius:10px;
+} </string>
+      </property>
      </widget>
+     <widget class="QPushButton" name="regularNew">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>555</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:white;
+border-radius:5px;</string>
+      </property>
+      <property name="text">
+       <string>新建</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="regularWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>550</y>
+        <width>791</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius:10px;
+background-color:#D1F7E9;</string>
+      </property>
+     </widget>
+     <zorder>regularWidget</zorder>
+     <zorder>regularAdmin</zorder>
+     <zorder>regularNew</zorder>
     </widget>
     <widget class="QWidget" name="Plugin">
      <widget class="QListView" name="pluginAdmin">
@@ -759,6 +877,45 @@ color:white;</string>
         <width>791</width>
         <height>591</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>HarmonyOS Sans SC</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTableView QTableCornerButton::section {
+    color: white;
+    background-color: rgb(64, 64, 64);
+    border: 0px;
+    border-radius:10px;
+    border-color: rgb(64, 64, 64);
+ }
+
+ QTableView {
+    color: black;
+    gridline-color: black;
+    background-color: rgb(255, 255, 255);
+	alternate-background-color: rgb(233, 248, 254);
+    selection-color: black;
+    selection-background-color: #ccdff8;
+    border-radius: 10px;
+    padding: 4px 4px;	
+}
+
+QHeaderView {
+    color: white;
+    background-color: rgba(255, 170,0,90);
+    border-radius:10px 10px 0 0;
+    min-height:40px;
+}
+
+QHeaderView::section {
+    color: white;
+    background-color: rgba(255, 170, 0,90);;
+    border-radius:10px;
+} </string>
       </property>
      </widget>
     </widget>
@@ -786,7 +943,7 @@ color:white;</string>
      <widget class="QWidget" name="consoleWidget" native="true">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>5</x>
         <y>530</y>
         <width>251</width>
         <height>61</height>

@@ -285,7 +285,7 @@ YAML::Node getRegular() {
 	return node;
 }
 
-void selfCatchLine(QString line) {
+void Server::selfCatchLine(QString line) {
 	YAML::Node regular = getRegular();
 
 	//读取正则组
@@ -318,7 +318,7 @@ void selfCatchLine(QString line) {
 			}
 			else {
 				string ac = fmtConsole::FmtConsoleRegular(Action);
-				Basic::Command::CustomCmd(ac, "");
+				command->CustomCmd(ac, "");
 			}
 		}
 	}

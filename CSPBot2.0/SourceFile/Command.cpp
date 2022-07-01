@@ -4,7 +4,7 @@
 #include <ctime>
 #include <optional>
 #include <sstream>
-//#include "server.h"
+
 #include "cspbot20.h"
 #include "helper.h"
 #include "websocketClient.h"
@@ -13,13 +13,12 @@
 #include "server.h"
 #include "global.h"
 
-using namespace Basic;
 using namespace std;
 
 string fmtMotdBE(string msgJson, string returnMsg);
 string fmtMotdJE(string msgJson, string returnMsg);
 
-vector<string> Command::SplitCommand(const std::string& paras)
+vector<string> CommandAPI::SplitCommand(const std::string& paras)
 {
 	if (paras.empty())
 		return vector<string>();
@@ -67,9 +66,9 @@ vector<string> Command::SplitCommand(const std::string& paras)
 	return res;
 }
 
-std::unordered_map<string, string> command={};
+std::unordered_map<string, string> commands ={};
 
-void Command::CustomCmd(string cmd, string group) {
+void CommandAPI::CustomCmd(string cmd, string group) {
 	vector<string> sp = SplitCommand(cmd);
 	string Action_Type = sp[0];
 	if (Action_Type == "bind") {
@@ -125,17 +124,18 @@ void Command::CustomCmd(string cmd, string group) {
 		}
 	}
 	else if (Action_Type == "start") {
-		
+		mirai->sendGroupMsg(group, u8"正在开启服务器...");
+		emit signalStartServer();
 	}
 	else if (Action_Type == "stop") {
 		if (server->started) {
 			server->stopServer();
 		}
 		else if (server->started != false && group != "0") {
-			mirai->sendGroupMsg(group, "服务器不在运行中");
+			mirai->sendGroupMsg(group, u8"服务器不在运行中");
 		}
 	}
-	else if (command.find(Action_Type) != command.end()) {
+	else if (commands.find(Action_Type) != commands.end()) {
 		vector<string> args;
 		int num = 0;
 		for (auto& i : sp) {

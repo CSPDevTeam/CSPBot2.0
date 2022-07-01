@@ -430,10 +430,14 @@ QString fmtConsole::getColoredLine(string line) {
 void LoggerReader::run() {
 	while (true) {
 		if (!q.empty()) {
-			string log = q.front();
-			QString mLog = Helper::stdString2QString(log);
-			q.pop();
-			emit updateLog(mLog);
+			try {
+				QString mLog = q.dequeue();
+				emit updateLog(mLog);
+			}
+			catch (...) {
+
+			}
+			
 		}
 		else {
 			Sleep(1 * 1000);

@@ -1,0 +1,31 @@
+{
+    "data": {
+        "messageChain": [
+            {
+                "id": 10746,
+                "time": 1656648176,
+                "type": "Source"
+            },
+            {
+                "text": "44",
+                "type": "Plain"
+            }
+        ],
+        "sender": {
+            "group": {
+                "id": 611424871,
+                "name": "垃圾厂",
+                "permission": "ADMINISTRATOR"
+            },
+            "id": 2351078777,
+            "joinTimestamp": 1624064881,
+            "lastSpeakTimestamp": 1656648174,
+            "memberName": "nmsl??",
+            "muteTimeRemaining": 0,
+            "permission": "ADMINISTRATOR",
+            "specialTitle": ""
+        },
+        "type": "GroupMessage"
+    },
+    "syncId": "-1"
+}

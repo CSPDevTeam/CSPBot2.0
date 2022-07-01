@@ -4,6 +4,7 @@
 #include <mysysinfo/mysysinfo.h>
 #include <QtWidgets/QApplication>
 #include "websocketClient.h"
+#include <QQueue>
 
 using namespace std;
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
@@ -12,17 +13,15 @@ CSPBot* window;
 Server* server;
 Mirai* mirai;
 WsClient* wsc;
+CommandAPI* command;
 MySysInfo* mysysinfo = new MySysInfo();
 int configVersion = 3;
-std::queue<string> q;
+QQueue<QString> q;
 
 string getConfig(string key){
     auto config = YAML::LoadFile("config/config.yml");
     return config[key].as<string>();
 };
-
-bool connectMirai();
-
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 int main(int argc, char *argv[])
@@ -30,6 +29,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     CSPBot* window = new CSPBot;
     window->show();
-    
+    window->publicStartLogger();
     return a.exec();
 }

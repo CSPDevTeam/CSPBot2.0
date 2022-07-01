@@ -9,12 +9,14 @@ class regularEdit : public QWidget
     Q_OBJECT
 
 public:
-    regularEdit(Regular regular,QWidget* parent = Q_NULLPTR);
+    regularEdit(Regular regular, bool newRegular,QWidget* parent = Q_NULLPTR);
 
 private slots:
     void on_actionClose_triggered();//¹Ø±Õ´°¿Ú
     /////// Start Progress ////////
     void stratProgress();
+    void saveRegular();
+    void deleteRegular();
 
 private:
     //////// Window ////////
@@ -30,6 +32,7 @@ private:
 
     //////// Style /////////
     void setGraphics(QWidget* bt);
+    
 
     //////// Setting ////////
     void setRegular();
@@ -38,5 +41,6 @@ private:
 
     //´æ´¢
     Regular mRegular;
+    bool mNewRegular;
     Ui::Regular regular_ui;
 };

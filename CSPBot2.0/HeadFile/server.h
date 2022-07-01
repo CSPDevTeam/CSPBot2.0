@@ -53,6 +53,7 @@ public:
 	DEBUG_EVENT de;
 private:
 	void catchInfo(QString line); //抓取信息
+	void selfCatchLine(QString line); //抓取命令
 	int startMode = 0;
 
 private slots:

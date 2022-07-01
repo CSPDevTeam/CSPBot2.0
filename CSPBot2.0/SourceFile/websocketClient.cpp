@@ -1,4 +1,4 @@
-//ÒıÈëÍ·ÎÄ¼ş
+ï»¿//å¼•å…¥å¤´æ–‡ä»¶
 #include "websocketClient.h"
 #include "global.h"
 //#include "CPython.h"
@@ -11,139 +11,34 @@
 
 using namespace std;
 
-//ÏûÏ¢ÀàĞÍ
-unordered_map<string, string> messageType = {
-	{"Image",u8" [Í¼Æ¬]"},
-	{"Quote",u8" [»Ø¸´µÄÏûÏ¢]"},
-	{"AtAll",u8" [@È«Ìå³ÉÔ±]"},
-	{"Face",u8" [QQ±íÇé]"},
-	{"FlashImage",u8" [ÉÁÕÕ]"},
-	{"Voice",u8" [ÓïÒô]"},
-	{"Xml",u8" [XMLÏûÏ¢]"},
-	{"Json",u8" [JSONÏûÏ¢]"},
-	{"App",u8" [Ğ¡³ÌĞò]"},
-	{"Poke",u8" [´ÁÒ»´Á]"},
-	{"Dice",u8" [Î´ÖªÏûÏ¢]"},
-	{"ForwardMessage",u8" [×ª·¢µÄÏûÏ¢]"}			
-};
 
 string getConfig(string key);
-//¹¹½¨Client
+//æ„å»ºClient
 Logger mirai_logger("Mirai");
+int sendMsg = 0, reciveMsg = 0; //æ”¶å‘æ¶ˆæ¯
 
 //API
 bool connectMirai() {
 	bool connected = mirai->login();
 	if (connected) {
-		mirai_logger.info(u8"Á¬½Óµ½Mirai³É¹¦");
+		mirai_logger.info(u8"è¿æ¥åˆ°MiraiæˆåŠŸ");
 	}
 	else {
-		QMessageBox::critical(window, u8"Mirai´íÎó", u8"ÎŞ·¨Á¬½Óµ½Mirai", QMessageBox::Ok);
-		mirai_logger.error(u8"ÎŞ·¨Á¬½Óµ½ Mirai");
+		QMessageBox::critical(window, u8"Miraié”™è¯¯", u8"æ— æ³•è¿æ¥åˆ°Mirai", QMessageBox::Ok);
+		mirai_logger.error(u8"æ— æ³•è¿æ¥åˆ° Mirai");
 	}
 
 	mirai->botProfile();
 	return connected;
 }
 
-//WebSocketClinet::WebSocketClinet(QObject* parent)
-//	: QObject(parent){
-//	m_pWebSocket = new QWebSocket();
-//	connect(
-//		m_pWebSocket, SIGNAL(connected()), 
-//		this, SLOT(slotConnected())
-//	);
-//	connect(
-//		m_pWebSocket, SIGNAL(disconnected()),
-//		this, SLOT(slotDisconnected())
-//	);
-//	connect(
-//		m_pWebSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-//		this, SLOT(slotError(QAbstractSocket::SocketError))
-//	);
-//}
-//
-//WebSocketClinet::~WebSocketClinet(){
-//	if (m_pWebSocket != 0){
-//		m_pWebSocket->deleteLater();
-//		m_pWebSocket = 0;
-//	}
-//}
-//// Á¬½Ówebsocket·şÎñÆ÷µÄURL
-//bool WebSocketClinet::connectUrl(QString url){
-//	m_url = QUrl(url);
-//	m_pWebSocket->open(m_url);
-//	return true;
-//}
-//// ¹Ø±Õwebsocket
-//void WebSocketClinet::close(){
-//	m_pWebSocket->close();
-//}
-//// ·¢ËÍTextÀàĞÍµÄÏûÏ¢
-//void WebSocketClinet::sendTextMsg(const QString& message){
-//	if (!m_bConnected){
-//		//mirai_logger.error("{} {} Failed to {}, it's not running...", __FILE__ , __LINE__,__FUNCTION__);
-//		return;
-//	}
-//	//mirai_logger.debug("Send: {}", message);
-//	m_pWebSocket->sendTextMessage(message);
-//}
-//// ·¢ËÍTextÀàĞÍµÄÏûÏ¢
-//void WebSocketClinet::sendTextMsg(const string& message){
-//	QString m_message = Helper::stdString2QString(message);
-//	if (!m_bConnected){
-//		//mirai_logger.error("{} {} Failed to {}, it's not running...", __FILE__, __LINE__, __FUNCTION__);
-//		return;
-//	}
-//	//mirai_logger.debug("Send: {}", message);
-//	m_pWebSocket->sendTextMessage(m_message);
-//}
-//// ·¢ËÍBinaryÀàĞÍµÄÏûÏ¢
-//void WebSocketClinet::sendBinaryMsg(const QByteArray& data){
-//	if (!m_bConnected){
-//		//mirai_logger.error("{} {} Failed to {}, it's not running...", __FILE__, __LINE__, __FUNCTION__);
-//		return;
-//	}
-//	m_pWebSocket->sendBinaryMessage(data);
-//}
-//// ·µ»Ø·şÎñÆ÷Á¬½Ó×´Ì¬
-//bool WebSocketClinet::getConStatus(){
-//	return m_bConnected;
-//}
-//// Á¬½Ó³É¹¦
-//void WebSocketClinet::slotConnected(){
-//	mirai_logger.info(u8"WebsocketÁ¬½Ó³É¹¦.");
-//	m_bConnected = true;
-//	connect(m_pWebSocket, SIGNAL(textMessageReceived(QString)), this, SLOT(slotRecvTextMsg(QString)));
-//	connect(m_pWebSocket, SIGNAL(binaryMessageReceived(QByteArray)), this, SLOT(slotRecvBinaryMsg(QByteArray)));
-//}
-//// ¶Ï¿ªÁ¬½Ó
-//void WebSocketClinet::slotDisconnected(){
-//	mirai_logger.error(u8"WebsocketÒÑ¶Ï¿ªÁ¬½Ó"); 
-//	reconnect();
-//}
-//// ½ÓÊÜ×Ö·ûÊı¾İ
-//void WebSocketClinet::slotRecvTextMsg(QString message){
-//	emit sigRecvTextMsg(message);
-//}
-//// ½ÓÊÜ¶ş½øÖÆÊı¾İ
-//void WebSocketClinet::slotRecvBinaryMsg(QByteArray message){
-//	mirai_logger.debug("slotRecvBinaryMsg: {}", message);
-//}
-//// ÏìÓ¦±¨´í
-//void WebSocketClinet::slotError(QAbstractSocket::SocketError error){
-//	mirai_logger.error("errorCode:{} error:{}", (int)error, Helper::QString2stdString(m_pWebSocket->errorString()));
-//}
-//// ¶Ï¿ªÖØÁ¬
-//void WebSocketClinet::reconnect() { 
-//	mirai_logger.warn(u8"WebsocketÖØÁ¬ÖĞ..."); 
-//	m_pWebSocket->abort(); 
-//	m_pWebSocket->open(m_url);
-//}
 
 WsClient::WsClient() {
 	ws.OnTextReceived([]
-	(WebSocketClient& client, string msg) {mirai->onText(client, msg);});
+	(WebSocketClient& client, string msg) {
+			reciveMsg += 1;
+			mirai->onText(client, msg);
+	});
 	ws.OnError([]
 	(WebSocketClient& client, string msg) {mirai->onError(client, msg);});
 	ws.OnLostConnection([]
@@ -158,6 +53,8 @@ bool WsClient::connect(string url) {
 	try {
 		ws.Connect(url);
 		this->connected = true;
+		mTime nowTime = time(NULL);
+		emit sigConnected(nowTime);
 		return true;
 	}
 	catch (std::runtime_error e) {
@@ -177,9 +74,11 @@ bool WsClient::close() {
 }
 
 bool WsClient::sendTextMsg(string msg) {
-	if (this->connected) {
+	if (connected) {
 		try {
 			ws.SendText(msg);
+			sendMsg += 1;
+			emit updateSendRecive(sendMsg, reciveMsg);
 			return true;
 		}
 		catch (std::runtime_error e) {}
@@ -188,9 +87,16 @@ bool WsClient::sendTextMsg(string msg) {
 }
 
 bool WsClient::shutdown() {
-	if (this->connected) {
+	if (connected) {
 		try {
 			ws.Shutdown();
+			mirai->logined = false;
+			mirai_logger.warn(u8"Miraiå·²æ–­å¼€è¿æ¥");
+			reciveMsg = 0;
+			sendMsg = 0;
+			emit updateSendRecive(sendMsg, reciveMsg);
+			emit sigConnected(0);
+			emit setUserImages("", "");
 			return true;
 		}
 		catch (std::runtime_error e) {}
@@ -200,53 +106,67 @@ bool WsClient::shutdown() {
 
 Mirai::Mirai() {
 	wsc = new WsClient();
+	connect(wsc, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int,int)));
+	connect(wsc, SIGNAL(sigConnected(mTime)), this, SLOT(slotConnected(mTime)));
+	connect(wsc, SIGNAL(setUserImages(QString,QString)), this, SLOT(slotSetUserImages(QString, QString)));
 }
 
-void Mirai::selfGroupCatchLine(Message message) {
+void Mirai::selfGroupCatchLine(messagePacket message) {
 	YAML::Node regular = YAML::LoadFile("data/regular.yml");
 	YAML::Node config = YAML::LoadFile("config/config.yml");
 
 	vector<Regular> regularList;
 
-	//¶ÁÈ¡ÕıÔò×é
+	//è¯»å–æ­£åˆ™ç»„
 	for (YAML::Node i : regular) {
 		string mRegular = i["Regular"].as<string>();
 		string Action = i["Action"].as<string>();
 		string From = i["From"].as<string>();
 		bool Permissions = i["Permissions"].as<bool>();
 
-		//×ª»»type
+		//è½¬æ¢type
 		string Action_type = Action.substr(0, 2);
 		regularAction regular_action;
-		if (Action_type == "<<") { regular_action = regularAction::Console; }
-		else if (Action_type == ">>") { regular_action = regularAction::Group; }
+		if (Action_type == "<<") { 
+			regular_action = regularAction::Console; 
+			Action = Action.erase(0, 2);
+		}
+		else if (Action_type == ">>") {
+			regular_action = regularAction::Group; 
+			Action = Action.erase(0, 2);
+		}
 		else { regular_action = regularAction::Command; };
 
-		//×ª»»À´Ô´
+		//è½¬æ¢æ¥æº
 		regularFrom regular_from;
-		transform(From.begin(), From.end(), From.begin(), ::toupper);
+		transform(From.begin(), From.end(), From.begin(), ::tolower);
 		if (From == "group") { regular_from = regularFrom::group; }
 		else { regular_from = regularFrom::console; };
-		Regular regular = { Helper::stdString2QString(mRegular),Action.erase(0, 2),regular_action,regular_from,Permissions };
-		//ÍÆÈëvector
+		Regular regular = { Helper::stdString2QString(mRegular),Helper::stdString2QString(Action),regular_action,regular_from,Permissions };
+		//æ¨å…¥vector
 		regularList.push_back(regular);
 	}
-	//Ê¹ÓÃÕıÔò×é
+	//ä½¿ç”¨æ­£åˆ™ç»„
 	for (Regular i : regularList) {
 		QRegExp r(i.regular);
 		int r_pos = r.indexIn(Helper::stdString2QString(message.message));
 		//bool qqAdmin = std::find(config["admin"].begin(), config["admin"].end(), message.qqNum) != config["admin"].end();
 		bool qqAdmin = true;
 
-		//Ö´ĞĞ²Ù×÷
+		//æ‰§è¡Œæ“ä½œ
 		if (r_pos > -1 && i.from == regularFrom::group && (i.permission == false || (i.permission == true && qqAdmin))) {
 			int num = 0;
 			for (auto& replace : r.capturedTexts()) {
-				i.action = Helper::replace(i.action, "$" + std::to_string(num), Helper::QString2stdString(replace));
+				i.action = Helper::stdString2QString(
+					Helper::replace(Helper::QString2stdString(i.action),
+						"$" + std::to_string(num), 
+						Helper::QString2stdString(replace)
+					)
+				);
 				num++;
 			}
-			//Ö´ĞĞ²Ù×÷
-			string cmd = fmtConsole::FmtGroupRegular(message.qqNum, message.qqNick, i.action);
+			//æ‰§è¡Œæ“ä½œ
+			string cmd = fmtConsole::FmtGroupRegular(message.qq, message.memberName, Helper::QString2stdString(i.action));
 			if (i.type == regularAction::Console) {
 				server->sendCmd(cmd + "\n");
 			}
@@ -254,7 +174,7 @@ void Mirai::selfGroupCatchLine(Message message) {
 				mirai->sendAllGroupMsg(cmd);
 			}
 			else {
-				Basic::Command::CustomCmd(cmd, message.group);
+				command->CustomCmd(cmd, message.group);
 			}
 		}
 	}
@@ -264,80 +184,57 @@ void Mirai::selfGroupCatchLine(Message message) {
 void Mirai::onText(WebSocketClient& client, string msg) {
 	json msg_json = json::parse(msg);
 	string syncId = msg_json["syncId"].get<string>();
+	emit updateSendRecive(sendMsg, reciveMsg); //æ›´æ–°
 	mirai_logger.debug(msg_json.dump());
 	//window->PacketCallback(msg);
-	//µÇÂ¼°ü
+	//ç™»å½•åŒ…
 	if (syncId == "1") {
-		//ÉèÖÃUserImage
+		//è®¾ç½®UserImage
 		string qqNick = msg_json["data"]["nickname"].get<string>();
-		mirai_logger.info(u8"{}µÇÂ¼ Mirai ³É¹¦", qqNick);
+		mirai_logger.info(u8"{}ç™»å½• Mirai æˆåŠŸ", qqNick);
 		logined = true;
 		emit OtherCallback("onLogin");
 		emit setUserImages(Helper::stdString2QString(getConfig("qq")), Helper::stdString2QString(qqNick));
 	}
-	//·¢ÏûÏ¢°ü
+	//å‘æ¶ˆæ¯åŒ…
 	else if (syncId == "2") {
 		int msgId = msg_json["data"]["messageId"];
 		if (msgId == -1) {
-			mirai_logger.warn(u8"ÒÑ·¢³öĞÅÏ¢µ«¿ÉÄÜÔâµ½ÆÁ±Î");
+			mirai_logger.warn(u8"å·²å‘å‡ºä¿¡æ¯ä½†å¯èƒ½é­åˆ°å±è”½");
 		}
 	}
 	else if (syncId == "-1") {
-		//ÏûÏ¢´¦Àí
+		//æ¶ˆæ¯å¤„ç†
 		if (msg_json["data"].find("type") != msg_json["data"].end() && msg_json["data"]["type"] == "GroupMessage") {
-			string qq = std::to_string(msg_json["data"]["sender"]["id"].get<long long>());
-			string qqnick = msg_json["data"]["sender"]["memberName"].get<string>();
-			string group = std::to_string(msg_json["data"]["sender"]["group"]["id"].get<long long>());
-			string msg = "";
+			messagePacket msgPacket = transMessagePacket(msg_json);
 
-			vector<string> allowGroup;
+			//vector<string> allowGroup;
 			std::ifstream fin("config/config.yml");
 			YAML::Node config = YAML::Load(fin);
+			bool inGroup = false;
 			for (auto i : config["group"]) {
-				allowGroup.push_back(i.as<string>());
+				if (i.as<string>() == msgPacket.group) {
+					inGroup = true;
+					break;
+				}
 			}
 
-			if (std::find(allowGroup.begin(), allowGroup.end(), group) != allowGroup.end()) {
-				for (auto& i : msg_json["data"]["messageChain"]) {
-					//·ÖÎöÏûÏ¢
-					if (i["type"] == "Plain") {
-						msg += u8" " + i["text"].get<string>();
-					}
-					else if (i["type"] == "At") {
-						msg += u8" " + i["display"].get<string>();
-					}
-					else if (i["type"] == "File") {
-						msg += u8" [ÎÄ¼ş]" + i["name"].get<string>();
-					}
-					else if (i["type"] == "MusicShare") {
-						msg += u8" [ÒôÀÖ·ÖÏí]" + i["musicUrl"];
-					}
-					else if (i["type"] == "Source") {}
-					else {
-						if (std::find(messageType.begin(), messageType.end(), i["type"]) != messageType.end()) {
-							msg += messageType[i["type"]];
-						}
-						else {
-							msg += u8" [Î´ÖªÏûÏ¢]";
-						}
-					}
-				}
-				msg = msg.erase(0, 1);
-				//´æ´¢½á¹¹Ìå
-				Message message = { group,qq,msg,qqnick };
+			if (inGroup) {
+				msgPacket.message = msgPacket.message.erase(0, 1);
+				//å­˜å‚¨ç»“æ„ä½“
 
 				//Callback
 				std::unordered_map<string, string> args;
-				args.emplace("group", group);
-				args.emplace("msg", msg);
-				args.emplace("qq", qq);
-				args.emplace("qqnick", qqnick);
+				args.emplace("group", msgPacket.group);
+				args.emplace("msg", msgPacket.message);
+				args.emplace("qq", msgPacket.qq);
+				args.emplace("qqnick", msgPacket.memberName);
 				emit OtherCallback("onReceiveMsg", args);
-				selfGroupCatchLine(message);
+				selfGroupCatchLine(msgPacket);
 
 			}
 		}
-		//ÊÂ¼ş´¦Àí(Èº³ÉÔ±¸ÄÃû)
+		//äº‹ä»¶å¤„ç†(ç¾¤æˆå‘˜æ”¹å)
 		else if (msg_json["data"].find("type") != msg_json["data"].end() && \
 			msg_json["data"]["type"] == "MemberCardChangeEvent") {
 
@@ -346,16 +243,39 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 
 }
 
-//ÏàÓ¦Á¬½Ó±¨´í
+//ç›¸åº”è¿æ¥æŠ¥é”™
 void Mirai::onError(WebSocketClient& client, string msg) {
 	mirai_logger.error("WebsocketClient error:{}", msg);
+	logined = false;
+	reciveMsg = 0;
+	sendMsg = 0;
+	emit updateSendRecive(sendMsg, reciveMsg);
 	emit OtherCallback("onConnectError");
 }
 
-//ÏìÓ¦Á¬½Ó¶ªÊ§
+//å“åº”è¿æ¥ä¸¢å¤±
 void Mirai::onLost(WebSocketClient& client, int code) {
 	mirai_logger.error("WebsocketClient Connect Lost,errorCode:{}", code);
+	logined = false;
+	reciveMsg = 0;
+	sendMsg = 0;
+	emit updateSendRecive(sendMsg, reciveMsg);
 	emit OtherCallback("onConnectLost");
+	emit setUserImages("","");
+	slotConnected(0);
+}
+
+//æ›´æ–°ç•Œé¢
+void Mirai::slotUpdateSendRecive(int send, int recive) {
+	emit updateSendRecive(send, recive);
+}
+
+void Mirai::slotConnected(mTime time) {
+	emit signalConnect(time);
+}
+
+void Mirai::slotSetUserImages(QString qqNum, QString qqNick) {
+	emit setUserImages(qqNum, qqNick);
 }
 
 bool Mirai::login() {
@@ -364,7 +284,7 @@ bool Mirai::login() {
 		string key = getConfig("key");
 		string wsUrl = getConfig("connectUrl");
 
-		//Æ´½ÓURL
+		//æ‹¼æ¥URL
 		string url = wsUrl + "/all?verifyKey=" + key + "&qq=" + qq;
 		return wsc->connect(url);
 	}
@@ -379,7 +299,7 @@ void Mirai::botProfile() {
 }
 
 void Mirai::sendGroupMsg(string group, string msg, bool callback) {
-	if (this->logined) {
+	if (logined) {
 		string mj = "{\"syncId\": 2, \"command\":\"sendGroupMessage\", \"subCommand\" : null,\
 					\"content\": {\"target\":" + group + ", \"messageChain\": [{ \"type\":\"Plain\", \"text\" : \"" + msg + "\"}]}}";
 		std::unordered_map<string, string> args;

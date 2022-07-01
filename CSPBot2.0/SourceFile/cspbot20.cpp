@@ -12,16 +12,144 @@ using namespace std;
 //关闭动画Animation
 QGraphicsOpacityEffect* c_pOpacity;
 QPropertyAnimation* c_pAnimation;
+//Mirai登录连接
+bool connectMirai();
 
 ///////////////////////////////////////////// Export /////////////////////////////////////////////
 //插入机器人日志
 void CSPBot::insertLog(QString a) {;
     ui.botconsole->setReadOnly(false);
     ui.botconsole->append(a);
+    ui.botconsole->moveCursor(QTextCursor::End);
     ui.botconsole->setReadOnly(true);
 };
 
-bool connectMirai();
+//启动机器人日志
+void CSPBot::startLogger() {
+    //////// Logger ////////
+    LoggerReader* loggerReader = new LoggerReader(this);
+    connect(loggerReader, SIGNAL(updateLog(QString)), this, SLOT(insertLog(QString)));
+    loggerReader->start();
+}
+
+//保存控制台日志
+void CSPBot::slotSaveConsole() {
+    if (ui.botconsole->toPlainText() != "") {
+        return;
+    }
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr(u8"保存当前日志"),
+        "",
+        tr(u8"日志文件(*.txt)"));
+    if (fileName == "") {
+        return;
+    }
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(this, u8"严重错误", u8"文件保存失败！",
+            QMessageBox::Yes, QMessageBox::Yes);
+    }
+    else
+    {
+        QTextStream stream(&file);
+        stream << ui.botconsole->toPlainText();
+        stream.flush();
+        file.close();
+    }
+}
+
+//清空控制台日志
+void CSPBot::slotClearConsole() {
+    ui.botconsole->setText("");
+}
+
+//更新上下行
+void CSPBot::slotUpdateSendRecive(int send, int recive) {
+    string sendString = to_string(send);
+    string reciveString = to_string(recive);
+    if (send > 99) {
+        sendString = "99+";
+    }
+    if (recive > 99) {
+        reciveString = "99+";
+    }
+    string reFormat = fmt::format(u8"消息:{}发;{}收", sendString,reciveString);
+    ui.websocketMsg->setText(Helper::stdString2QString(reFormat));
+}
+
+//更新连接时间
+void CSPBot::slotConnected(mTime getTime) {
+    mGetTime = getTime;
+}
+
+//手动连接Mirai
+void CSPBot::slotConnectMirai() {
+    if (mirai->logined == false) {
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"正在连接Mirai...");
+        insertLog(Helper::stdString2QString(formatLog));
+        connectMirai();
+    }
+    else {
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"现在已处于已连接状态.");
+        insertLog(Helper::stdString2QString(formatLog));
+    }
+}
+
+//手动断开Mirai
+void CSPBot::slotDisConnectMirai() {
+    if (mirai->logined == false) {
+        
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"现在未处于已连接状态.");
+        insertLog(Helper::stdString2QString(formatLog));
+    }
+    else {
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"正在断开Mirai...");
+        insertLog(Helper::stdString2QString(formatLog));
+        wsc->shutdown();
+    }
+}
+
+///////////////////////////////////////////// Timer /////////////////////////////////////////////
+void CSPBot::slotTimerFunc() {
+    //////// Connect ////////
+    mTime nowTime = time(NULL);
+    int min;
+    string minString;
+    if (mGetTime == 0) {
+        min = 0;
+    }
+    else {
+        int f = nowTime - mGetTime;
+        if (f < 60) {
+            min = 0;
+        }
+        else {
+            min = f/60;
+        }
+        
+    }
+    minString = to_string(min);
+    if (min > 99) {
+        minString = "99+";
+    }
+    string minFormat = fmt::format(u8"连接时间:{}m", minString);
+    ui.websocketConnectedTime->setText(Helper::stdString2QString(minFormat));
+
+    //////// Mirai ////////
+    if (mirai->logined) {
+        ui.websocketStatus->setText(u8"状态: 已连接");
+    }
+    else {
+        ui.websocketStatus->setText(u8"状态: 未连接");
+    }
+
+    /////// Table ////////
+    InitPlayerTableView();
+    InitRegularTableView();
+}
+
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 CSPBot::CSPBot(QWidget *parent)
@@ -35,6 +163,7 @@ CSPBot::CSPBot(QWidget *parent)
     //设置无边框
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowTitle(u8"CSPBot v" + Helper::stdString2QString(version));
     //设置窗口阴影
     QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
     shadow_effect->setOffset(0, 0);
@@ -57,7 +186,10 @@ CSPBot::CSPBot(QWidget *parent)
         ui.regularAdmin,
         ui.pluginAdmin,
         ui.inputCmd,
-        ui.runCmd
+        ui.runCmd,
+        ui.consoleWidget,
+        ui.websocketWidget,
+        ui.regularWidget,
     };
     for (auto bt : buttons) {
         setGraphics(bt);
@@ -74,6 +206,8 @@ CSPBot::CSPBot(QWidget *parent)
     //////// Bind ////////
     //注册并绑定
     qRegisterMetaType<StringMap>("StringMap");
+    qRegisterMetaType<mTime>("mTime");
+
     //翻页按钮
     connect(ui.mainPage, SIGNAL(clicked()), this, SLOT(switchPage()));
     connect(ui.playerPage, SIGNAL(clicked()), this, SLOT(switchPage()));
@@ -96,33 +230,45 @@ CSPBot::CSPBot(QWidget *parent)
     connect(ui.clear, SIGNAL(clicked()), this, SLOT(clear_console()));
     connect(ui.ServerCmd, SIGNAL(clicked()), this, SLOT(startCmd())); //绑定启动cmd
     connect(ui.runCmd, SIGNAL(clicked()), this, SLOT(insertCmd())); //绑定运行命令
+    connect(this, SIGNAL(signalStartLogger()), this, SLOT(startLogger())); //开启Logger服务
 
     //绑定快捷键
     connect(this, SIGNAL(runCommand()), this, SLOT(insertCmd())); //绑定回车输入命令
     connect(this, SIGNAL(runCmd()), ui.ServerCmd, SLOT(click())); //绑定启动cmd
 
+    //机器人Console
+    connect(ui.consoleSave, SIGNAL(clicked()), this, SLOT(slotSaveConsole())); //保存日志
+    connect(ui.consoleClear, SIGNAL(clicked()), this, SLOT(slotClearConsole())); //清空控制台
+    connect(ui.connect, SIGNAL(clicked()), this, SLOT(slotConnectMirai())); //连接Mirai
+    connect(ui.disConnect, SIGNAL(clicked()), this, SLOT(slotDisConnectMirai())); //断开连接
+
+    //表格
+    connect(ui.regularAdmin, SIGNAL(pressed(QModelIndex)), this, SLOT(clickRegularTable(QModelIndex)));
+    connect(ui.regularAdmin, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickedRegularTable(QModelIndex)));
+    connect(ui.regularNew, SIGNAL(clicked()), this, SLOT(newRegular())); //新建正则按钮
 
     //////// Mirai ////////
     mirai = new Mirai();
     connect(mirai, SIGNAL(setUserImages(QString, QString)), this, SLOT(setUserImage(QString, QString)));
-
-
-    //////// Logger ////////
-    LoggerReader* loggerReader = new LoggerReader(this);
-    connect(loggerReader, SIGNAL(updateLog(QString)), this, SLOT(insertLog(QString)));
-    loggerReader->start();
+    connect(mirai, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
+    connect(mirai, SIGNAL(signalConnect(mTime)), this, SLOT(slotConnected(mTime)));
     connectMirai();
 
     /////// Other /////////
     ui.inputCmd->setEnabled(false);
     ui.runCmd->setEnabled(false);
     ui.ServerLog->setEnabled(false);
+    command = new CommandAPI();
+    connect(command, SIGNAL(signalStartServer()), this, SLOT(startServer()));
 
-    /////// Test ////////
-    Regular re = { "","",Console,group,true };
-    regularEdit* resub = new regularEdit(re,this);
-    resub->show();
+    /////// timer /////////
+    QTimer* timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc()));
+    timer->start(1 * 1000);
 
+    /////// Table /////////
+    InitPlayerTableView();
+    InitRegularTableView();
 }
 
 ///////////////////////////////////////////// Style /////////////////////////////////////////////
@@ -192,6 +338,13 @@ void CSPBot::setAllScrollbar(QScrollBar* bar) {
 QPixmap PixmapToRound(QPixmap& src, int radius);
 
 void CSPBot::setUserImage(QString qqNum, QString qqNick) {
+    if (qqNum == "" || qqNick == "") {
+        QPixmap pixmap = QPixmap();
+        ui.userImage->setPixmap(pixmap);
+        ui.user->setText(u8"用户未登录");
+        ui.userImage->setText(u8"用户未登录");
+        return;
+    }
     QString szUrl = "https://q.qlogo.cn/g?b=qq&nk=" + qqNum + "&s=640";
     QUrl url(szUrl);
     QNetworkAccessManager manager;
@@ -357,6 +510,7 @@ void CSPBot::buildServer(int mode) {
 void CSPBot::slotInsertBDSLog(QString log) {
     ui.ServerLog->setReadOnly(false);
     ui.ServerLog->append(log);
+    ui.ServerLog->moveCursor(QTextCursor::End);
     ui.ServerLog->setReadOnly(true);
 }; 
 
@@ -471,4 +625,190 @@ void CSPBot::keyPressEvent(QKeyEvent* e)
     else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
         emit runCommand();
     }
+}
+
+///////////////////////////////////////////// Table /////////////////////////////////////////////
+void CSPBot::InitPlayerTableView()
+{
+    try {
+        YAML::Node node = YAML::LoadFile("data/player.yml"); //读取player配置文件
+        int line_num = node.size();
+        QStringList strHeader;
+        strHeader << u8"玩家名称" << u8"玩家Xuid" << u8"玩家QQ号";
+
+        QStandardItemModel* m_model = new QStandardItemModel();
+        m_model->setHorizontalHeaderLabels(strHeader);
+        m_model->setColumnCount(strHeader.size());
+        m_model->setRowCount(line_num);
+        ui.playerAdmin->verticalHeader()->hide();
+        ui.playerAdmin->setModel(m_model);
+
+        //居中显示并设置文本
+        int in = 0;
+        for (YAML::Node i : node)
+        {
+            string playerName = i["playerName"].as<string>();
+            string xuid = i["xuid"].as<string>();
+            string qq = i["qq"].as<string>();
+            QStandardItem* item1 = new QStandardItem(Helper::stdString2QString(playerName));
+            item1->setTextAlignment(Qt::AlignCenter);
+            QStandardItem* item2 = new QStandardItem(Helper::stdString2QString(xuid));
+            item2->setTextAlignment(Qt::AlignCenter);
+            QStandardItem* item3 = new QStandardItem(Helper::stdString2QString(qq));
+            item3->setTextAlignment(Qt::AlignCenter);
+            m_model->setItem(in, 0, item1);
+            m_model->setItem(in, 1, item2);
+            m_model->setItem(in, 2, item3);
+            in++;
+        }
+        ui.playerAdmin->horizontalHeader()->setStretchLastSection(true);
+        ui.playerAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        ui.playerAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        //ui.playerAdmin->setFrameShape(QListWidget::NoFrame);
+        ui.playerAdmin->setAlternatingRowColors(true);
+        ui.playerAdmin->setShowGrid(false);
+    }
+    catch (...) {
+
+    }
+}
+
+void CSPBot::InitRegularTableView()
+{
+    try {
+        YAML::Node node = YAML::LoadFile("data/regular.yml"); //读取player配置文件
+        int line_num = node.size();
+        QStringList strHeader;
+        strHeader << u8"正则" << u8"来源" << u8"执行" << u8"权限";
+
+        QStandardItemModel* m_model = new QStandardItemModel();
+        //添加表头数据
+        m_model->setHorizontalHeaderLabels(strHeader);
+        //设置列数
+        m_model->setColumnCount(strHeader.size());
+        //设置行数
+        m_model->setRowCount(line_num);
+
+        //隐藏列表头
+        ui.regularAdmin->verticalHeader()->hide();
+
+        //setModel.
+        ui.regularAdmin->setModel(m_model);
+        //居中显示并设置文本
+        int in = 0;
+        for (YAML::Node i : node)
+        {
+            string Regular = i["Regular"].as<string>();
+            string Action = i["Action"].as<string>();
+            string From = i["From"].as<string>();
+            string Permissions;
+            if (i["Permissions"].as<bool>()) {
+                Permissions = u8"是";
+            }
+            else if (!i["Permissions"].as<bool>()) {
+                Permissions = u8"否";
+            }
+            QStandardItem* item1 = new QStandardItem(Helper::stdString2QString(Regular));
+            item1->setTextAlignment(Qt::AlignCenter);
+            QStandardItem* item2 = new QStandardItem(Helper::stdString2QString(From));
+            item2->setTextAlignment(Qt::AlignCenter);
+            QStandardItem* item3 = new QStandardItem(Helper::stdString2QString(Action));
+            item3->setTextAlignment(Qt::AlignCenter);
+            QStandardItem* item4 = new QStandardItem(Helper::stdString2QString(Permissions));
+            item4->setTextAlignment(Qt::AlignCenter);
+            m_model->setItem(in, 0, item1);
+            m_model->setItem(in, 1, item2);
+            m_model->setItem(in, 2, item3);
+            m_model->setItem(in, 3, item4);
+            in++;
+        }
+        ui.regularAdmin->horizontalHeader()->setStretchLastSection(true);
+        ui.regularAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        ui.regularAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        //ui.playerAdmin->setFrameShape(QListWidget::NoFrame);
+        ui.regularAdmin->setAlternatingRowColors(true);
+        ui.regularAdmin->setShowGrid(false);
+        
+    }
+    catch (...) {
+
+    }
+}
+
+//选中自动选中该行
+void CSPBot::clickRegularTable(QModelIndex index) {
+    ui.regularAdmin->selectRow(index.row());
+}
+
+void CSPBot::doubleClickedRegularTable(QModelIndex index) {
+    int row = ui.regularAdmin->currentIndex().row();
+    auto modelViewOneUp = ui.regularAdmin->model();
+    vector<string> regularData;
+    /*
+    enum regularAction { Console, Group, Command };
+    enum regularFrom { group, console };
+    struct Regular {
+	    QString regular;
+	    std::string action;
+	    regularAction type;
+	    regularFrom from;
+	    bool permission;
+    };
+    strHeader << u8"正则" << u8"来源" << u8"执行" << u8"权限";
+    */
+    for (int i=0; i<5; i++)
+    {
+        QModelIndex index = modelViewOneUp->index(row, i);
+        QString name = modelViewOneUp->data(index).toString();
+        regularData.push_back(Helper::QString2stdString(name));
+    }
+    string mRegular = regularData[0];
+    string mFrom = regularData[1];
+    string mAction = regularData[2];
+    string mPermission = regularData[3];
+
+    //转换type
+    string Action_type = mAction.substr(0, 2);
+    regularAction regular_action;
+    if (Action_type == "<<") { 
+        regular_action = regularAction::Console; 
+    }
+    else if (Action_type == ">>") { 
+        regular_action = regularAction::Group; 
+    }
+    else { regular_action = regularAction::Command; };
+
+    //转换权限
+    bool Permission = (mPermission == u8"是");
+
+    //转换来源
+    regularFrom regular_from;
+    transform(mFrom.begin(), mFrom.end(), mFrom.begin(), ::tolower);
+    if (mFrom == "group") { 
+        regular_from = regularFrom::group;
+    }
+    else { 
+        regular_from = regularFrom::console;
+    };
+
+    Regular regular = { 
+        Helper::stdString2QString(regularData[0]),
+        Helper::stdString2QString(regularData[2]),
+        regular_action,
+        regular_from,
+        Permission};
+    regularEdit* regEdit = new regularEdit(regular,false,this);
+    regEdit->show();
+}
+
+//新建正则
+void CSPBot::newRegular() {
+    Regular regular = {
+        "",
+        "",
+        Console,
+        console,
+        false };
+    regularEdit* regEdit = new regularEdit(regular,true,this);
+    regEdit->show();
 }
