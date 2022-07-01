@@ -69,45 +69,6 @@ border-radius:45px</string>
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QPushButton" name="Main">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>260</y>
-       <width>161</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>HarmonyOS Sans SC</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-	background-color:#f0f3f8;
-	color:#666666;
-	border-radius:10px;
-	qproperty-iconSize: 32px 32px;
-}
-
-QPushButton:hover{
-	background-color:#e0e6ee;
-	border-radius:10px;
-}
-</string>
-     </property>
-     <property name="text">
-      <string>  软件主页</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>:/Chargesoftware/Images/Home_gray.svg</normaloff>:/Chargesoftware/Images/Home_gray.svg</iconset>
-     </property>
-    </widget>
     <widget class="QPushButton" name="mainPage">
      <property name="geometry">
       <rect>

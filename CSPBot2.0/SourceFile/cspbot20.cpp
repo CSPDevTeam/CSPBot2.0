@@ -4,6 +4,7 @@
 #include "global.h"
 #include "logger.h"
 #include "websocketClient.h"
+#include "regularEdit.h"
 
 using namespace std;
 
@@ -59,7 +60,7 @@ CSPBot::CSPBot(QWidget *parent)
         ui.runCmd
     };
     for (auto bt : buttons) {
-        this->setGraphics(bt);
+        setGraphics(bt);
     }
 
     //¶¯»­´°¿Ú
@@ -116,6 +117,11 @@ CSPBot::CSPBot(QWidget *parent)
     ui.inputCmd->setEnabled(false);
     ui.runCmd->setEnabled(false);
     ui.ServerLog->setEnabled(false);
+
+    /////// Test ////////
+    Regular re = { "","",Console,group,true };
+    regularEdit* resub = new regularEdit(re,this);
+    resub->show();
 
 }
 

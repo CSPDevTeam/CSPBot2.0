@@ -236,3 +236,14 @@ namespace Bind {
 		return false;
 	}
 }
+
+//正则组结构体
+enum regularAction { Console, Group, Command };
+enum regularFrom { group, console };
+struct Regular {
+	QString regular;
+	std::string action;
+	regularAction type;
+	regularFrom from;
+	bool permission;
+};

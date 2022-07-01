@@ -1,29 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="cspbot20.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="websocketClient.cpp">
-      <Filter>Source File\Websocket</Filter>
-    </ClCompile>
-    <ClCompile Include="logger.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
     <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="server.cpp">
+    <ClCompile Include="SourceFile\stdafx.cpp">
       <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Command.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\logger.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\main.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\server.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\websocketClient.cpp">
+      <Filter>Source File\Websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\cspbot20.cpp">
+      <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\regularEdit.cpp">
+      <Filter>Source File\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -42,53 +45,68 @@
     <Filter Include="Source File\Websocket">
       <UniqueIdentifier>{7f8c84ed-c74c-47a1-bc10-e699d6aaa809}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Head File\UI">
+      <UniqueIdentifier>{a43af4bc-0c09-4579-9b77-60fb2e2614e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\UI">
+      <UniqueIdentifier>{7647e4a5-a786-4364-a87d-cae648836d89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="cspbot20.h">
-      <Filter>Head File</Filter>
-    </QtMoc>
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h">
       <Filter>Head File</Filter>
     </QtMoc>
-    <QtMoc Include="server.h">
+    <QtMoc Include="HeadFile\logger.h">
       <Filter>Head File</Filter>
     </QtMoc>
-    <QtMoc Include="logger.h">
+    <QtMoc Include="HeadFile\server.h">
       <Filter>Head File</Filter>
     </QtMoc>
-    <QtMoc Include="websocketClient.h">
+    <QtMoc Include="HeadFile\websocketClient.h">
       <Filter>Head File\Websocket</Filter>
     </QtMoc>
+    <QtMoc Include="HeadFile\cspbot20.h">
+      <Filter>Head File\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="HeadFile\regularEdit.h">
+      <Filter>Head File\UI</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="cspbot20.qrc">
+    <ClInclude Include="HeadFile\stdafx.h">
+      <Filter>Head File</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\global.h">
+      <Filter>Head File</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\helper.h">
+      <Filter>Head File</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ResourceFile\CSPBot2.0.ico">
       <Filter>Resource File</Filter>
-    </QtRcc>
+    </Image>
+    <Image Include="ResourceFile\CSPBot.ico">
+      <Filter>Resource File</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CSPBot2.0.rc">
+    <ResourceCompile Include="ResourceFile\CSPBot2.0.rc">
       <Filter>Resource File</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CSPBot2.0.ico">
+    <QtRcc Include="ResourceFile\cspbot20.qrc">
       <Filter>Resource File</Filter>
-    </None>
+    </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="cspbot20.ui">
+    <QtUic Include="ResourceFile\cspbot20.ui">
       <Filter>Resource File</Filter>
     </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Head File</Filter>
-    </ClInclude>
-    <ClInclude Include="global.h">
-      <Filter>Head File</Filter>
-    </ClInclude>
-    <ClInclude Include="helper.h">
-      <Filter>Head File</Filter>
-    </ClInclude>
+    <QtUic Include="ResourceFile\regularEdit.ui">
+      <Filter>Resource File</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

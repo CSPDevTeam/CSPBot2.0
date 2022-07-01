@@ -31,17 +31,6 @@ string getConfig(string key);
 //构建Client
 Logger mirai_logger("Mirai");
 
-//正则组结构体
-enum regularAction { Console, Group, Command };
-enum regularFrom { group, console };
-struct Regular {
-	QString regular;
-	string action;
-	regularAction type;
-	regularFrom from;
-	bool permission;
-};
-
 //API
 bool connectMirai() {
 	bool connected = mirai->login();
