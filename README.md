@@ -36,3 +36,8 @@
 
 - Q: 字体有问题怎么办
 - A: 请安装指定字体[HarmonyOS_Sans_SC_Regular.ttf](https://huohuas001.lanzouv.com/iFSlj078w1pe)
+
+- Q: 遇到点击主程序没反应怎么办
+- A: 可以选择安装[Python 3.8.0](https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe)或者把[fixPython](https://huohuas001.lanzouv.com/imqT407a521g).zip包解压放进`CSPBot2.0.exe`同目录下即可
+
+- 更多详情请查看文档
