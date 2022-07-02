@@ -9,6 +9,7 @@
 //Type
 typedef std::unordered_map<std::string, std::string> StringMap;
 typedef time_t mTime;
+typedef std::vector<std::string> StringVector;
 
 class CSPBot : public QMainWindow
 {
@@ -82,6 +83,7 @@ private slots:
 
     /////////////// Plugin //////////////////
     bool slotOtherCallback(QString listener, StringMap args);
+    void slotCommandCallback(QString cmd, StringVector args);
     
 
 ///////////////////////////////////////////// Private /////////////////////////////////////////////

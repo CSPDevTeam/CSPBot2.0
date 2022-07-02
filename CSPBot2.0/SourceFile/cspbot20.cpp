@@ -209,6 +209,7 @@ CSPBot::CSPBot(QWidget *parent)
     //×¢²á²¢°ó¶¨
     qRegisterMetaType<StringMap>("StringMap");
     qRegisterMetaType<mTime>("mTime");
+    qRegisterMetaType<StringVector>("StringVector");
 
     //·­Ò³°´Å¥
     connect(ui.mainPage, SIGNAL(clicked()), this, SLOT(switchPage()));
@@ -263,6 +264,7 @@ CSPBot::CSPBot(QWidget *parent)
     ui.ServerLog->setEnabled(false);
     commandApi = new CommandAPI();
     connect(commandApi, SIGNAL(signalStartServer()), this, SLOT(startServer()));
+    connect(commandApi, SIGNAL(signalCommandCallback(QString,StringVector)), this, SLOT(slotCommandCallback(QString,StringVector)));
 
     /////// timer /////////
     QTimer* timer = new QTimer(this);
@@ -536,6 +538,18 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 
     return cb.callback();
 }; 
+
+void CSPBot::slotCommandCallback(QString cmd,StringVector fArgs){
+    string type = Helper::QString2stdString(cmd);
+    if (command.find(type) != command.end()) {
+        py::list args;
+        for (auto& i:fArgs) {
+            args.append(py::str(i));
+        }
+        py::function cbe = command[type];
+        cbe(args);
+    }
+}
 
 //¸ü¸Ä×´Ì¬
 void CSPBot::slotChangeStatus(bool a) {

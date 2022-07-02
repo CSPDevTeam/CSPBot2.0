@@ -25,17 +25,17 @@
     <ClCompile Include="SourceFile\regularEdit.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\CSPBot2\SouceFile\PyEvent.cpp">
-      <Filter>Source File\plugin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\CSPBot2\SouceFile\PyModle.cpp">
-      <Filter>Source File\plugin</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\CSPBot2\SouceFile\PyAPI.cpp">
-      <Filter>Source File\plugin</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFile\stdafx.cpp">
       <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\PyAPI.cpp">
+      <Filter>Source File\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\PyEvent.cpp">
+      <Filter>Source File\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\PyModle.cpp">
+      <Filter>Source File\plugin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

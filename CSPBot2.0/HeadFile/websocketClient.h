@@ -150,6 +150,7 @@ class CommandAPI :public QObject
 	Q_OBJECT
 signals:
 	void signalStartServer();
+	void signalCommandCallback(QString cmd, StringVector args);
 	//void Callback(QString listener,StringMap args);
 public:
 	explicit CommandAPI(){};

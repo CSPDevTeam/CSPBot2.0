@@ -134,7 +134,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 		}
 	}
 	else if (command.find(Action_Type) != command.end()) {
-		vector<string> args;
+		StringVector args;
 		int num = 0;
 		for (auto& i : sp) {
 			if (num != 0) {
@@ -142,7 +142,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			}
 			num++;
 		}
-		//window->CommandCallback(Action_Type, args);
+		emit signalCommandCallback(Helper::stdString2QString(Action_Type), args);
 	}
 }
 

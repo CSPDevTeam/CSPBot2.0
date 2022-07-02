@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include "logger.h"
 #include "websocketClient.h"
-//#include "CPython.h"
 
 enum stopType;
 

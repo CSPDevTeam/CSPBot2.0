@@ -125,14 +125,14 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\CSPBot2\SouceFile\PyAPI.cpp" />
-    <ClCompile Include="..\..\CSPBot2\SouceFile\PyEvent.cpp" />
-    <ClCompile Include="..\..\CSPBot2\SouceFile\PyModle.cpp" />
     <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp" />
     <ClCompile Include="SourceFile\Command.cpp" />
     <ClCompile Include="SourceFile\cspbot20.cpp" />
     <ClCompile Include="SourceFile\logger.cpp" />
     <ClCompile Include="SourceFile\main.cpp" />
+    <ClCompile Include="SourceFile\PyAPI.cpp" />
+    <ClCompile Include="SourceFile\PyEvent.cpp" />
+    <ClCompile Include="SourceFile\PyModle.cpp" />
     <ClCompile Include="SourceFile\regularEdit.cpp" />
     <ClCompile Include="SourceFile\server.cpp" />
     <ClCompile Include="SourceFile\stdafx.cpp">
