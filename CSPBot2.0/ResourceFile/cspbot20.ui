@@ -35,6 +35,11 @@ border-radius:10px</string>
       <height>641</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>HarmonyOS Sans SC</family>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">background-color:#f0f3f8;
 border-top-left-radius:10px;
@@ -53,7 +58,7 @@ border-bottom-left-radius:10px;</string>
      </property>
      <property name="font">
       <font>
-       <family>HarmonyOS Sans SC Black</family>
+       <family>HarmonyOS Sans SC</family>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -123,7 +128,7 @@ qproperty-iconSize: 32px 32px;
      </property>
      <property name="font">
       <font>
-       <family>HarmonyOS Sans SC Black</family>
+       <family>HarmonyOS Sans SC</family>
        <pointsize>11</pointsize>
        <weight>75</weight>
        <bold>true</bold>
@@ -306,7 +311,7 @@ QPushButton:hover{
      </property>
      <property name="font">
       <font>
-       <family>HarmonyOS Sans SC Black</family>
+       <family>HarmonyOS Sans SC</family>
        <pointsize>18</pointsize>
        <weight>75</weight>
        <bold>true</bold>
@@ -338,14 +343,14 @@ QPushButton:hover{
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>71</width>
+       <width>91</width>
        <height>16</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <family>HarmonyOS Sans Medium</family>
-       <pointsize>9</pointsize>
+       <family>HarmonyOS Sans SC</family>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="styleSheet">
@@ -367,7 +372,7 @@ QPushButton:hover{
     </property>
     <property name="font">
      <font>
-      <family>HarmonyOS Sans</family>
+      <family>HarmonyOS Sans SC</family>
      </font>
     </property>
     <property name="currentIndex">
