@@ -70,7 +70,6 @@ void regularEdit::saveRegular() {
         string fmAction = Helper::QString2stdString(mRegular.action);
         string fmFrom;
         bool fmPermission = mRegular.permission;
-        //qDebug() << "fmRegular:" << fmRegular << "\nfmAction:" << fmAction << "\nfmFrom:" << fmFrom << "\nfmPer"
 
         //×ª»»À´Ô´
         switch (mRegular.from)

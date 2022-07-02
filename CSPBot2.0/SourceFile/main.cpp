@@ -13,7 +13,7 @@ CSPBot* window;
 Server* server;
 Mirai* mirai;
 WsClient* wsc;
-CommandAPI* command;
+CommandAPI* commandApi;
 MySysInfo* mysysinfo = new MySysInfo();
 int configVersion = 3;
 QQueue<QString> q;
@@ -23,6 +23,8 @@ string getConfig(string key){
     return config[key].as<string>();
 };
 
+void InitPython(); //³õÊ¼»¯Python½âÊÍÆ÷
+
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
@@ -30,5 +32,6 @@ int main(int argc, char *argv[])
     CSPBot* window = new CSPBot;
     window->show();
     window->publicStartLogger();
+    InitPython();
     return a.exec();
 }

@@ -318,7 +318,7 @@ void Server::selfCatchLine(QString line) {
 			}
 			else {
 				string ac = fmtConsole::FmtConsoleRegular(Action);
-				command->CustomCmd(ac, "");
+				commandApi->CustomCmd(ac, "");
 			}
 		}
 	}

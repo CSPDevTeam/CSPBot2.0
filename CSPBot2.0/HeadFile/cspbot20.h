@@ -47,7 +47,6 @@ private slots:
 
     /////////////// Server //////////////////
     //ServerRebackSlot
-    void slotOtherCallback(QString listener, StringMap args);
     void slotChenableForce(bool a);
     void slotInsertBDSLog(QString log);
     void slotChangeStatus(bool a);
@@ -81,9 +80,8 @@ private slots:
     void doubleClickedRegularTable(QModelIndex index);
     void newRegular(); //新建正则
 
-    /////// Table ///////
-    void InitPlayerTableView();
-    void InitRegularTableView();
+    /////////////// Plugin //////////////////
+    bool slotOtherCallback(QString listener, StringMap args);
     
 
 ///////////////////////////////////////////// Private /////////////////////////////////////////////
@@ -114,6 +112,10 @@ private:
     /////// Keyboard ///////
     mTime mGetTime;
 
+    /////// Table ///////
+    void InitPlayerTableView();
+    void InitRegularTableView();
+    void InitPluginTableView();
     
 
     //////// UI ////////

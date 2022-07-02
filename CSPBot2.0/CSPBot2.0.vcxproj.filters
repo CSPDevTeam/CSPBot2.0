@@ -4,9 +4,6 @@
     <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\stdafx.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFile\Command.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
@@ -27,6 +24,18 @@
     </ClCompile>
     <ClCompile Include="SourceFile\regularEdit.cpp">
       <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSPBot2\SouceFile\PyEvent.cpp">
+      <Filter>Source File\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSPBot2\SouceFile\PyModle.cpp">
+      <Filter>Source File\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CSPBot2\SouceFile\PyAPI.cpp">
+      <Filter>Source File\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\stdafx.cpp">
+      <Filter>Source File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +60,12 @@
     <Filter Include="Source File\UI">
       <UniqueIdentifier>{7647e4a5-a786-4364-a87d-cae648836d89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Head File\plugin">
+      <UniqueIdentifier>{d3b58c53-d1e3-4937-acc0-c97c68a2e93d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\plugin">
+      <UniqueIdentifier>{00d65e6f-bfe8-45da-a1a6-d34511f29ebd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h">
@@ -73,13 +88,16 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeadFile\stdafx.h">
-      <Filter>Head File</Filter>
-    </ClInclude>
     <ClInclude Include="HeadFile\global.h">
       <Filter>Head File</Filter>
     </ClInclude>
     <ClInclude Include="HeadFile\helper.h">
+      <Filter>Head File</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\pluginModule.h">
+      <Filter>Head File\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\stdafx.h">
       <Filter>Head File</Filter>
     </ClInclude>
   </ItemGroup>

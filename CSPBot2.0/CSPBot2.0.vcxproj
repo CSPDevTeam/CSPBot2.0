@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeadFile;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeadFile;$(SolutionDir)Include\python;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>$(SolutionDir)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeadFile;$(SolutionDir)Include\python;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -70,8 +70,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)Include\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>LightWSClient.lib;fmtd.lib;yaml-cpp.lib;libcrypto.lib;libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Include\libs\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LightWSClient.lib;fmtd.lib;yaml-cpp.lib;libcrypto.lib;libssl.lib;python3.lib;python38.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -84,8 +84,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)Include\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>LightWSClient.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Include\libs\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LightWSClient.lib;fmt.lib;yaml-cpp.lib;libcrypto.lib;libssl.lib;python3.lib;python38.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -125,6 +125,9 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\CSPBot2\SouceFile\PyAPI.cpp" />
+    <ClCompile Include="..\..\CSPBot2\SouceFile\PyEvent.cpp" />
+    <ClCompile Include="..\..\CSPBot2\SouceFile\PyModle.cpp" />
     <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp" />
     <ClCompile Include="SourceFile\Command.cpp" />
     <ClCompile Include="SourceFile\cspbot20.cpp" />
@@ -142,12 +145,13 @@
   <ItemGroup>
     <ClInclude Include="HeadFile\global.h" />
     <ClInclude Include="HeadFile\helper.h" />
+    <ClInclude Include="HeadFile\stdafx.h" />
     <QtMoc Include="HeadFile\regularEdit.h" />
     <QtMoc Include="HeadFile\websocketClient.h" />
     <QtMoc Include="HeadFile\server.h" />
     <QtMoc Include="HeadFile\logger.h" />
     <QtMoc Include="HeadFile\cspbot20.h" />
-    <ClInclude Include="HeadFile\stdafx.h" />
+    <ClInclude Include="HeadFile\pluginModule.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ResourceFile\CSPBot.ico" />

@@ -8,7 +8,7 @@
 #include "cspbot20.h"
 #include "helper.h"
 #include "websocketClient.h"
-//#include "CPython.h"
+#include "pluginModule.h"
 #include "helper.h"
 #include "server.h"
 #include "global.h"
@@ -65,8 +65,6 @@ vector<string> CommandAPI::SplitCommand(const std::string& paras)
 	}
 	return res;
 }
-
-std::unordered_map<string, string> commands ={};
 
 void CommandAPI::CustomCmd(string cmd, string group) {
 	vector<string> sp = SplitCommand(cmd);
@@ -135,7 +133,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			mirai->sendGroupMsg(group, u8"服务器不在运行中");
 		}
 	}
-	else if (commands.find(Action_Type) != commands.end()) {
+	else if (command.find(Action_Type) != command.end()) {
 		vector<string> args;
 		int num = 0;
 		for (auto& i : sp) {

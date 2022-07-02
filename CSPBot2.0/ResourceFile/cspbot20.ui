@@ -371,7 +371,7 @@ QPushButton:hover{
      </font>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="Control">
      <widget class="QTextEdit" name="ServerLog">
@@ -869,13 +869,13 @@ background-color:#D1F7E9;</string>
      <zorder>regularNew</zorder>
     </widget>
     <widget class="QWidget" name="Plugin">
-     <widget class="QListView" name="pluginAdmin">
+     <widget class="QTableView" name="pluginAdmin">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>5</y>
         <width>791</width>
-        <height>591</height>
+        <height>581</height>
        </rect>
       </property>
       <property name="font">

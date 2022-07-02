@@ -219,6 +219,30 @@ namespace Bind {
 		}
 		return false;
 	}
+
+	//查询信息
+	inline YAML::Node queryXboxID(std::string type, std::string arg) {
+		YAML::Node player = YAML::LoadFile("data/player.yml");
+		//迭代搜索
+		for (YAML::Node i : player) {
+			if (type == "qq") {
+				if (i["qq"].as<std::string>() == arg) {
+					return i;
+				}
+			}
+			else if (type == "player") {
+				if (i["playerName"].as<std::string>() == arg) {
+					return i;
+				}
+			}
+			else if (type == "xuid") {
+				if (i["xuid"].as<std::string>() == arg) {
+					return i;
+				}
+			}
+		}
+		return {};
+	}
 }
 
 //正则组结构体

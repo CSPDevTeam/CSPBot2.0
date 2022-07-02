@@ -174,7 +174,7 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 				mirai->sendAllGroupMsg(cmd);
 			}
 			else {
-				command->CustomCmd(cmd, message.group);
+				commandApi->CustomCmd(cmd, message.group);
 			}
 		}
 	}
@@ -229,8 +229,11 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 				args.emplace("msg", msgPacket.message);
 				args.emplace("qq", msgPacket.qq);
 				args.emplace("qqnick", msgPacket.memberName);
-				emit OtherCallback("onReceiveMsg", args);
-				selfGroupCatchLine(msgPacket);
+				bool send = emit OtherCallback("onReceiveMsg", args);
+				if (send) {
+					selfGroupCatchLine(msgPacket);
+				}
+				
 
 			}
 		}
@@ -305,8 +308,11 @@ void Mirai::sendGroupMsg(string group, string msg, bool callback) {
 		std::unordered_map<string, string> args;
 		args.emplace("group", group);
 		args.emplace("msg", msg);
-		emit OtherCallback("onSendMsg", args);
-		wsc->sendTextMsg(mj);
+		bool send = emit OtherCallback("onSendMsg", args);
+		if (send) {
+			wsc->sendTextMsg(mj);
+		}
+		
 	}
 
 }
@@ -317,8 +323,11 @@ void Mirai::recallMsg(string target, bool callback) {
 		string mj = "{\"syncId\": 3,\"command\" : \"recall\",\"subCommand\":null,\"content\":{\"target\":" + target + "}}";
 		std::unordered_map<string, string> args;
 		args.emplace("target", target);
-		emit OtherCallback("onRecall", args);
-		wsc->sendTextMsg(mj);
+		bool send = emit OtherCallback("onRecall", args);
+		if (send) {
+			wsc->sendTextMsg(mj);
+		}
+		
 	}
 }
 

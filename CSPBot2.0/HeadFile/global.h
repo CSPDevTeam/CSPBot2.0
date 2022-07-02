@@ -19,7 +19,7 @@ class WsClient;
 extern WsClient* wsc;
 
 class CommandAPI;
-extern CommandAPI* command;
+extern CommandAPI* commandApi;
 
 
 extern QQueue<QString> q;

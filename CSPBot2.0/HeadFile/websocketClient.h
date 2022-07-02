@@ -132,7 +132,7 @@ public:
 	void onLost(WebSocketClient& client, int code);
 signals:
 	void setUserImages(QString qqNum, QString qqNick); //更改UserImages
-	void OtherCallback(QString listener, StringMap args={}); //Callback
+	bool OtherCallback(QString listener, StringMap args={}); //Callback
 	void sigLogin(); //登录成功
 	void updateSendRecive(int send, int recive); //更新界面
 	void signalConnect(mTime time); //连接成功传输

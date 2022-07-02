@@ -5,6 +5,7 @@
 #include "logger.h"
 #include "websocketClient.h"
 #include "regularEdit.h"
+#include "pluginModule.h"
 
 using namespace std;
 
@@ -148,6 +149,7 @@ void CSPBot::slotTimerFunc() {
     /////// Table ////////
     InitPlayerTableView();
     InitRegularTableView();
+    InitPluginTableView();
 }
 
 
@@ -252,14 +254,15 @@ CSPBot::CSPBot(QWidget *parent)
     connect(mirai, SIGNAL(setUserImages(QString, QString)), this, SLOT(setUserImage(QString, QString)));
     connect(mirai, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
     connect(mirai, SIGNAL(signalConnect(mTime)), this, SLOT(slotConnected(mTime)));
+    connect(mirai, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
     connectMirai();
 
     /////// Other /////////
     ui.inputCmd->setEnabled(false);
     ui.runCmd->setEnabled(false);
     ui.ServerLog->setEnabled(false);
-    command = new CommandAPI();
-    connect(command, SIGNAL(signalStartServer()), this, SLOT(startServer()));
+    commandApi = new CommandAPI();
+    connect(commandApi, SIGNAL(signalStartServer()), this, SLOT(startServer()));
 
     /////// timer /////////
     QTimer* timer = new QTimer(this);
@@ -269,6 +272,7 @@ CSPBot::CSPBot(QWidget *parent)
     /////// Table /////////
     InitPlayerTableView();
     InitRegularTableView();
+    InitPluginTableView();
 }
 
 ///////////////////////////////////////////// Style /////////////////////////////////////////////
@@ -515,8 +519,22 @@ void CSPBot::slotInsertBDSLog(QString log) {
 }; 
 
 //Callback
-void CSPBot::slotOtherCallback(QString listener, StringMap args) {
-    
+bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
+    qDebug() << "CallBack:" << listener;
+    string eventName = Helper::QString2stdString(listener);
+    auto event_code = magic_enum::enum_cast<EventCode>(eventName.c_str());
+    if (!event_code) {
+        return false;
+    }
+    EventCode ct = event_code.value();
+    Callbacker cb(ct);
+    for(auto& i:args) {
+        string key = i.first;
+        string value = i.second;
+        cb.insert(key.c_str(), py::str(value));
+    }
+
+    return cb.callback();
 }; 
 
 //更改状态
@@ -811,4 +829,52 @@ void CSPBot::newRegular() {
         false };
     regularEdit* regEdit = new regularEdit(regular,true,this);
     regEdit->show();
+}
+
+void CSPBot::InitPluginTableView()
+{
+    try {
+        int line_num = plugins.size();
+        QStringList strHeader;
+        strHeader << u8"文件名" << u8"插件" << u8"介绍" << u8"版本" << u8"作者";
+
+        QStandardItemModel* m_model = new QStandardItemModel();
+        m_model->setHorizontalHeaderLabels(strHeader);
+        m_model->setColumnCount(strHeader.size());
+        m_model->setRowCount(line_num);
+        ui.pluginAdmin->verticalHeader()->hide();
+        ui.pluginAdmin->setModel(m_model);
+        int in = 0;
+        for (auto& i : plugins)
+        {
+            QStandardItem* item1 = new QStandardItem(Helper::stdString2QString(i.first));
+            QStandardItem* item2 = new QStandardItem(Helper::stdString2QString(i.second.name));
+            QStandardItem* item3 = new QStandardItem(Helper::stdString2QString(i.second.info));
+            QStandardItem* item4 = new QStandardItem(Helper::stdString2QString(i.second.version));
+            QStandardItem* item5 = new QStandardItem(Helper::stdString2QString(i.second.author));
+
+            //居中文本
+            item1->setTextAlignment(Qt::AlignCenter);
+            item2->setTextAlignment(Qt::AlignCenter);
+            item3->setTextAlignment(Qt::AlignCenter);
+            item4->setTextAlignment(Qt::AlignCenter);
+            item5->setTextAlignment(Qt::AlignCenter);
+
+            m_model->setItem(in, 0, item1);
+            m_model->setItem(in, 1, item2);
+            m_model->setItem(in, 2, item3);
+            m_model->setItem(in, 3, item4);
+            m_model->setItem(in, 4, item5);
+            in++;
+        }
+        ui.pluginAdmin->horizontalHeader()->setStretchLastSection(true);
+        ui.pluginAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+        ui.pluginAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        ui.pluginAdmin->setAlternatingRowColors(true);
+        ui.pluginAdmin->setShowGrid(false);
+
+    }
+    catch (...) {
+
+    }
 }
