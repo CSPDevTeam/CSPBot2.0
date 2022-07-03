@@ -43,6 +43,7 @@ config/*.yml
 data/*.yml
 data/.vscode/
 config/.vscode/
+plugins/
 
 
 # Visual Studio 2017 auto generated files

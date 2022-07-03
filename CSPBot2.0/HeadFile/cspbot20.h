@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include "qnetworkreply.h"
 #include "ui_cspbot20.h"
 #include <string>
 #include "helper.h"
@@ -59,12 +60,11 @@ private slots:
     void clear_console(); //清空BDS日志
     void startCmd(); //启动cmd
     void insertCmd(); //插入命令
-    //void PacketCallback(std::string a);
-    //void CommandCallback(std::string a, std::vector<std::string> b);
 
     /////////////// Mirai //////////////////
     void slotConnectMirai(); //连接Mirai
     void slotDisConnectMirai(); //断开Mirai
+    void setUserImageError(QNetworkReply::NetworkError e); //设置头像时出现ERROR
     
 
     /////////////// Console //////////////////

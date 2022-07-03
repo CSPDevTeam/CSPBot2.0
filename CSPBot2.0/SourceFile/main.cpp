@@ -8,7 +8,7 @@
 
 using namespace std;
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
-std::string version = "2.0.0";
+std::string version = "2.0.1";
 CSPBot* window;
 Server* server;
 Mirai* mirai;

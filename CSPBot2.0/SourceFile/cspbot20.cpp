@@ -7,6 +7,7 @@
 #include "regularEdit.h"
 #include "pluginModule.h"
 
+
 using namespace std;
 
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
@@ -343,6 +344,12 @@ void CSPBot::setAllScrollbar(QScrollBar* bar) {
 
 QPixmap PixmapToRound(QPixmap& src, int radius);
 
+void CSPBot::setUserImageError(QNetworkReply::NetworkError e) {
+    auto error = magic_enum::enum_name<QNetworkReply::NetworkError>(e);
+    Logger lo("Mirai");
+    lo.error("{}", error);
+}
+
 void CSPBot::setUserImage(QString qqNum, QString qqNick) {
     if (qqNum == "" || qqNick == "") {
         QPixmap pixmap = QPixmap();
@@ -359,12 +366,19 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
     QNetworkReply* reply = manager.get(QNetworkRequest(url));
     //请求结束并下载完成后，退出子事件循环
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(setUserImageError(QNetworkReply::NetworkError)));
     //开启子事件循环
     loop.exec();
     QByteArray jpegData = reply->readAll();
     QPixmap pixmap;
     pixmap.loadFromData(jpegData);
-    ui.userImage->setPixmap(PixmapToRound(pixmap, 45)); // 你在QLabel显示图片
+    if (!pixmap.isNull()) {
+        ui.userImage->setPixmap(PixmapToRound(pixmap, 45)); // 你在QLabel显示图片
+    }
+    else {
+        ui.userImage->setText(u8"图片加载错误");
+    }
+    
     ui.user->setText(qqNick);
 }
 

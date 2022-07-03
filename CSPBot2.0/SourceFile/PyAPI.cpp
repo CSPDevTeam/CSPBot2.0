@@ -42,10 +42,38 @@ struct PyLogger {
 	Logger thiz;
 
 	PyLogger(const string& title) :thiz("Plugin ["+title+"]") {}
-	void info(const string& msg) { thiz.info(msg); }
-	void debug(const string& msg) { thiz.debug(msg); }
-	void warn(const string& msg) { thiz.warn(msg); }
-	void error(const string& msg) { thiz.error(msg); }
+	string forMatedString(py::args args) {
+		string forMatString = "";
+		bool first = true;
+		for (auto i : args) {
+			string pyStr = py::str(i);
+			if (first) {
+				forMatString += pyStr;
+				first = false;
+			}
+			else {
+				forMatString += " " + pyStr;
+			}
+		}
+		return forMatString;
+	}
+	
+	void info(py::args args) {
+		string forMatString = forMatedString(args);
+		thiz.info(forMatString); 
+	}
+	void debug(py::args args) {
+		string forMatString = forMatedString(args);
+		thiz.debug(forMatString);
+	}
+	void warn(py::args args) {
+		string forMatString = forMatedString(args);
+		thiz.warn(forMatString);
+	}
+	void error(py::args args) {
+		string forMatString = forMatedString(args);
+		thiz.error(forMatString);
+	}
 };
 
 //######################### CSPBot #########################
@@ -134,8 +162,6 @@ bool setListener(const string& eventName, const py::function& func) {
 	g_cb_functions[event_code.value()].push_back(func);
 	return true;
 }
-
-
 
 //######################### Motd #########################
 
@@ -298,8 +324,6 @@ string ShowTipWindow(
 	py::list buttonType
 
 ) {
-	
-
 	QFlags<QMessageBox::StandardButton> btn;
 	for (auto i : buttonType) {
 		string Btype = py::str(i);
