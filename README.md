@@ -10,7 +10,7 @@
 <br>
 
 ## CSPBot v2文档站
-👉[点我直达](https://cspbot-devloper.github.io/CSPBot2.0/)👈
+👉[点我直达](https://cspbot.top/)👈
 
 <br>
 
