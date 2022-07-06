@@ -66,20 +66,24 @@ public:
 	inline bool callback() {
 		bool pass = true;
 		arg_.inc_ref();//TODO: ÎªÊ²Ã´¼Ó1
-		for (auto cb : g_cb_functions[type_]) {
-			try {
-				if (arg_.size() > 0) {
-					pass = cb(arg_) != py::bool_(false);
-				}
-				else {
-					pass = cb() != py::bool_(false);
-				}
+		for (auto &cb : g_cb_functions[type_]) {
+			
+			if (g_cb_functions[type_].size() > 0) {
+				try {
+					if (arg_.size() > 0) {
+						pass = cb(arg_) != py::bool_(false);
+					}
+					else {
+						pass = cb() != py::bool_(false);
+					}
 
-			}
-			catch (const std::exception& e) {
-				pluginLogger.error(e.what());
+				}
+				catch (const std::exception& e) {
+					pluginLogger.error(e.what());
+				}
 			}
 		}
+
 		return pass;
 	}
 

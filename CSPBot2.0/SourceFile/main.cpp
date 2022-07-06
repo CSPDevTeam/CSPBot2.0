@@ -29,9 +29,29 @@ void InitPython(); //初始化Python解释器
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    //展示ssl版本
+    qDebug() << QSslSocket::sslLibraryBuildVersionString();
+
+	//加载字体
+    QFontDatabase database;
+    bool hasFont = false;
+    auto fontFamily = database.families();
+    if (std::find(
+        fontFamily.begin(),
+        fontFamily.end(),
+        "HarmonyOS Sans SC") != fontFamily.end()) {
+        hasFont = true;
+    };
+    
+	
+	
     CSPBot* window = new CSPBot;
     window->show();
     window->publicStartLogger();
     InitPython();
+    if (!hasFont) {
+        QMessageBox::information(window, u8"提示", u8"缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体",
+            QMessageBox::Yes, QMessageBox::Yes);
+    }
     return a.exec();
 }

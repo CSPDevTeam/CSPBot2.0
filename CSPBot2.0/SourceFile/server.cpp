@@ -50,7 +50,9 @@ bool Server::createServer()
 
 	//ÅÐ¶ÏÆô¶¯Ä£Ê½
 	if (startMode == 0) {
-		s = "runner.bat";
+		//s = "runner.bat";
+		s = "cmd.exe /c cd {}&{}";
+		s = fmt::format(s, getConfig("progressPath"), getConfig("progressName"));
 	}
 	else if (startMode == 1) {
 		s = "cmd.exe";
@@ -206,7 +208,6 @@ bool Server::getPoll() {
 	catch (...) {
 		return false;
 	}
-
 }
 
 

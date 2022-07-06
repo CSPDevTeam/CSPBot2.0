@@ -398,6 +398,12 @@ QPushButton:hover{
        <string notr="true">background-color:#484848;
 color:white;</string>
       </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QWidget" name="controlWidget" native="true">
       <property name="geometry">

@@ -36,7 +36,9 @@ void CSPBot::startLogger() {
 
 //保存控制台日志
 void CSPBot::slotSaveConsole() {
-    if (ui.botconsole->toPlainText() != "") {
+    if (ui.botconsole->toPlainText() == "") {
+        QMessageBox::information(this, u8"提示", u8"控制台日志为空",
+            QMessageBox::Yes, QMessageBox::Yes);
         return;
     }
     QString fileName = QFileDialog::getSaveFileName(this,
@@ -256,13 +258,21 @@ CSPBot::CSPBot(QWidget *parent)
     connect(mirai, SIGNAL(setUserImages(QString, QString)), this, SLOT(setUserImage(QString, QString)));
     connect(mirai, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
     connect(mirai, SIGNAL(signalConnect(mTime)), this, SLOT(slotConnected(mTime)));
-    connect(mirai, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
+    connect(mirai, 
+        SIGNAL(OtherCallback(QString, StringMap)), 
+        this, 
+        SLOT(slotOtherCallback(QString, StringMap))
+        ,Qt::BlockingQueuedConnection
+    );
     connectMirai();
 
     /////// Other /////////
     ui.inputCmd->setEnabled(false);
     ui.runCmd->setEnabled(false);
-    ui.ServerLog->setEnabled(false);
+    ui.stop->setEnabled(false);
+    ui.forceStop->setEnabled(false);
+    ui.ServerLog->setReadOnly(true);
+    ui.botconsole->setReadOnly(true);
     commandApi = new CommandAPI();
     connect(commandApi, SIGNAL(signalStartServer()), this, SLOT(startServer()));
     connect(commandApi, SIGNAL(signalCommandCallback(QString,StringVector)), this, SLOT(slotCommandCallback(QString,StringVector)));
@@ -496,13 +506,13 @@ bool CSPBot::checkClose() {
         if (temp == QMessageBox::Yes)
         {
             server->forceStopServer();
-            /*Callbacker cbe(EventCode::onStop);
+            Callbacker cbe(EventCode::onStop);
             if (cbe.callback()) {
-                event->accept();
+                return true;
             }
             else {
-                event->ignore();
-            }*/
+                return false;
+            }
         }
         else
         {
@@ -530,7 +540,7 @@ void CSPBot::buildServer(int mode) {
 void CSPBot::slotInsertBDSLog(QString log) {
     ui.ServerLog->setReadOnly(false);
     ui.ServerLog->append(log);
-    ui.ServerLog->moveCursor(QTextCursor::End);
+	ui.ServerLog->moveCursor(QTextCursor::End);
     ui.ServerLog->setReadOnly(true);
 }; 
 

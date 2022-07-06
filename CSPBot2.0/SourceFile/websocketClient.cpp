@@ -230,6 +230,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 				args.emplace("qq", msgPacket.qq);
 				args.emplace("qqnick", msgPacket.memberName);
 				bool send = emit OtherCallback("onReceiveMsg", args);
+				qDebug() << "callBack:" << send;
 				if (send) {
 					selfGroupCatchLine(msgPacket);
 				}
