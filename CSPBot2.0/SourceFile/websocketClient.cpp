@@ -18,13 +18,13 @@ Logger mirai_logger("Mirai");
 int sendMsg = 0, reciveMsg = 0; //收发消息
 
 //API
-bool connectMirai() {
+bool Mirai::connectMirai() {
 	bool connected = mirai->login();
 	if (connected) {
 		mirai_logger.info(u8"连接到Mirai成功");
 	}
 	else {
-		QMessageBox::critical(window, u8"Mirai错误", u8"无法连接到Mirai", QMessageBox::Ok);
+		emit signalMiraiMessageBox();
 		mirai_logger.error(u8"无法连接到 Mirai");
 	}
 
@@ -111,6 +111,14 @@ Mirai::Mirai() {
 	connect(wsc, SIGNAL(setUserImages(QString,QString)), this, SLOT(slotSetUserImages(QString, QString)));
 }
 
+void Mirai::run() {
+	mirai_logger.info(u8"Mirai启动中...");
+	connectMirai();
+	mirai_logger.info(u8"Mirai启动完成");
+}
+
+void otherSendCmd(string cmd);
+
 void Mirai::selfGroupCatchLine(messagePacket message) {
 	YAML::Node regular = YAML::LoadFile("data/regular.yml");
 	YAML::Node config = YAML::LoadFile("config/config.yml");
@@ -168,7 +176,8 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 			//执行操作
 			string cmd = fmtConsole::FmtGroupRegular(message.qq, message.memberName, Helper::QString2stdString(i.action));
 			if (i.type == regularAction::Console) {
-				server->sendCmd(cmd + "\n");
+				string fCmd = cmd + "\n";
+				emit sendServerCommand(Helper::stdString2QString(fCmd));
 			}
 			else if (i.type == regularAction::Group) {
 				mirai->sendAllGroupMsg(cmd);
@@ -229,11 +238,8 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 				args.emplace("msg", msgPacket.message);
 				args.emplace("qq", msgPacket.qq);
 				args.emplace("qqnick", msgPacket.memberName);
-				bool send = emit OtherCallback("onReceiveMsg", args);
-				qDebug() << "callBack:" << send;
-				if (send) {
-					selfGroupCatchLine(msgPacket);
-				}
+				emit OtherCallback("onReceiveMsg", args);
+				selfGroupCatchLine(msgPacket);
 				
 
 			}
@@ -309,10 +315,9 @@ void Mirai::sendGroupMsg(string group, string msg, bool callback) {
 		std::unordered_map<string, string> args;
 		args.emplace("group", group);
 		args.emplace("msg", msg);
-		bool send = emit OtherCallback("onSendMsg", args);
-		if (send) {
-			wsc->sendTextMsg(mj);
-		}
+		emit OtherCallback("onSendMsg", args);
+		wsc->sendTextMsg(mj);
+		
 		
 	}
 
@@ -324,10 +329,8 @@ void Mirai::recallMsg(string target, bool callback) {
 		string mj = "{\"syncId\": 3,\"command\" : \"recall\",\"subCommand\":null,\"content\":{\"target\":" + target + "}}";
 		std::unordered_map<string, string> args;
 		args.emplace("target", target);
-		bool send = emit OtherCallback("onRecall", args);
-		if (send) {
-			wsc->sendTextMsg(mj);
-		}
+		emit OtherCallback("onRecall", args);
+		wsc->sendTextMsg(mj);
 		
 	}
 }

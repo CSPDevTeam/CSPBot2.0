@@ -1,4 +1,4 @@
-#include "regularEdit.h"
+ï»¿#include "regularEdit.h"
 #include <QGraphicsDropShadowEffect>
 #include <qevent.h>
 #include "qdebug.h"
@@ -18,12 +18,12 @@ regularEdit::regularEdit(Regular regular,bool newRegular, QWidget* parent)
     mNewRegular = newRegular;
 
     //////// Style ////////
-    //´°¿ÚÑùÊ½
+    //çª—å£æ ·å¼
     this->setAttribute(Qt::WA_TranslucentBackground, true);
-    //ÉèÖÃÎŞ±ß¿ò
+    //è®¾ç½®æ— è¾¹æ¡†
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    //ÉèÖÃ´°¿ÚÒõÓ°
+    //è®¾ç½®çª—å£é˜´å½±
     QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
     shadow_effect->setOffset(0, 0);
     shadow_effect->setColor(Qt::gray);
@@ -41,7 +41,7 @@ regularEdit::regularEdit(Regular regular,bool newRegular, QWidget* parent)
     }
 
 
-    //·Ö×é
+    //åˆ†ç»„
     groupButton1 = new QButtonGroup(this);
     groupButton1->addButton(regular_ui.console, 0);
     groupButton1->addButton(regular_ui.group, 1);
@@ -61,17 +61,17 @@ regularEdit::regularEdit(Regular regular,bool newRegular, QWidget* parent)
 }
 
 void regularEdit::saveRegular() {
-    //¶ÁÈ¡Yaml
+    //è¯»å–Yaml
     YAML::Node regular = YAML::LoadFile("data/regular.yml");
 
     if (mNewRegular == false) {
-        //×ª»»³É´æ´¢µÄRegular
+        //è½¬æ¢æˆå­˜å‚¨çš„Regular
         string fmRegular = Helper::QString2stdString(mRegular.regular);
         string fmAction = Helper::QString2stdString(mRegular.action);
         string fmFrom;
         bool fmPermission = mRegular.permission;
 
-        //×ª»»À´Ô´
+        //è½¬æ¢æ¥æº
         switch (mRegular.from)
         {
         case group:
@@ -82,7 +82,7 @@ void regularEdit::saveRegular() {
             break;
         }
 
-        //»ñÈ¡Ô­¶ÔÏó
+        //è·å–åŸå¯¹è±¡
         bool removed = false;
         for (int i = 0; i < regular.size(); i++) {
             if (regular[i]["Regular"].as<string>() == fmRegular && \
@@ -98,21 +98,21 @@ void regularEdit::saveRegular() {
         if (!removed) {
             QMessageBox::warning(
                 this,
-                u8"¾¯¸æ",
-                u8"ÎŞ·¨Õı³£É¾³ıÔ­ÕıÔò£¬ÇëÊÖ¶¯É¾³ı",
+                u8"è­¦å‘Š",
+                u8"æ— æ³•æ­£å¸¸åˆ é™¤åŸæ­£åˆ™ï¼Œè¯·æ‰‹åŠ¨åˆ é™¤",
                 QMessageBox::Yes
             );
         }
     }
     
-    //Ğ´ÈëĞÂ¶ÔÏó
-    //×ª»»³É´æ´¢µÄRegular
+    //å†™å…¥æ–°å¯¹è±¡
+    //è½¬æ¢æˆå­˜å‚¨çš„Regular
     string tmRegular = Helper::QString2stdString(regular_ui.regularEdit->text());
     string tmAction = Helper::QString2stdString(regular_ui.actionEdit->text());
     string tmFrom;
     bool tmPermission = regular_ui.checkBox->checkState();
 
-    //×ª»»À´Ô´
+    //è½¬æ¢æ¥æº
     switch (groupButton1->checkedId())
     {
     case 0:
@@ -129,7 +129,7 @@ void regularEdit::saveRegular() {
     newRegular["Permissions"] = tmPermission;
     regular.push_back(newRegular);
 
-    //Ğ´ÈëÎÄ¼ş
+    //å†™å…¥æ–‡ä»¶
     ofstream fout("data/regular.yml");
     fout << regular;
     fout.close();
@@ -141,15 +141,15 @@ void regularEdit::saveRegular() {
 }
 
 void regularEdit::deleteRegular() {
-    //¶ÁÈ¡Yaml
+    //è¯»å–Yaml
     YAML::Node regular = YAML::LoadFile("data/regular.yml");
-    //×ª»»³É´æ´¢µÄRegular
+    //è½¬æ¢æˆå­˜å‚¨çš„Regular
     string fmRegular = Helper::QString2stdString(mRegular.regular);
     string fmAction = Helper::QString2stdString(mRegular.action);
     string fmFrom;
     bool fmPermission = mRegular.permission;
 
-    //×ª»»À´Ô´
+    //è½¬æ¢æ¥æº
     switch (mRegular.from)
     {
     case group:
@@ -160,7 +160,7 @@ void regularEdit::deleteRegular() {
         break;
     }
 
-    //»ñÈ¡Ô­¶ÔÏó
+    //è·å–åŸå¯¹è±¡
     bool removed = false;
     for (int i = 0; i < regular.size(); i++) {
         if (regular[i]["Regular"].as<string>() == fmRegular && \
@@ -176,13 +176,13 @@ void regularEdit::deleteRegular() {
     if (!removed) {
         QMessageBox::warning(
             this,
-            u8"¾¯¸æ",
-            u8"ÎŞ·¨Õı³£É¾³ıÕıÔò£¬ÇëÊÖ¶¯É¾³ı",
+            u8"è­¦å‘Š",
+            u8"æ— æ³•æ­£å¸¸åˆ é™¤æ­£åˆ™ï¼Œè¯·æ‰‹åŠ¨åˆ é™¤",
             QMessageBox::Yes
         );
     }
 
-    //Ğ´ÈëÎÄ¼ş
+    //å†™å…¥æ–‡ä»¶
     ofstream fout("data/regular.yml");
     fout << regular;
     fout.close();
@@ -191,7 +191,7 @@ void regularEdit::deleteRegular() {
 }
 
 void regularEdit::setRegular() {
-    //ÉèÖÃÕıÔò
+    //è®¾ç½®æ­£åˆ™
     regular_ui.regularEdit->setText(mRegular.regular);
     regular_ui.actionEdit->setText(mRegular.action);
     switch (mRegular.from)
@@ -203,7 +203,7 @@ void regularEdit::setRegular() {
         regular_ui.group->setChecked(true);
         break;
     }
-    //ÉèÖÃÊÇ·ñĞèÒªÈ¨ÏŞ
+    //è®¾ç½®æ˜¯å¦éœ€è¦æƒé™
     regular_ui.checkBox->setChecked(mRegular.permission);
     
 }
@@ -223,16 +223,16 @@ void regularEdit::setGraphics(QWidget* bt) {
 }
 
 ///////////////////////////////////////////// MoveWindow /////////////////////////////////////////////
-//±êÌâÀ¸µÄ³¤¶È
+//æ ‡é¢˜æ çš„é•¿åº¦
 const static int pos_min_x = 0;
 const static int pos_max_x = 500;
 const static int pos_min_y = 0;
 const static int pos_max_y = 30;
-//×Ô¼ºÊµÏÖµÄ´°¿ÚÍÏ¶¯²Ù×÷
+//è‡ªå·±å®ç°çš„çª—å£æ‹–åŠ¨æ“ä½œ
 void regularEdit::mousePressEvent(QMouseEvent* event)
 {
     mousePosition = event->pos();
-    //Ö»¶Ô±êÌâÀ¸·¶Î§ÄÚµÄÊó±êÊÂ¼ş½øĞĞ´¦Àí
+    //åªå¯¹æ ‡é¢˜æ èŒƒå›´å†…çš„é¼ æ ‡äº‹ä»¶è¿›è¡Œå¤„ç†
     if (mousePosition.x() <= pos_min_x)
         return;
     if (mousePosition.x() >= pos_max_x)

@@ -37,6 +37,9 @@
     <ClCompile Include="SourceFile\PyModle.cpp">
       <Filter>Source File\plugin</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFile\debug.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source File">

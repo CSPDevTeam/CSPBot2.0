@@ -1,4 +1,4 @@
-#include "mysysinfo.h"
+ï»¿#include "mysysinfo.h"
 MySysInfo::MySysInfo(QObject* parent) : QObject(parent)
 {
     connect(&monitor_timer__, &QTimer::timeout, this, &MySysInfo::GetResource);
@@ -23,12 +23,12 @@ bool MySysInfo::GetMemUsage(double& nMemTotal, double& nMemUsed)
 {
 #if defined(Q_OS_LINUX)
     QProcess process;
-    process.start("free -m"); //Ê¹ÓÃfreeÍê³É»ñÈ¡
+    process.start("free -m"); //ä½¿ç”¨freeå®Œæˆè·å–
     process.waitForFinished();
     process.readLine();
     QString str = process.readLine();
     str.replace("\n", "");
-    str.replace(QRegExp("( ){1,}"), " ");//½«Á¬Ğø¿Õ¸ñÌæ»»Îªµ¥¸ö¿Õ¸ñ ÓÃÓÚ·Ö¸î
+    str.replace(QRegExp("( ){1,}"), " ");//å°†è¿ç»­ç©ºæ ¼æ›¿æ¢ä¸ºå•ä¸ªç©ºæ ¼ ç”¨äºåˆ†å‰²
     auto lst = str.split(" ");
     if (lst.size() > 6)
     {
@@ -43,7 +43,7 @@ bool MySysInfo::GetMemUsage(double& nMemTotal, double& nMemUsed)
 #else
     MEMORYSTATUSEX memsStat;
     memsStat.dwLength = sizeof(memsStat);
-    if (!GlobalMemoryStatusEx(&memsStat))//Èç¹û»ñÈ¡ÏµÍ³ÄÚ´æĞÅÏ¢²»³É¹¦£¬¾ÍÖ±½Ó·µ»Ø
+    if (!GlobalMemoryStatusEx(&memsStat))//å¦‚æœè·å–ç³»ç»Ÿå†…å­˜ä¿¡æ¯ä¸æˆåŠŸï¼Œå°±ç›´æ¥è¿”å›
     {
         return false;
     }
@@ -57,7 +57,7 @@ bool MySysInfo::GetNetUsage()
 {
 #if defined(Q_OS_LINUX)
     QProcess process;
-    process.start("cat /proc/net/dev"); //¶ÁÈ¡ÎÄ¼ş/proc/net/dev»ñÈ¡ÍøÂçÊÕ·¢°üÊıÁ¿£¬ÔÙ³ıÈ¡ÑùÊ±¼äµÃµ½ÍøÂçËÙ¶È
+    process.start("cat /proc/net/dev"); //è¯»å–æ–‡ä»¶/proc/net/devè·å–ç½‘ç»œæ”¶å‘åŒ…æ•°é‡ï¼Œå†é™¤å–æ ·æ—¶é—´å¾—åˆ°ç½‘ç»œé€Ÿåº¦
     process.waitForFinished();
     process.readLine();
     process.readLine();
@@ -136,8 +136,8 @@ bool MySysInfo::GetCpuUsage(double& nCpuRate)
     preIdleTime = idleTime;
     preKernelTime = kernelTime;
     preUserTime = userTime;
-    hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);//³õÊ¼ÖµÎªnonsignaled
-    WaitForSingleObject(hEvent, 500);//µÈ´ı500ºÁÃë
+    hEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);//åˆå§‹å€¼ä¸ºnonsignaled
+    WaitForSingleObject(hEvent, 500);//ç­‰å¾…500æ¯«ç§’
     res = GetSystemTimes(&idleTime, &kernelTime, &userTime);
     long long idle = CompareFileTime(preIdleTime, idleTime);
     long long kernel = CompareFileTime(preKernelTime, kernelTime);
@@ -186,18 +186,18 @@ bool MySysInfo::GetdiskSpace(unsigned long& lFreeAll, unsigned long& lTotalAll)
             str.replace(QRegExp("( ){1,}"), " ");
             auto lst = str.split(" ");
             if (lst.size() > 5)
-                //qDebug("¹ÒÔØµã:%s ÒÑÓÃ:%.0lfMB ¿ÉÓÃ:%.0lfMB", lst[5].toStdString().c_str(), lst[2].toDouble() / 1024.0, lst[3].toDouble() / 1024.0);
+                //qDebug("æŒ‚è½½ç‚¹:%s å·²ç”¨:%.0lfMB å¯ç”¨:%.0lfMB", lst[5].toStdString().c_str(), lst[2].toDouble() / 1024.0, lst[3].toDouble() / 1024.0);
             lFreeAll += lst[2].toDouble() / 1024.0;
             lTotalAll += lst[3].toDouble() / 1024.0 + lFreeAll;
         }
     }
 #else
 
-    static char path[_MAX_PATH];//´æ´¢µ±Ç°ÏµÍ³´æÔÚµÄÅÌ·û
+    static char path[_MAX_PATH];//å­˜å‚¨å½“å‰ç³»ç»Ÿå­˜åœ¨çš„ç›˜ç¬¦
     int curdrive = _getdrive();
     lFreeAll = 0UL;
     lTotalAll = 0UL;
-    for (int drive = 1; drive <= curdrive; drive++)//±éÀúËùÓĞÅÌ·û
+    for (int drive = 1; drive <= curdrive; drive++)//éå†æ‰€æœ‰ç›˜ç¬¦
     {
         if (!_chdrive(drive))
         {
@@ -227,9 +227,9 @@ bool MySysInfo::GetdiskSpace(unsigned long& lFreeAll, unsigned long& lTotalAll)
 bool MySysInfo::GetPathSpace(const QString& path)
 {
 #if defined(Q_OS_LINUX)
-    struct statfs diskInfo;//ĞèÒª#include "sys/statfs.h"
+    struct statfs diskInfo;//éœ€è¦#include "sys/statfs.h"
     statfs(path.toUtf8().data(), &diskInfo);
-    //qDebug("%s ×Ü´óĞ¡:%.0lfMB ¿ÉÓÃ´óĞ¡:%.0lfMB", path.toStdString().c_str(), (diskInfo.f_blocks * diskInfo.f_bsize) / 1024.0 / 1024.0, (diskInfo.f_bavail * diskInfo.f_bsize) / 1024.0 / 1024.0);
+    //qDebug("%s æ€»å¤§å°:%.0lfMB å¯ç”¨å¤§å°:%.0lfMB", path.toStdString().c_str(), (diskInfo.f_blocks * diskInfo.f_bsize) / 1024.0 / 1024.0, (diskInfo.f_bavail * diskInfo.f_bsize) / 1024.0 / 1024.0);
 #endif
     return true;
 }

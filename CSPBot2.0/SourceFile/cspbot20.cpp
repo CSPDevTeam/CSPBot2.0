@@ -1,4 +1,4 @@
-#include "cspbot20.h"
+ï»¿#include "cspbot20.h"
 #include "stdafx.h"
 #include "helper.h"
 #include "global.h"
@@ -6,19 +6,20 @@
 #include "websocketClient.h"
 #include "regularEdit.h"
 #include "pluginModule.h"
+#include <QInputDialog>
 
 
 using namespace std;
 
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
-//¹Ø±Õ¶¯»­Animation
+//å…³é—­åŠ¨ç”»Animation
 QGraphicsOpacityEffect* c_pOpacity;
 QPropertyAnimation* c_pAnimation;
-//MiraiµÇÂ¼Á¬½Ó
-bool connectMirai();
+//Miraiç™»å½•è¿æ¥
+//bool connectMirai();
 
 ///////////////////////////////////////////// Export /////////////////////////////////////////////
-//²åÈë»úÆ÷ÈËÈÕÖ¾
+//æ’å…¥æœºå™¨äººæ—¥å¿—
 void CSPBot::insertLog(QString a) {;
     ui.botconsole->setReadOnly(false);
     ui.botconsole->append(a);
@@ -26,7 +27,7 @@ void CSPBot::insertLog(QString a) {;
     ui.botconsole->setReadOnly(true);
 };
 
-//Æô¶¯»úÆ÷ÈËÈÕÖ¾
+//å¯åŠ¨æœºå™¨äººæ—¥å¿—
 void CSPBot::startLogger() {
     //////// Logger ////////
     LoggerReader* loggerReader = new LoggerReader(this);
@@ -34,17 +35,17 @@ void CSPBot::startLogger() {
     loggerReader->start();
 }
 
-//±£´æ¿ØÖÆÌ¨ÈÕÖ¾
+//ä¿å­˜æ§åˆ¶å°æ—¥å¿—
 void CSPBot::slotSaveConsole() {
     if (ui.botconsole->toPlainText() == "") {
-        QMessageBox::information(this, u8"ÌáÊ¾", u8"¿ØÖÆÌ¨ÈÕÖ¾Îª¿Õ",
+        QMessageBox::information(this, u8"æç¤º", u8"æ§åˆ¶å°æ—¥å¿—ä¸ºç©º",
             QMessageBox::Yes, QMessageBox::Yes);
         return;
     }
     QString fileName = QFileDialog::getSaveFileName(this,
-        tr(u8"±£´æµ±Ç°ÈÕÖ¾"),
+        tr(u8"ä¿å­˜å½“å‰æ—¥å¿—"),
         "",
-        tr(u8"ÈÕÖ¾ÎÄ¼ş(*.txt)"));
+        tr(u8"æ—¥å¿—æ–‡ä»¶(*.txt)"));
     if (fileName == "") {
         return;
     }
@@ -52,7 +53,7 @@ void CSPBot::slotSaveConsole() {
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        QMessageBox::critical(this, u8"ÑÏÖØ´íÎó", u8"ÎÄ¼ş±£´æÊ§°Ü£¡",
+        QMessageBox::critical(this, u8"ä¸¥é‡é”™è¯¯", u8"æ–‡ä»¶ä¿å­˜å¤±è´¥ï¼",
             QMessageBox::Yes, QMessageBox::Yes);
     }
     else
@@ -64,12 +65,12 @@ void CSPBot::slotSaveConsole() {
     }
 }
 
-//Çå¿Õ¿ØÖÆÌ¨ÈÕÖ¾
+//æ¸…ç©ºæ§åˆ¶å°æ—¥å¿—
 void CSPBot::slotClearConsole() {
     ui.botconsole->setText("");
 }
 
-//¸üĞÂÉÏÏÂĞĞ
+//æ›´æ–°ä¸Šä¸‹è¡Œ
 void CSPBot::slotUpdateSendRecive(int send, int recive) {
     string sendString = to_string(send);
     string reciveString = to_string(recive);
@@ -79,40 +80,44 @@ void CSPBot::slotUpdateSendRecive(int send, int recive) {
     if (recive > 99) {
         reciveString = "99+";
     }
-    string reFormat = fmt::format(u8"ÏûÏ¢:{}·¢;{}ÊÕ", sendString,reciveString);
+    string reFormat = fmt::format(u8"æ¶ˆæ¯:{}å‘;{}æ”¶", sendString,reciveString);
     ui.websocketMsg->setText(Helper::stdString2QString(reFormat));
 }
 
-//¸üĞÂÁ¬½ÓÊ±¼ä
+//æ›´æ–°è¿æ¥æ—¶é—´
 void CSPBot::slotConnected(mTime getTime) {
     mGetTime = getTime;
 }
 
-//ÊÖ¶¯Á¬½ÓMirai
+//æ‰‹åŠ¨è¿æ¥Mirai
 void CSPBot::slotConnectMirai() {
     if (mirai->logined == false) {
-        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"ÕıÔÚÁ¬½ÓMirai...");
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"æ­£åœ¨è¿æ¥Mirai...");
         insertLog(Helper::stdString2QString(formatLog));
-        connectMirai();
+        mirai->connectMirai();
     }
     else {
-        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"ÏÖÔÚÒÑ´¦ÓÚÒÑÁ¬½Ó×´Ì¬.");
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"ç°åœ¨å·²å¤„äºå·²è¿æ¥çŠ¶æ€.");
         insertLog(Helper::stdString2QString(formatLog));
     }
 }
 
-//ÊÖ¶¯¶Ï¿ªMirai
+//æ‰‹åŠ¨æ–­å¼€Mirai
 void CSPBot::slotDisConnectMirai() {
     if (mirai->logined == false) {
         
-        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"ÏÖÔÚÎ´´¦ÓÚÒÑÁ¬½Ó×´Ì¬.");
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"ç°åœ¨æœªå¤„äºå·²è¿æ¥çŠ¶æ€.");
         insertLog(Helper::stdString2QString(formatLog));
     }
     else {
-        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"ÕıÔÚ¶Ï¿ªMirai...");
+        string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"æ­£åœ¨æ–­å¼€Mirai...");
         insertLog(Helper::stdString2QString(formatLog));
         wsc->shutdown();
     }
+}
+
+void CSPBot::slotMiraiMessageBox(){
+    QMessageBox::critical(this, u8"Miraié”™è¯¯", u8"æ— æ³•è¿æ¥åˆ°Mirai", QMessageBox::Ok);
 }
 
 ///////////////////////////////////////////// Timer /////////////////////////////////////////////
@@ -138,15 +143,15 @@ void CSPBot::slotTimerFunc() {
     if (min > 99) {
         minString = "99+";
     }
-    string minFormat = fmt::format(u8"Á¬½ÓÊ±¼ä:{}m", minString);
+    string minFormat = fmt::format(u8"è¿æ¥æ—¶é—´:{}m", minString);
     ui.websocketConnectedTime->setText(Helper::stdString2QString(minFormat));
 
     //////// Mirai ////////
     if (mirai->logined) {
-        ui.websocketStatus->setText(u8"×´Ì¬: ÒÑÁ¬½Ó");
+        ui.websocketStatus->setText(u8"çŠ¶æ€: å·²è¿æ¥");
     }
     else {
-        ui.websocketStatus->setText(u8"×´Ì¬: Î´Á¬½Ó");
+        ui.websocketStatus->setText(u8"çŠ¶æ€: æœªè¿æ¥");
     }
 
     /////// Table ////////
@@ -163,26 +168,26 @@ CSPBot::CSPBot(QWidget *parent)
     ui.setupUi(this);
     
     //////// Style ////////
-    //´°¿ÚÑùÊ½
+    //çª—å£æ ·å¼
     this->setAttribute(Qt::WA_TranslucentBackground, true);
-    //ÉèÖÃÎŞ±ß¿ò
+    //è®¾ç½®æ— è¾¹æ¡†
     this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowTitle(u8"CSPBot v" + Helper::stdString2QString(version));
-    //ÉèÖÃ´°¿ÚÒõÓ°
+    //è®¾ç½®çª—å£é˜´å½±
     QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
     shadow_effect->setOffset(0, 0);
     shadow_effect->setColor(Qt::gray);
     shadow_effect->setBlurRadius(10);
     ui.background->setGraphicsEffect(shadow_effect);
 
-    //¹ö¶¯Ìõ
+    //æ»šåŠ¨æ¡
     vector<QScrollBar*> bars = { ui.ServerLog->verticalScrollBar(),ui.botconsole->verticalScrollBar() };
     for (QScrollBar* bar : bars) {
         setAllScrollbar(bar);
     }
 
-    //ÒõÓ°ÉèÖÃ
+    //é˜´å½±è®¾ç½®
     vector<QWidget*> buttons = {
         ui.ServerLog,
         ui.controlWidget,
@@ -200,61 +205,65 @@ CSPBot::CSPBot(QWidget *parent)
         setGraphics(bt);
     }
 
-    //¶¯»­´°¿Ú
+    //åŠ¨ç”»çª—å£
     c_pOpacity = new QGraphicsOpacityEffect(this);
     c_pAnimation = new QPropertyAnimation(this);
 
     //////// Basic ////////
-    //°ó¶¨°æ±¾ºÅµ½±êÇ©
+    //ç»‘å®šç‰ˆæœ¬å·åˆ°æ ‡ç­¾
     ui.version->setText("V" + Helper::stdString2QString(version));
 
     //////// Bind ////////
-    //×¢²á²¢°ó¶¨
+    //æ³¨å†Œå¹¶ç»‘å®š
     qRegisterMetaType<StringMap>("StringMap");
     qRegisterMetaType<mTime>("mTime");
     qRegisterMetaType<StringVector>("StringVector");
 
-    //·­Ò³°´Å¥
+    //ç¿»é¡µæŒ‰é’®
     connect(ui.mainPage, SIGNAL(clicked()), this, SLOT(switchPage()));
     connect(ui.playerPage, SIGNAL(clicked()), this, SLOT(switchPage()));
     connect(ui.regularPage, SIGNAL(clicked()), this, SLOT(switchPage()));
     connect(ui.pluginPage, SIGNAL(clicked()), this, SLOT(switchPage()));
     connect(ui.logPage, SIGNAL(clicked()), this, SLOT(switchPage()));
 
-    //¹¦ÄÜĞÔ°´Å¥
+    //åŠŸèƒ½æ€§æŒ‰é’®
     connect(ui.close, SIGNAL(clicked()), this, SLOT(on_actionClose_triggered()));
     connect(ui.min, SIGNAL(clicked()), this, SLOT(on_actionMinimize_triggered()));
 
-    //°ó¶¨ÊÂ¼ş
+    //ç»‘å®šäº‹ä»¶
     connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
     connect(this,SIGNAL(signalStartServer()), this, SLOT(startServer()));
     
-    //ServerÀà°´Å¥
+    //Serverç±»æŒ‰é’®
     connect(ui.start, SIGNAL(clicked()), this, SLOT(startServer()));
     connect(ui.stop, SIGNAL(clicked()), this, SLOT(stopServer()));
     connect(ui.forceStop, SIGNAL(clicked()), this, SLOT(forceStopServer()));
     connect(ui.clear, SIGNAL(clicked()), this, SLOT(clear_console()));
-    connect(ui.ServerCmd, SIGNAL(clicked()), this, SLOT(startCmd())); //°ó¶¨Æô¶¯cmd
-    connect(ui.runCmd, SIGNAL(clicked()), this, SLOT(insertCmd())); //°ó¶¨ÔËĞĞÃüÁî
-    connect(this, SIGNAL(signalStartLogger()), this, SLOT(startLogger())); //¿ªÆôLogger·şÎñ
+    connect(ui.ServerCmd, SIGNAL(clicked()), this, SLOT(startCmd())); //ç»‘å®šå¯åŠ¨cmd
+    connect(ui.runCmd, SIGNAL(clicked()), this, SLOT(insertCmd())); //ç»‘å®šè¿è¡Œå‘½ä»¤
+    connect(this, SIGNAL(signalStartLogger()), this, SLOT(startLogger())); //å¼€å¯LoggeræœåŠ¡
 
-    //°ó¶¨¿ì½İ¼ü
-    connect(this, SIGNAL(runCommand()), this, SLOT(insertCmd())); //°ó¶¨»Ø³µÊäÈëÃüÁî
-    connect(this, SIGNAL(runCmd()), ui.ServerCmd, SLOT(click())); //°ó¶¨Æô¶¯cmd
+    //ç»‘å®šå¿«æ·é”®
+    connect(this, SIGNAL(runCommand()), this, SLOT(insertCmd())); //ç»‘å®šå›è½¦è¾“å…¥å‘½ä»¤
+    connect(this, SIGNAL(runCmd()), ui.ServerCmd, SLOT(click())); //ç»‘å®šå¯åŠ¨cmd
 
-    //»úÆ÷ÈËConsole
-    connect(ui.consoleSave, SIGNAL(clicked()), this, SLOT(slotSaveConsole())); //±£´æÈÕÖ¾
-    connect(ui.consoleClear, SIGNAL(clicked()), this, SLOT(slotClearConsole())); //Çå¿Õ¿ØÖÆÌ¨
-    connect(ui.connect, SIGNAL(clicked()), this, SLOT(slotConnectMirai())); //Á¬½ÓMirai
-    connect(ui.disConnect, SIGNAL(clicked()), this, SLOT(slotDisConnectMirai())); //¶Ï¿ªÁ¬½Ó
+    //æœºå™¨äººConsole
+    connect(ui.consoleSave, SIGNAL(clicked()), this, SLOT(slotSaveConsole())); //ä¿å­˜æ—¥å¿—
+    connect(ui.consoleClear, SIGNAL(clicked()), this, SLOT(slotClearConsole())); //æ¸…ç©ºæ§åˆ¶å°
+    connect(ui.connect, SIGNAL(clicked()), this, SLOT(slotConnectMirai())); //è¿æ¥Mirai
+    connect(ui.disConnect, SIGNAL(clicked()), this, SLOT(slotDisConnectMirai())); //æ–­å¼€è¿æ¥
 
-    //±í¸ñ
+    //è¡¨æ ¼
     connect(ui.regularAdmin, SIGNAL(pressed(QModelIndex)), this, SLOT(clickRegularTable(QModelIndex)));
     connect(ui.regularAdmin, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickedRegularTable(QModelIndex)));
-    connect(ui.regularNew, SIGNAL(clicked()), this, SLOT(newRegular())); //ĞÂ½¨ÕıÔò°´Å¥
+    connect(ui.regularNew, SIGNAL(clicked()), this, SLOT(newRegular())); //æ–°å»ºæ­£åˆ™æŒ‰é’®
+
+    //////// Debug ////////
+    connect(this, SIGNAL(signalDebug()), this, SLOT(slotDebug()));
 
     //////// Mirai ////////
     mirai = new Mirai();
+    mirai->start();
     connect(mirai, SIGNAL(setUserImages(QString, QString)), this, SLOT(setUserImage(QString, QString)));
     connect(mirai, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
     connect(mirai, SIGNAL(signalConnect(mTime)), this, SLOT(slotConnected(mTime)));
@@ -262,9 +271,9 @@ CSPBot::CSPBot(QWidget *parent)
         SIGNAL(OtherCallback(QString, StringMap)), 
         this, 
         SLOT(slotOtherCallback(QString, StringMap))
-        ,Qt::BlockingQueuedConnection
     );
-    connectMirai();
+    connect(mirai, SIGNAL(signalMiraiMessageBox()), this, SLOT(slotMiraiMessageBox()));
+    connect(mirai, SIGNAL(sendServerCommand(QString)), this, SLOT(slotSendCommand(QString)));
 
     /////// Other /////////
     ui.inputCmd->setEnabled(false);
@@ -364,8 +373,8 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
     if (qqNum == "" || qqNick == "") {
         QPixmap pixmap = QPixmap();
         ui.userImage->setPixmap(pixmap);
-        ui.user->setText(u8"ÓÃ»§Î´µÇÂ¼");
-        ui.userImage->setText(u8"ÓÃ»§Î´µÇÂ¼");
+        ui.user->setText(u8"ç”¨æˆ·æœªç™»å½•");
+        ui.userImage->setText(u8"ç”¨æˆ·æœªç™»å½•");
         return;
     }
     QString szUrl = "https://q.qlogo.cn/g?b=qq&nk=" + qqNum + "&s=640";
@@ -374,19 +383,19 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
     QEventLoop loop;
     qDebug() << "Reading picture form " << url;
     QNetworkReply* reply = manager.get(QNetworkRequest(url));
-    //ÇëÇó½áÊø²¢ÏÂÔØÍê³Éºó£¬ÍË³ö×ÓÊÂ¼şÑ­»·
+    //è¯·æ±‚ç»“æŸå¹¶ä¸‹è½½å®Œæˆåï¼Œé€€å‡ºå­äº‹ä»¶å¾ªç¯
     QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(setUserImageError(QNetworkReply::NetworkError)));
-    //¿ªÆô×ÓÊÂ¼şÑ­»·
+    //å¼€å¯å­äº‹ä»¶å¾ªç¯
     loop.exec();
     QByteArray jpegData = reply->readAll();
     QPixmap pixmap;
     pixmap.loadFromData(jpegData);
     if (!pixmap.isNull()) {
-        ui.userImage->setPixmap(PixmapToRound(pixmap, 45)); // ÄãÔÚQLabelÏÔÊ¾Í¼Æ¬
+        ui.userImage->setPixmap(PixmapToRound(pixmap, 45)); // ä½ åœ¨QLabelæ˜¾ç¤ºå›¾ç‰‡
     }
     else {
-        ui.userImage->setText(u8"Í¼Æ¬¼ÓÔØ´íÎó");
+        ui.userImage->setText(u8"å›¾ç‰‡åŠ è½½é”™è¯¯");
     }
     
     ui.user->setText(qqNick);
@@ -403,7 +412,7 @@ QPixmap PixmapToRound(QPixmap& src, int radius)
     QSize size2(radius * 2, radius * 2);
     QBitmap mask(size);
     QPainter painter(&mask);
-    painter.setRenderHints(QPainter::SmoothPixmapTransform);//Ïû¾â³İ
+    painter.setRenderHints(QPainter::SmoothPixmapTransform);//æ¶ˆé”¯é½¿
     painter.setRenderHints(QPainter::Antialiasing);
     painter.setRenderHints(QPainter::TextAntialiasing);
     painter.translate(0, 0);
@@ -418,7 +427,7 @@ QPixmap PixmapToRound(QPixmap& src, int radius)
 
 ///////////////////////////////////////////// Basic /////////////////////////////////////////////
 void CSPBot::switchPage() {
-    QPushButton* button = qobject_cast<QPushButton*>(sender());//µÃµ½°´ÏÂµÄ°´Å¥µÄÖ¸Õë
+    QPushButton* button = qobject_cast<QPushButton*>(sender());//å¾—åˆ°æŒ‰ä¸‹çš„æŒ‰é’®çš„æŒ‡é’ˆ
     QPushButton* btns[5] = { ui.mainPage,ui.playerPage,ui.pluginPage,ui.regularPage,ui.logPage };
     for (auto i : btns) {
         i->setStyleSheet("QPushButton{background-color:#f0f3f8;color:#666666;border-radius:10px;qproperty-iconSize: 32px 32px;}QPushButton:hover{background-color:#e0e6ee;border-radius:10px;};");
@@ -443,16 +452,16 @@ void CSPBot::switchPage() {
 
 
 ///////////////////////////////////////////// MoveWindow /////////////////////////////////////////////
-//±êÌâÀ¸µÄ³¤¶È
+//æ ‡é¢˜æ çš„é•¿åº¦
 const static int pos_min_x = 0;
 const static int pos_max_x = 1010;
 const static int pos_min_y = 0;
 const static int pos_max_y = 30;
-//×Ô¼ºÊµÏÖµÄ´°¿ÚÍÏ¶¯²Ù×÷
+//è‡ªå·±å®ç°çš„çª—å£æ‹–åŠ¨æ“ä½œ
 void CSPBot::mousePressEvent(QMouseEvent* event)
 {
     mousePosition = event->pos();
-    //Ö»¶Ô±êÌâÀ¸·¶Î§ÄÚµÄÊó±êÊÂ¼ş½øĞĞ´¦Àí
+    //åªå¯¹æ ‡é¢˜æ èŒƒå›´å†…çš„é¼ æ ‡äº‹ä»¶è¿›è¡Œå¤„ç†
     if (mousePosition.x() <= pos_min_x)
         return;
     if (mousePosition.x() >= pos_max_x)
@@ -479,7 +488,7 @@ void CSPBot::mouseReleaseEvent(QMouseEvent* event)
 void CSPBot::on_actionMinimize_triggered()
 {
     showMinimized();
-    //×î´ó»¯ showMaximized()£»
+    //æœ€å¤§åŒ– showMaximized()ï¼›
 }
 void CSPBot::on_actionClose_triggered()
 {
@@ -496,11 +505,11 @@ void CSPBot::on_actionClose_triggered()
 }
 
 bool CSPBot::checkClose() {
-    if (server != nullptr && server->started) {
+    if (server != nullptr && server->getStarted()) {
         auto temp = QMessageBox::warning(
             this,
-            u8"¾¯¸æ",
-            u8"·şÎñÆ÷»¹ÔÚÔËĞĞ£¬ÄãÊÇ·ñÒª¹Ø±Õ?",
+            u8"è­¦å‘Š",
+            u8"æœåŠ¡å™¨è¿˜åœ¨è¿è¡Œï¼Œä½ æ˜¯å¦è¦å…³é—­?",
             QMessageBox::Yes | QMessageBox::No
         );
         if (temp == QMessageBox::Yes)
@@ -523,20 +532,20 @@ bool CSPBot::checkClose() {
 }
 
 ///////////////////////////////////////////// Server /////////////////////////////////////////////
-//¹¹ÔìServer
+//æ„é€ Server
 void CSPBot::buildServer(int mode) {
     server = new Server(mode,this);
-    //°ó¶¨¼ì²âÆ÷
+    //ç»‘å®šæ£€æµ‹å™¨
     connect(server, SIGNAL(insertBDSLog(QString)), this, SLOT(slotInsertBDSLog(QString)));
     connect(server, SIGNAL(OtherCallback(QString,StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
     connect(server, SIGNAL(chenableForce(bool)), this, SLOT(slotChenableForce(bool)));
     connect(server, SIGNAL(chLabel(QString, QString)), this, SLOT(slotChLabel(QString, QString)));
     connect(server, SIGNAL(changeStatus(bool)), this, SLOT(slotChangeStatus(bool)));
-    //Æô¶¯ServerÏß³Ì
-    server->start();
+    //å¯åŠ¨Server
+    server->run();
 }
 
-//²åÈëBDSÈÕÖ¾
+//æ’å…¥BDSæ—¥å¿—
 void CSPBot::slotInsertBDSLog(QString log) {
     ui.ServerLog->setReadOnly(false);
     ui.ServerLog->append(log);
@@ -557,10 +566,13 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
     for(auto& i:args) {
         string key = i.first;
         string value = i.second;
-        cb.insert(key.c_str(), py::str(value));
+        if (!Helper::is_str_utf8(value.c_str())) {
+            return false;
+        }
+        cb.insert(key.c_str(), py::str(value.c_str()));
     }
-
-    return cb.callback();
+    bool ret = cb.callback();
+    return ret;
 }; 
 
 void CSPBot::slotCommandCallback(QString cmd,StringVector fArgs){
@@ -575,41 +587,41 @@ void CSPBot::slotCommandCallback(QString cmd,StringVector fArgs){
     }
 }
 
-//¸ü¸Ä×´Ì¬
+//æ›´æ”¹çŠ¶æ€
 void CSPBot::slotChangeStatus(bool a) {
     if (a) {
-        ui.ServerStatus->setText(u8"×´Ì¬: ÒÑÆô¶¯");
+        ui.ServerStatus->setText(u8"çŠ¶æ€: å·²å¯åŠ¨");
     }
     else {
-        ui.ServerStatus->setText(u8"×´Ì¬: Î´Æô¶¯");
+        ui.ServerStatus->setText(u8"çŠ¶æ€: æœªå¯åŠ¨");
     }
 }; 
 
-//¸ü¸Ä±êÇ©
+//æ›´æ”¹æ ‡ç­¾
 void CSPBot::slotChLabel(QString title, QString content) {
     if (title == "world") {
-        ui.ServerWorld->setText(u8"ÊÀ½ç:" + content);
+        ui.ServerWorld->setText(u8"ä¸–ç•Œ:" + content);
     }
     else if (title == "version") {
-        ui.ServerVersion->setText(u8"°æ±¾:" + content);
+        ui.ServerVersion->setText(u8"ç‰ˆæœ¬:" + content);
     }
     else if (title == "difficult") {
-        ui.ServerDifficult->setText(u8"ÄÑ¶È:" + content);
+        ui.ServerDifficult->setText(u8"éš¾åº¦:" + content);
     }
 }; 
 
-//¸ü¸ÄÇ¿ÖÆÍ£Ö¹×´Ì¬
+//æ›´æ”¹å¼ºåˆ¶åœæ­¢çŠ¶æ€
 void CSPBot::slotChenableForce(bool a) {
     ui.forceStop->setEnabled(a);
     if (a) {
-        /*ui.change->setText(u8"Í£Ö¹");*/
+        /*ui.change->setText(u8"åœæ­¢");*/
         ui.stop->setEnabled(true);
         ui.start->setEnabled(false);
         ui.inputCmd->setEnabled(true);
         ui.runCmd->setEnabled(true);
     }
     else {
-        /*ui.change->setText(u8"Æô¶¯");*/
+        /*ui.change->setText(u8"å¯åŠ¨");*/
         ui.stop->setEnabled(false);
         ui.start->setEnabled(true);
         ui.inputCmd->setEnabled(false);
@@ -617,47 +629,47 @@ void CSPBot::slotChenableForce(bool a) {
     }
 }; 
 
-//¿ªÆô·şÎñÆ÷
+//å¼€å¯æœåŠ¡å™¨
 void CSPBot::startServer() {
     buildServer(0);
     ui.stop->setEnabled(true);
-    slotInsertBDSLog(u8"[CSPBot] ÒÑÏò½ø³Ì·¢³öÆô¶¯ÃüÁî");
+    slotInsertBDSLog(u8"[CSPBot] å·²å‘è¿›ç¨‹å‘å‡ºå¯åŠ¨å‘½ä»¤");
     ui.start->setEnabled(false);
 }
 
-//¿ªÆôCmd
+//å¼€å¯Cmd
 void CSPBot::startCmd() {
     buildServer(1);
     ui.stop->setEnabled(true);
-    slotInsertBDSLog(u8"<font style=\"color:#FFCC66;\">!!![WARNNING] [CSPBot] ÄúÒÑ½øÈë<font color=\"#008000\">CMD</font>µ÷ÊÔÄ£Ê½. [WARNNING]!!!</font>");
-    slotInsertBDSLog(u8"[CSPBot] ÒÑÏò½ø³Ì·¢³öÆô¶¯ÃüÁî");
+    slotInsertBDSLog(u8"<font style=\"color:#FFCC66;\">!!![WARNNING] [CSPBot] æ‚¨å·²è¿›å…¥<font color=\"#008000\">CMD</font>è°ƒè¯•æ¨¡å¼. [WARNNING]!!!</font>");
+    slotInsertBDSLog(u8"[CSPBot] å·²å‘è¿›ç¨‹å‘å‡ºå¯åŠ¨å‘½ä»¤");
     ui.start->setEnabled(false);
 }
 
-//¹Ø±Õ·şÎñÆ÷
+//å…³é—­æœåŠ¡å™¨
 void CSPBot::stopServer() {
     server->stopServer();
-    slotInsertBDSLog(u8"[CSPBot] ÒÑÏò½ø³Ì·¢³öÖÕÖ¹ÃüÁî");
+    slotInsertBDSLog(u8"[CSPBot] å·²å‘è¿›ç¨‹å‘å‡ºç»ˆæ­¢å‘½ä»¤");
     ui.stop->setEnabled(false);
     ui.start->setEnabled(true);
 }
 
-//Ç¿ÖÆÍ£Ö¹½ø³Ì
+//å¼ºåˆ¶åœæ­¢è¿›ç¨‹
 void CSPBot::forceStopServer() {
-    auto temp = QMessageBox::warning(this, u8"¾¯¸æ", u8"·şÎñÆ÷»¹ÔÚÔËĞĞ£¬ÄãÊÇ·ñÒªÇ¿ÖÆÍ£Ö¹?", QMessageBox::Yes | QMessageBox::No);
+    auto temp = QMessageBox::warning(this, u8"è­¦å‘Š", u8"æœåŠ¡å™¨è¿˜åœ¨è¿è¡Œï¼Œä½ æ˜¯å¦è¦å¼ºåˆ¶åœæ­¢?", QMessageBox::Yes | QMessageBox::No);
     if (temp == QMessageBox::Yes)
     {
         server->forceStopServer();
-        ui.ServerLog->append(u8"[CSPBot] ÒÑÏò½ø³Ì·¢³öÇ¿ÖÆÖÕÖ¹ÃüÁî");
+        ui.ServerLog->append(u8"[CSPBot] å·²å‘è¿›ç¨‹å‘å‡ºå¼ºåˆ¶ç»ˆæ­¢å‘½ä»¤");
     }
 }
 
-//Çå¿ÕÈÕÖ¾
+//æ¸…ç©ºæ—¥å¿—
 void CSPBot::clear_console() {
     ui.ServerLog->setText("");
 }
 
-//²åÈëÃüÁî
+//æ’å…¥å‘½ä»¤
 void CSPBot::insertCmd() {
     try {
         string cmd = Helper::QString2stdString(ui.inputCmd->text());
@@ -671,6 +683,28 @@ void CSPBot::insertCmd() {
     }
 }
 
+void CSPBot::slotSendCommand(QString cmd) {
+	server->sendCmd(Helper::QString2stdString(cmd));
+}
+
+///////////////////////////////////////////// Debug /////////////////////////////////////////////
+void CSPBot::slotDebug() {
+    bool bRet = false;
+    QString text = QInputDialog::getText(this, u8"CSPBot Debug",u8"Debugè°ƒè¯•å™¨ç”¨æˆ·è¯·é€€å‡º.", QLineEdit::Normal, "", &bRet);
+    if (!bRet || text.isEmpty()) {
+        return;
+    }
+
+	//åˆ¤æ–­éœ€è¦ä»€ä¹ˆåŠŸèƒ½
+    if (text == "crash") {
+        int* x = 0;
+		*x = 1;
+    }
+    else if (text == "cmd") {
+        emit runCommand();
+    }
+}
+
 ///////////////////////////////////////////// Keyboard /////////////////////////////////////////////
 void CSPBot::keyPressEvent(QKeyEvent* e)
 {
@@ -681,16 +715,20 @@ void CSPBot::keyPressEvent(QKeyEvent* e)
     else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
         emit runCommand();
     }
+	//DEBUGè°ƒè¯•å™¨
+    else if (e->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier) && e->key() == Qt::Key_D) {
+        emit signalDebug();
+    }
 }
 
 ///////////////////////////////////////////// Table /////////////////////////////////////////////
 void CSPBot::InitPlayerTableView()
 {
     try {
-        YAML::Node node = YAML::LoadFile("data/player.yml"); //¶ÁÈ¡playerÅäÖÃÎÄ¼ş
+        YAML::Node node = YAML::LoadFile("data/player.yml"); //è¯»å–playeré…ç½®æ–‡ä»¶
         int line_num = node.size();
         QStringList strHeader;
-        strHeader << u8"Íæ¼ÒÃû³Æ" << u8"Íæ¼ÒXuid" << u8"Íæ¼ÒQQºÅ";
+        strHeader << u8"ç©å®¶åç§°" << u8"ç©å®¶Xuid" << u8"ç©å®¶QQå·";
 
         QStandardItemModel* m_model = new QStandardItemModel();
         m_model->setHorizontalHeaderLabels(strHeader);
@@ -699,7 +737,7 @@ void CSPBot::InitPlayerTableView()
         ui.playerAdmin->verticalHeader()->hide();
         ui.playerAdmin->setModel(m_model);
 
-        //¾ÓÖĞÏÔÊ¾²¢ÉèÖÃÎÄ±¾
+        //å±…ä¸­æ˜¾ç¤ºå¹¶è®¾ç½®æ–‡æœ¬
         int in = 0;
         for (YAML::Node i : node)
         {
@@ -732,25 +770,25 @@ void CSPBot::InitPlayerTableView()
 void CSPBot::InitRegularTableView()
 {
     try {
-        YAML::Node node = YAML::LoadFile("data/regular.yml"); //¶ÁÈ¡playerÅäÖÃÎÄ¼ş
+        YAML::Node node = YAML::LoadFile("data/regular.yml"); //è¯»å–playeré…ç½®æ–‡ä»¶
         int line_num = node.size();
         QStringList strHeader;
-        strHeader << u8"ÕıÔò" << u8"À´Ô´" << u8"Ö´ĞĞ" << u8"È¨ÏŞ";
+        strHeader << u8"æ­£åˆ™" << u8"æ¥æº" << u8"æ‰§è¡Œ" << u8"æƒé™";
 
         QStandardItemModel* m_model = new QStandardItemModel();
-        //Ìí¼Ó±íÍ·Êı¾İ
+        //æ·»åŠ è¡¨å¤´æ•°æ®
         m_model->setHorizontalHeaderLabels(strHeader);
-        //ÉèÖÃÁĞÊı
+        //è®¾ç½®åˆ—æ•°
         m_model->setColumnCount(strHeader.size());
-        //ÉèÖÃĞĞÊı
+        //è®¾ç½®è¡Œæ•°
         m_model->setRowCount(line_num);
 
-        //Òş²ØÁĞ±íÍ·
+        //éšè—åˆ—è¡¨å¤´
         ui.regularAdmin->verticalHeader()->hide();
 
         //setModel.
         ui.regularAdmin->setModel(m_model);
-        //¾ÓÖĞÏÔÊ¾²¢ÉèÖÃÎÄ±¾
+        //å±…ä¸­æ˜¾ç¤ºå¹¶è®¾ç½®æ–‡æœ¬
         int in = 0;
         for (YAML::Node i : node)
         {
@@ -759,10 +797,10 @@ void CSPBot::InitRegularTableView()
             string From = i["From"].as<string>();
             string Permissions;
             if (i["Permissions"].as<bool>()) {
-                Permissions = u8"ÊÇ";
+                Permissions = u8"æ˜¯";
             }
             else if (!i["Permissions"].as<bool>()) {
-                Permissions = u8"·ñ";
+                Permissions = u8"å¦";
             }
             QStandardItem* item1 = new QStandardItem(Helper::stdString2QString(Regular));
             item1->setTextAlignment(Qt::AlignCenter);
@@ -791,7 +829,7 @@ void CSPBot::InitRegularTableView()
     }
 }
 
-//Ñ¡ÖĞ×Ô¶¯Ñ¡ÖĞ¸ÃĞĞ
+//é€‰ä¸­è‡ªåŠ¨é€‰ä¸­è¯¥è¡Œ
 void CSPBot::clickRegularTable(QModelIndex index) {
     ui.regularAdmin->selectRow(index.row());
 }
@@ -810,7 +848,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	    regularFrom from;
 	    bool permission;
     };
-    strHeader << u8"ÕıÔò" << u8"À´Ô´" << u8"Ö´ĞĞ" << u8"È¨ÏŞ";
+    strHeader << u8"æ­£åˆ™" << u8"æ¥æº" << u8"æ‰§è¡Œ" << u8"æƒé™";
     */
     for (int i=0; i<5; i++)
     {
@@ -823,7 +861,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
     string mAction = regularData[2];
     string mPermission = regularData[3];
 
-    //×ª»»type
+    //è½¬æ¢type
     string Action_type = mAction.substr(0, 2);
     regularAction regular_action;
     if (Action_type == "<<") { 
@@ -834,10 +872,10 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
     }
     else { regular_action = regularAction::Command; };
 
-    //×ª»»È¨ÏŞ
-    bool Permission = (mPermission == u8"ÊÇ");
+    //è½¬æ¢æƒé™
+    bool Permission = (mPermission == u8"æ˜¯");
 
-    //×ª»»À´Ô´
+    //è½¬æ¢æ¥æº
     regularFrom regular_from;
     transform(mFrom.begin(), mFrom.end(), mFrom.begin(), ::tolower);
     if (mFrom == "group") { 
@@ -857,7 +895,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
     regEdit->show();
 }
 
-//ĞÂ½¨ÕıÔò
+//æ–°å»ºæ­£åˆ™
 void CSPBot::newRegular() {
     Regular regular = {
         "",
@@ -874,7 +912,7 @@ void CSPBot::InitPluginTableView()
     try {
         int line_num = plugins.size();
         QStringList strHeader;
-        strHeader << u8"ÎÄ¼şÃû" << u8"²å¼ş" << u8"½éÉÜ" << u8"°æ±¾" << u8"×÷Õß";
+        strHeader << u8"æ–‡ä»¶å" << u8"æ’ä»¶" << u8"ä»‹ç»" << u8"ç‰ˆæœ¬" << u8"ä½œè€…";
 
         QStandardItemModel* m_model = new QStandardItemModel();
         m_model->setHorizontalHeaderLabels(strHeader);
@@ -891,7 +929,7 @@ void CSPBot::InitPluginTableView()
             QStandardItem* item4 = new QStandardItem(Helper::stdString2QString(i.second.version));
             QStandardItem* item5 = new QStandardItem(Helper::stdString2QString(i.second.author));
 
-            //¾ÓÖĞÎÄ±¾
+            //å±…ä¸­æ–‡æœ¬
             item1->setTextAlignment(Qt::AlignCenter);
             item2->setTextAlignment(Qt::AlignCenter);
             item3->setTextAlignment(Qt::AlignCenter);

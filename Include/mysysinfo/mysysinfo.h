@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef RESOURCE_MINITOR_H
 #define RESOURCE_MINITOR_H
 #include <QObject>

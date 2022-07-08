@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QtWidgets/QMainWindow>
 #include "qnetworkreply.h"
@@ -31,21 +31,22 @@ public:
 
 ///////////////////////////////////////////// Signals /////////////////////////////////////////////
 signals:
-    void ilog(); //Logger ²ÛĞÅºÅ
-    void runCmd(); //Æô¶¯Cmd
-    void runCommand(); //ÔËĞĞÃüÁî
-    void signalStartServer(); //¿ªÆô·şÎñÆ÷
-    void signalStartLogger(); //¿ªÆôLogger·şÎñ
+    void ilog(); //Logger æ§½ä¿¡å·
+    void runCmd(); //å¯åŠ¨Cmd
+    void runCommand(); //è¿è¡Œå‘½ä»¤
+    void signalStartServer(); //å¼€å¯æœåŠ¡å™¨
+    void signalStartLogger(); //å¼€å¯LoggeræœåŠ¡
+    void signalDebug(); //å¼€å¯Debugæµ‹è¯•
 
 
 ///////////////////////////////////////////// Slot /////////////////////////////////////////////
 private slots:
-    void on_actionMinimize_triggered();//×îĞ¡»¯´°¿Ú
-    void on_actionClose_triggered();//¹Ø±Õ´°¿Ú
-    void switchPage();//ÇĞ»»º¯Êı
-    void insertLog(QString a);//Logger ²Ûº¯Êı
-    void setUserImage(QString qqNum, QString qqNick); //ÉèÖÃÍ·Ïñ
-    void startLogger(); //Æô¶¯ÈÕÖ¾
+    void on_actionMinimize_triggered();//æœ€å°åŒ–çª—å£
+    void on_actionClose_triggered();//å…³é—­çª—å£
+    void switchPage();//åˆ‡æ¢å‡½æ•°
+    void insertLog(QString a);//Logger æ§½å‡½æ•°
+    void setUserImage(QString qqNum, QString qqNick); //è®¾ç½®å¤´åƒ
+    void startLogger(); //å¯åŠ¨æ—¥å¿—
 
     /////////////// Server //////////////////
     //ServerRebackSlot
@@ -54,42 +55,47 @@ private slots:
     void slotChangeStatus(bool a);
     void slotChLabel(QString title, QString content);
     //ServerMainSlot
-    void startServer(); //¿ªÆô·şÎñÆ÷
-    void stopServer(); //Í£Ö¹·şÎñÆ÷
-    void forceStopServer(); //Ç¿ÖÆÍ£Ö¹·şÎñÆ÷
-    void clear_console(); //Çå¿ÕBDSÈÕÖ¾
-    void startCmd(); //Æô¶¯cmd
-    void insertCmd(); //²åÈëÃüÁî
+    void startServer(); //å¼€å¯æœåŠ¡å™¨
+    void stopServer(); //åœæ­¢æœåŠ¡å™¨
+    void forceStopServer(); //å¼ºåˆ¶åœæ­¢æœåŠ¡å™¨
+    void clear_console(); //æ¸…ç©ºBDSæ—¥å¿—
+    void startCmd(); //å¯åŠ¨cmd
+    void insertCmd(); //æ’å…¥å‘½ä»¤
 
     /////////////// Mirai //////////////////
-    void slotConnectMirai(); //Á¬½ÓMirai
-    void slotDisConnectMirai(); //¶Ï¿ªMirai
-    void setUserImageError(QNetworkReply::NetworkError e); //ÉèÖÃÍ·ÏñÊ±³öÏÖERROR
+    void slotConnectMirai(); //è¿æ¥Mirai
+    void slotDisConnectMirai(); //æ–­å¼€Mirai
+    void slotMiraiMessageBox(); //Miraiæ¶ˆæ¯æ¡†
+    void setUserImageError(QNetworkReply::NetworkError e); //è®¾ç½®å¤´åƒæ—¶å‡ºç°ERROR
+    void slotSendCommand(QString cmd); //Miraiä¼ è¾“å‘½ä»¤
     
 
     /////////////// Console //////////////////
-    void slotSaveConsole(); //±£´æ¿ØÖÆÌ¨ÎÄ¼ş
-    void slotClearConsole(); //Çå¿Õ¿ØÖÆÌ¨
-    void slotUpdateSendRecive(int send, int recive); //¸üĞÂÊÕ·¢
-    void slotConnected(mTime time); //¸üĞÂÊ±¼ä
+    void slotSaveConsole(); //ä¿å­˜æ§åˆ¶å°æ–‡ä»¶
+    void slotClearConsole(); //æ¸…ç©ºæ§åˆ¶å°
+    void slotUpdateSendRecive(int send, int recive); //æ›´æ–°æ”¶å‘
+    void slotConnected(mTime time); //æ›´æ–°æ—¶é—´
 
     /////////////// Global //////////////////
-    void slotTimerFunc(); //TimerÆô¶¯º¯Êı
+    void slotTimerFunc(); //Timerå¯åŠ¨å‡½æ•°
 
     /////////////// Table //////////////////
     void clickRegularTable(QModelIndex index);
     void doubleClickedRegularTable(QModelIndex index);
-    void newRegular(); //ĞÂ½¨ÕıÔò
+    void newRegular(); //æ–°å»ºæ­£åˆ™
 
     /////////////// Plugin //////////////////
     bool slotOtherCallback(QString listener, StringMap args);
     void slotCommandCallback(QString cmd, StringVector args);
+
+    /////////////// Plugin //////////////////
+    void slotDebug();
     
 
 ///////////////////////////////////////////// Private /////////////////////////////////////////////
 private:
     //////// Basic ////////
-    //Ìí¼ÓÒõÓ°
+    //æ·»åŠ é˜´å½±
     void setGraphics(QWidget* bt);
 
     //////// Window ////////
@@ -98,7 +104,7 @@ private:
     //void setGraphics(QWidget* bt);
     void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent*);
-    //¹Ø±ÕÊÂ¼ş
+    //å…³é—­äº‹ä»¶
     bool checkClose();
     QPoint mousePosition;
     bool isMousePressed;

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include "qstring.h"
 #include <stdlib.h>
@@ -12,21 +12,21 @@ using json = nlohmann::json;
 
 namespace Helper{
 
-	//½«std::string×ª»»ÎªQString
+	//å°†std::stringè½¬æ¢ä¸ºQString
 	inline QString stdString2QString(std::string str) {
 		QByteArray byteArray(str.c_str(), str.length());
 		QString msg = byteArray;
 		return msg;
 	}
 
-	//½«QString×ª»»Îªstd::string
+	//å°†QStringè½¬æ¢ä¸ºstd::string
 	inline std::string QString2stdString(QString str) {
 		QByteArray bytes = str.toUtf8();
 		std::string msg = bytes;
 		return msg;
 	}
 
-	//×Ö·û´®Ìæ»»
+	//å­—ç¬¦ä¸²æ›¿æ¢
 	inline std::string replace(std::string strSrc,
 		const std::string& oldStr, const std::string& newStr, int count = -1)
 	{
@@ -44,7 +44,7 @@ namespace Helper{
 		return strRet;
 	}
 
-	//ÇĞ¸î×Ö·û´®
+	//åˆ‡å‰²å­—ç¬¦ä¸²
 	inline std::vector<std::string> split(const std::string& str, const std::string& pattern)
 	{
 		std::vector<std::string> res;
@@ -64,7 +64,7 @@ namespace Helper{
 		return res;
 	}
 
-	//¼ì²âstringÊÇ·ñÊÇUTF-8
+	//æ£€æµ‹stringæ˜¯å¦æ˜¯UTF-8
 	inline bool is_str_utf8(const char* str)
 	{
 		unsigned int nBytes = 0;
@@ -93,7 +93,7 @@ namespace Helper{
 		return true;
 	}
 
-	//GBKÓëUTF-8»¥×ª
+	//GBKä¸UTF-8äº’è½¬
 	inline std::string GbkToUtf8(const char* src_str)
 	{
 		int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
@@ -165,7 +165,7 @@ namespace Bind {
 			qq_list.push_back(i["qq"].as<std::string>());
 		}
 
-		//¼ì²âÓĞÃ»ÓĞÒÑ°ó¶¨µÄÕËºÅ
+		//æ£€æµ‹æœ‰æ²¡æœ‰å·²ç»‘å®šçš„è´¦å·
 		if (std::find(player_list.begin(), player_list.end(), name) == player_list.end() && \
 			std::find(qq_list.begin(), qq_list.end(), qq) == qq_list.end()) {
 			std::ofstream fout("data/player.yml");
@@ -189,7 +189,7 @@ namespace Bind {
 			qq_list.push_back(i["qq"].as<std::string>());
 		}
 
-		//¼ì²âÓĞÃ»ÓĞÒÑ°ó¶¨µÄÕËºÅ
+		//æ£€æµ‹æœ‰æ²¡æœ‰å·²ç»‘å®šçš„è´¦å·
 		if (std::find(qq_list.begin(), qq_list.end(), qq) != qq_list.end()) {
 			std::ofstream fout("data/player.yml");
 			auto it = find(qq_list.begin(), qq_list.end(), qq);
@@ -206,7 +206,7 @@ namespace Bind {
 		return true;
 	}
 
-	//°ó¶¨Xuid
+	//ç»‘å®šXuid
 	inline bool bindXuid(std::string name, std::string xuid) {
 		YAML::Node player = YAML::LoadFile("data/player.yml");
 		for (YAML::Node i : player) {
@@ -220,10 +220,10 @@ namespace Bind {
 		return false;
 	}
 
-	//²éÑ¯ĞÅÏ¢
+	//æŸ¥è¯¢ä¿¡æ¯
 	inline YAML::Node queryXboxID(std::string type, std::string arg) {
 		YAML::Node player = YAML::LoadFile("data/player.yml");
-		//µü´úËÑË÷
+		//è¿­ä»£æœç´¢
 		for (YAML::Node i : player) {
 			if (type == "qq") {
 				if (i["qq"].as<std::string>() == arg) {
@@ -245,7 +245,7 @@ namespace Bind {
 	}
 }
 
-//ÕıÔò×é½á¹¹Ìå
+//æ­£åˆ™ç»„ç»“æ„ä½“
 enum regularAction { Console, Group, Command };
 enum regularFrom { group, console };
 struct Regular {

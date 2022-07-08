@@ -1,4 +1,4 @@
-#include <mysysinfo/mysysinfo.h>
+ï»¿#include <mysysinfo/mysysinfo.h>
 #include "logger.h"
 #include "helper.h"
 #include <Nlohmann/json.hpp>
@@ -43,7 +43,7 @@ string fmtMotdBE(string msgJson, string returnMsg) {
 		return tempReturnMsg;
 	}
 	else {
-		return u8"·¢Éú´íÎó!Ô­Òò:·şÎñÆ÷×´Ì¬Îª" + msg["status"].get<string>();
+		return u8"å‘ç”Ÿé”™è¯¯!åŸå› :æœåŠ¡å™¨çŠ¶æ€ä¸º" + msg["status"].get<string>();
 	}
 
 
@@ -83,7 +83,7 @@ string fmtMotdJE(string msgJson, string returnMsg) {
 		return tempReturnMsg;
 	}
 	else {
-		return u8"·¢Éú´íÎó!Ô­Òò:·şÎñÆ÷×´Ì¬Îª" + msg["status"].get<string>();
+		return u8"å‘ç”Ÿé”™è¯¯!åŸå› :æœåŠ¡å™¨çŠ¶æ€ä¸º" + msg["status"].get<string>();
 	}
 }
 
@@ -124,23 +124,23 @@ std::unordered_map<QString, QString> G_colorParts = {
 };
 
 std::unordered_map<QString, QString> fromatColor = {
-	{"¡ì0","#fff"},
-	{"¡ì1","#fff"},
-	{"¡ì2","#fff"},
-	{"¡ì3","#fff"},
-	{"¡ì4","#ff0000"},
-	{"¡ì5","#00ff00"},
-	{"¡ì6","#ffff00"},
-	{"¡ì7","#0000ff"},
-	{"¡ì8","#ff00ff"},
-	{"¡ì9","#00ffff"},
-	{"¡ìa","#fff"},
-	{"¡ìb","#fff"},
-	{"¡ìc","#fff"},
-	{"¡ìd","#fff"},
-	{"¡ìe","#fff"},
-	{"¡ìf","#fff"},
-	{"¡ìg","#fff"},
+	{"Â§0","#fff"},
+	{"Â§1","#fff"},
+	{"Â§2","#fff"},
+	{"Â§3","#fff"},
+	{"Â§4","#ff0000"},
+	{"Â§5","#00ff00"},
+	{"Â§6","#ffff00"},
+	{"Â§7","#0000ff"},
+	{"Â§8","#ff00ff"},
+	{"Â§9","#00ffff"},
+	{"Â§a","#fff"},
+	{"Â§b","#fff"},
+	{"Â§c","#fff"},
+	{"Â§d","#fff"},
+	{"Â§e","#fff"},
+	{"Â§f","#fff"},
+	{"Â§g","#fff"},
 };
 
 std::unordered_map<QString, QString> Xtermcolor = {
@@ -233,33 +233,33 @@ string fmtConsole::getCPUUsed() {
 
 string fmtConsole::FmtConsoleRegular(string cmd) {
 	/*
-	//ÏµÍ³
-	{cpu} CPUÕ¼ÓÃÂÊ
-	{ramAll} ×ÜÎïÀíÄÚ´æ
-	{ramUse} ÒÑÊ¹ÓÃµÄÎïÀíÄÚ´æ
-	{ramCan} ¿ÉÊ¹ÓÃµÄÎïÀíÄÚ´æ
-	{ramPercent} ÎïÀíÄÚ´æÊ¹ÓÃÂÊ
+	//ç³»ç»Ÿ
+	{cpu} CPUå ç”¨ç‡
+	{ramAll} æ€»ç‰©ç†å†…å­˜
+	{ramUse} å·²ä½¿ç”¨çš„ç‰©ç†å†…å­˜
+	{ramCan} å¯ä½¿ç”¨çš„ç‰©ç†å†…å­˜
+	{ramPercent} ç‰©ç†å†…å­˜ä½¿ç”¨ç‡
 
-	//Ê±¼ä
-	{time} µ±Ç°Ê±¼ä
-	{year} µ±Ç°Äê·İ
-	{month} µ±Ç°ÔÂ·İ
-	{week} µ±Ç°ĞÇÆÚ(Êı×Ö)
-	{day} µ±Ç°ÌìÊı
-	{hour} µ±Ç°Ğ¡Ê±(24Ğ¡Ê±ÖÆ)
-	{min} µ±Ç°·ÖÖÓ
-	{second} µ±Ç°ÃëÊı
+	//æ—¶é—´
+	{time} å½“å‰æ—¶é—´
+	{year} å½“å‰å¹´ä»½
+	{month} å½“å‰æœˆä»½
+	{week} å½“å‰æ˜ŸæœŸ(æ•°å­—)
+	{day} å½“å‰å¤©æ•°
+	{hour} å½“å‰å°æ—¶(24å°æ—¶åˆ¶)
+	{min} å½“å‰åˆ†é’Ÿ
+	{second} å½“å‰ç§’æ•°
 	*/
 
 	std::unordered_map<string, string> ram = getRam();
-	//ÏµÍ³
+	//ç³»ç»Ÿ
 	string cpu_ = Helper::replace(cmd, "{cpu}", getCPUUsed());
 	string ramAll_ = Helper::replace(cpu_, "{ramAll}", ram["all"]);
 	string ramUse_ = Helper::replace(ramAll_, "{ramUse}", ram["used"]);
 	string ramPercent_ = Helper::replace(ramUse_, "{ranPercent}", ram["percent"]);
 	string ramCan_ = Helper::replace(ramPercent_, "{ramCan}", ram["canuse"]);
 
-	//ÈÕÆÚ
+	//æ—¥æœŸ
 	time_t tt = time(NULL);
 	struct tm* t = localtime(&tt);
 	char time[1000];
@@ -290,26 +290,26 @@ string fmtConsole::FmtGroupRegular(
 ) {
 	/*
 	//QQ
-	{qqid} QQºÅ
-	{qqnick} QQêÇ³Æ
-	{xboxid} XBOXID(Î´°ó¶¨Ôò²»¸Ä±ä)
+	{qqid} QQå·
+	{qqnick} QQæ˜µç§°
+	{xboxid} XBOXID(æœªç»‘å®šåˆ™ä¸æ”¹å˜)
 
-	//ÏµÍ³
-	{cpu} CPUÕ¼ÓÃÂÊ
-	{ramAll} ×ÜÎïÀíÄÚ´æ
-	{ramUse} ÒÑÊ¹ÓÃµÄÎïÀíÄÚ´æ
-	{ramCan} ¿ÉÊ¹ÓÃµÄÎïÀíÄÚ´æ
-	{ramPercent} ÎïÀíÄÚ´æÊ¹ÓÃÂÊ
+	//ç³»ç»Ÿ
+	{cpu} CPUå ç”¨ç‡
+	{ramAll} æ€»ç‰©ç†å†…å­˜
+	{ramUse} å·²ä½¿ç”¨çš„ç‰©ç†å†…å­˜
+	{ramCan} å¯ä½¿ç”¨çš„ç‰©ç†å†…å­˜
+	{ramPercent} ç‰©ç†å†…å­˜ä½¿ç”¨ç‡
 
-	//Ê±¼ä
-	{time} µ±Ç°Ê±¼ä
-	{year} µ±Ç°Äê·İ
-	{month} µ±Ç°ÔÂ·İ
-	{week} µ±Ç°ĞÇÆÚ(Êı×Ö)
-	{day} µ±Ç°ÌìÊı
-	{hour} µ±Ç°Ğ¡Ê±(24Ğ¡Ê±ÖÆ)
-	{min} µ±Ç°·ÖÖÓ
-	{second} µ±Ç°ÃëÊı
+	//æ—¶é—´
+	{time} å½“å‰æ—¶é—´
+	{year} å½“å‰å¹´ä»½
+	{month} å½“å‰æœˆä»½
+	{week} å½“å‰æ˜ŸæœŸ(æ•°å­—)
+	{day} å½“å‰å¤©æ•°
+	{hour} å½“å‰å°æ—¶(24å°æ—¶åˆ¶)
+	{min} å½“å‰åˆ†é’Ÿ
+	{second} å½“å‰ç§’æ•°
 	*/
 	//QQ
 	string qqid_ = Helper::replace(cmd, "{qqid}", qqid);
@@ -323,14 +323,14 @@ string fmtConsole::FmtGroupRegular(
 	}
 
 	std::unordered_map<string, string> ram = getRam();
-	//ÏµÍ³
+	//ç³»ç»Ÿ
 	string cpu_ = Helper::replace(xboxid_, "{cpu}", getCPUUsed());
 	string ramAll_ = Helper::replace(cpu_, "{ramAll}", ram["all"]);
 	string ramUse_ = Helper::replace(ramAll_, "{ramUse}", ram["used"]);
 	string ramPercent_ = Helper::replace(ramUse_, "{ranPercent}", ram["percent"]);
 	string ramCan_ = Helper::replace(ramPercent_, "{ramCan}", ram["canuse"]);
 
-	//ÈÕÆÚ
+	//æ—¥æœŸ
 	time_t tt = time(NULL);
 	struct tm* t = localtime(&tt);
 	char time[1000];
@@ -366,7 +366,7 @@ QString fmtConsole::getColoredLine(string line) {
 			{
 				QString rgb = "rgb(";
 				QString rgbcolor = color.cap(0);
-				//ÌáÈ¡color
+				//æå–color
 				rgbcolor = rgbcolor.replace("\033[38;2;", "").replace("m", "").replace(";", ",");
 				QString hexColor = Helper::stdString2QString(RGBToHex::rgb(Helper::QString2stdString(rgbcolor)));
 				qline = qline.replace(color.cap(0), "<font color=\"" + hexColor + "\" style=\"white-space: pre-wrap\">");
@@ -400,7 +400,7 @@ QString fmtConsole::getColoredLine(string line) {
 				}
 			}
 
-			//É¾³ı¶àÓàµÄ</font>
+			//åˆ é™¤å¤šä½™çš„</font>
 			string lline = "</font>";
 			auto start = qline.mid(0, lline.length());
 			if (start == "</font>") {

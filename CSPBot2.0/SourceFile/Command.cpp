@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include <vector>
 #include <ctime>
@@ -71,10 +71,10 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	string Action_Type = sp[0];
 	if (Action_Type == "bind") {
 		if (sp.size() > 2) {
-			bind(sp[1], sp[2]);
+			Bind::bind(sp[1], sp[2]);
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"²ÎÊı´íÎó!");
+			mirai->sendGroupMsg(group, u8"å‚æ•°é”™è¯¯!");
 		}
 	}
 	else if (Action_Type == "unbind") {
@@ -82,7 +82,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			Bind::unbind(sp[1]);
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"²ÎÊı´íÎó!");
+			mirai->sendGroupMsg(group, u8"å‚æ•°é”™è¯¯!");
 		}
 	}
 	else if (Action_Type == "motdbe") {
@@ -96,11 +96,11 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 				mirai->sendGroupMsg(group, fmt_respone);
 			}
 			else {
-				mirai->sendGroupMsg(group, u8"MotdµØÖ·´íÎó!");
+				mirai->sendGroupMsg(group, u8"Motdåœ°å€é”™è¯¯!");
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"²ÎÊı´íÎó!");
+			mirai->sendGroupMsg(group, u8"å‚æ•°é”™è¯¯!");
 		}
 	}
 	else if (Action_Type == "motdje") {
@@ -114,23 +114,23 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 				mirai->sendGroupMsg(group, fmt_respone);
 			}
 			else {
-				mirai->sendGroupMsg(group, u8"MotdµØÖ·´íÎó!");
+				mirai->sendGroupMsg(group, u8"Motdåœ°å€é”™è¯¯!");
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"²ÎÊı´íÎó!");
+			mirai->sendGroupMsg(group, u8"å‚æ•°é”™è¯¯!");
 		}
 	}
 	else if (Action_Type == "start") {
-		mirai->sendGroupMsg(group, u8"ÕıÔÚ¿ªÆô·şÎñÆ÷...");
+		mirai->sendGroupMsg(group, u8"æ­£åœ¨å¼€å¯æœåŠ¡å™¨...");
 		emit signalStartServer();
 	}
 	else if (Action_Type == "stop") {
-		if (server->started) {
+		if (server->getStarted()) {
 			server->stopServer();
 		}
-		else if (server->started != false && group != "0") {
-			mirai->sendGroupMsg(group, u8"·şÎñÆ÷²»ÔÚÔËĞĞÖĞ");
+		else if (server->getStarted() != false && group != "0") {
+			mirai->sendGroupMsg(group, u8"æœåŠ¡å™¨ä¸åœ¨è¿è¡Œä¸­");
 		}
 	}
 	else if (command.find(Action_Type) != command.end()) {

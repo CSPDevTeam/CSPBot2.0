@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -101,7 +101,7 @@ public:
 		}
 	};
 
-	//»ñÈ¡¸ñÊ½»¯Ê±¼ä
+	//è·å–æ ¼å¼åŒ–æ—¶é—´
 	inline static std::string getTime() {
 		time_t tt = time(NULL);
 		struct tm* t = localtime(&tt);
@@ -157,7 +157,7 @@ class LoggerReader :public QThread
 protected:
 	void run();
 signals:
-	void updateLog(QString log); //Êä³öÈÕÖ¾
+	void updateLog(QString log); //è¾“å‡ºæ—¥å¿—
 public:
 	LoggerReader(QObject* parent = NULL) {};
 	~LoggerReader() {};

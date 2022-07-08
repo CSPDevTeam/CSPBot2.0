@@ -1,4 +1,4 @@
-#include <string>
+ï»¿#include <string>
 #include <windows.h> 
 #include "global.h"
 #include "cspbot20.h"
@@ -25,222 +25,171 @@ enum stopType :int {
 	accident,
 } stoptype;
 
+void setUTF8() {
+#ifdef _WIN32
+	SetConsoleOutputCP(65001);
+	CONSOLE_FONT_INFOEX info = { 0 };
+	info.cbSize = sizeof(info);
+	info.dwFontSize.Y = 16; // leave X as zero
+	info.FontWeight = FW_NORMAL;
+	//wcscpy(info.FaceName, L"Consolas");
+	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &info);
+#endif
+}
+
 bool Server::createServer()
 {
-	STARTUPINFO si = { 0 };
-	SECURITY_ATTRIBUTES sa = { 0 };
-	sa.nLength = sizeof(sa);
-	sa.bInheritHandle = TRUE;
-	sa.lpSecurityDescriptor = 0;
-	BOOL bRet = CreatePipe(&g_hChildStd_OUT_Rd, &g_hChildStd_OUT_Wr, &sa, 0);
-	BOOL bWet = CreatePipe(&g_hChildStd_IN_Rd, &g_hChildStd_IN_Wr, &sa, 0);
-	if (bRet != TRUE) {
-		return false;
-	}
-	HANDLE hTemp = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetStdHandle(STD_OUTPUT_HANDLE, g_hChildStd_OUT_Wr);
-	GetStartupInfo(&si);
-	si.cb = sizeof(STARTUPINFO);
-	si.wShowWindow = SW_HIDE;
-	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
-	si.hStdInput = g_hChildStd_IN_Rd;
-	si.hStdError = g_hChildStd_OUT_Wr;
-	si.hStdOutput = g_hChildStd_OUT_Wr;
-	std:string s;
-
-	//ÅĞ¶ÏÆô¶¯Ä£Ê½
+	setUTF8();
+	myChildProcess = new QProcess(this);
+	
+	//ç»‘å®šäº‹ä»¶
+	QObject::connect(myChildProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(receiver()));
+	QObject::connect(myChildProcess, SIGNAL(readyReadStandardError()), this, SLOT(receiver()));
+	QObject::connect(myChildProcess, SIGNAL(finished(int)), this, SLOT(progressFinished(int)));
+	
+	myChildProcess->setProcessChannelMode(QProcess::MergedChannels);
+	string runProgress;
 	if (startMode == 0) {
-		//s = "runner.bat";
-		s = "cmd.exe /c cd {}&{}";
-		s = fmt::format(s, getConfig("progressPath"), getConfig("progressName"));
+		runProgress = "runner.bat";
 	}
 	else if (startMode == 1) {
-		s = "cmd.exe";
+		runProgress = "cmd.exe";
 	}
-
-	wstring widstr = std::wstring(s.begin(), s.end());
-	LPWSTR path = (LPWSTR)widstr.c_str();
-	bRet = CreateProcess(NULL, path, NULL, NULL, TRUE, NULL, NULL, NULL, &si, &this->pi);
-	SetStdHandle(STD_OUTPUT_HANDLE, hTemp);
-	if (bRet != TRUE)
-	{
-		return false;
+	
+	myChildProcess->start(Helper::stdString2QString(runProgress));
+	if (myChildProcess->waitForStarted()) {
+		serverLogger.info(u8"æœåŠ¡å™¨å¯åŠ¨æˆåŠŸ,PIDä¸º:{}", myChildProcess->processId());
+		emit changeStatus(true);
+		emit chenableForce(true);
+		started = true;
 	}
-	CloseHandle(g_hChildStd_OUT_Wr);
-	this->ReadNum = ReadNum;
-	this->started = true;
-	cin.get();
-	serverLogger.info(u8"·şÎñÆ÷Æô¶¯³É¹¦,PIDÎª:" + std::to_string(pi.dwProcessId));
+	else {
+		serverLogger.error(u8"æœåŠ¡å™¨å¯åŠ¨å¤±è´¥,åŸå› :{}", Helper::QString2stdString(myChildProcess->errorString()));
+	}
+	
 
 	return true;
 }
 
-void selfCatchLine(QString line);
-
-//ServerÖ÷Æô¶¯
+//Serverä¸»å¯åŠ¨
 void Server::run() {
 	createServer();
-	//°ó¶¨¼ì²âÆ÷
-	ServerPoll* sp = new ServerPoll();
-	connect(sp, SIGNAL(insertBDSLog(QString)), this, SLOT(slotInsertBDSLog(QString)));
-	connect(sp, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
-	connect(sp, SIGNAL(changeStatus(bool)), this, SLOT(slotChangeStatus(bool)));
-	connect(sp, SIGNAL(chLabel(QString, QString)), this, SLOT(slotChLabel(QString, QString)));
-	connect(sp, SIGNAL(chenableForce(bool)), this, SLOT(slotChenableForce(bool)));
-	//Æô¶¯¼ì²âÆ÷
-	sp->start();
 	if (started) {
 		emit OtherCallback("onServerStart");
-		while (ReadFile(this->g_hChildStd_OUT_Rd, this->ReadBuff, 8192, &this->ReadNum, NULL))
-		{
-			if (started) {
-				ReadBuff[ReadNum] = '\0';
-				std::string line = ReadBuff;
-				if (!Helper::is_str_utf8(line.c_str())) {
-					line = Helper::GbkToUtf8(line.c_str());
-				}
-				//qDebug() << stdString2QString(line);
-				regex pattern("\033\\[(.+?)m");
-				string nocolor_line = regex_replace(line, pattern, "");
-				vector<string> words = Helper::split(line, "\n");
-				vector<string> nocolor_words = Helper::split(nocolor_line, "\n");
-				for (string i : words) {
-					string _line = Helper::replace(i, "\n", "");
-					_line = Helper::replace(_line, "\r", "");
-					if (_line != "") {
-						QString qline = Helper::stdString2QString(_line);
-						QString coloredLine = fmtConsole::getColoredLine(_line);
-						if (coloredLine != "") {
-							emit insertBDSLog(coloredLine);
-						}
-					}
-				}
-
-				for (string i : nocolor_words) {
-					string _line = Helper::replace(i, "\n", "");
-					_line = Helper::replace(_line, "\r", "");
-					if (_line != "") {
-						QString qline = Helper::stdString2QString(_line);
-						catchInfo(qline);
-						selfCatchLine(qline);
-
-						//Callback 
-						std::unordered_map<string, string> p;
-						p.emplace("line", _line);
-						emit OtherCallback("onConsoleUpdate", p);
-					}
-				}
-			}
-			else {
-				break;
-			}
-		}
 	}
-
 }
 
-//Ç¿ÖÆÍ£Ö¹
+//å¼ºåˆ¶åœæ­¢
 bool Server::forceStopServer() {
-	try {
-		QProcess process(window);
-		QStringList argument;
-		process.setProgram("taskkill");
-		argument << "/F" << "/T" << "/PID" << Helper::stdString2QString(std::to_string(this->pi.dwProcessId));
-		process.setArguments(argument);
-		process.start();
-		process.waitForStarted();
-		process.waitForFinished();
-		TypeOfStop = force;
-		return true;
-	}
-	catch (...) {
-		return false;
-	}
+	myChildProcess->kill();
+	return true;
 }
 
-//·¢ËÍÃüÁî
+//å‘é€å‘½ä»¤
 bool Server::sendCmd(string cmd) {
-	try {
-		//¼ì²âÍ£Ö¹
-		if (cmd == getConfig("stopCmd") + "\n") {
-			normalStop = true;
-		}
-
-		//Callback
-		std::unordered_map<string, string> p;
-		p.emplace("cmd", cmd);
-		emit OtherCallback("onSendCommand", p);
-
-		if (!WriteFile(this->g_hChildStd_IN_Wr, cmd.c_str(), cmd.length(), &this->ReadNum, NULL))
-		{
-			return false;
-		}
-		return true;
-	}
-	catch (...) {
-		return false;
-	}
-}
-
-//ÈíÍ£Ö¹·şÎñÆ÷
-bool Server::stopServer() {
-	try {
-		Server::sendCmd(getConfig("stopCmd") + "\n");
+	qDebug() << Helper::stdString2QString(cmd);
+	
+	//æ£€æµ‹åœæ­¢
+	if (cmd == getConfig("stopCmd") + "\n") {
 		normalStop = true;
-		return true;
-	}
-	catch (...) {
-		return false;
 	}
 
+	//Callback
+	std::unordered_map<string, string> p;
+	p.emplace("cmd", cmd);
+	emit OtherCallback("onSendCommand", p);
+	myChildProcess->write(cmd.c_str());
+	return true;
 }
 
-//»ñÈ¡×Ó½ø³ÌÔËĞĞ×´Ì¬
-bool Server::getPoll() {
-	try {
-		if (this != nullptr) {
-			return WaitForSingleObject(pi.hProcess, 0);
-		}
-		else {
-			return false;
-		}
-	}
-	catch (...) {
-		return false;
-	}
+//è½¯åœæ­¢æœåŠ¡å™¨
+bool Server::stopServer() {
+	Server::sendCmd(getConfig("stopCmd") + "\n");
+	normalStop = true;
+	return true;
 }
 
+//å¤„ç†BDSæ¶ˆæ¯
+void Server::formatBDSLog(string line) {
+	//å»æ‰Colorå¹¶åˆ†å‰²
+	regex pattern("\033\\[(.+?)m");
+	string nocolor_line = regex_replace(line, pattern, "");
+	vector<string> nocolor_words = Helper::split(nocolor_line, "\n");
 
-void ServerPoll::run() {
-	while (1) {
-		bool poll = server->getPoll();
-		if (!poll) {
-			server->started = false;
-			emit insertBDSLog(u8"[CSPBot] ½ø³ÌÒÑÖÕÖ¹.");
-			emit OtherCallback("onServerStop");
-			emit changeStatus(false);
-			emit chenableForce(false);
-			emit chLabel("world", "Unkown");
-			emit chLabel("version", "Unkown");
-			emit chLabel("difficult", "Unkown");
-
-			//Callback
-			if (server->normalStop) {
-				server->TypeOfStop = normal;
+	//è‰²å½©æ ¼å¼åŒ–
+	vector<string> words = Helper::split(line, "\n");
+	
+	//å¯¹æ§åˆ¶å°è¾“å‡ºè‰²å½©
+	for (string i : words) {
+		string _line = Helper::replace(i, "\n", "");
+		_line = Helper::replace(_line, "\r", "");
+		if (_line != "") {
+			QString qline = Helper::stdString2QString(_line);
+			QString coloredLine = fmtConsole::getColoredLine(_line);
+			if (coloredLine != "") {
+				emit insertBDSLog(coloredLine);
 			}
-			else {
-				server->TypeOfStop = accident;
-			}
+		}
+	}
 
-			break;
+	//å»æ‰é¢œè‰²è¿›è¡Œå›è°ƒ
+	for (string i : nocolor_words) {
+		string _line = Helper::replace(i, "\n", "");
+		_line = Helper::replace(_line, "\r", "");
+		if (_line != "") {
+			QString qline = Helper::stdString2QString(_line);
+			catchInfo(qline);
+			selfCatchLine(qline);
+
+			//Callback 
+			std::unordered_map<string, string> p;
+			p.emplace("line", _line);
+			emit OtherCallback("onConsoleUpdate", p);
 		}
-		else {
-			emit changeStatus(true);
-			emit chenableForce(true);
-		}
-		Sleep(1 * 1000);
 	}
 }
+
+//è·å–æ—¥å¿—è¾“å‡º
+void Server::receiver() {
+	char output[2049];
+	while (myChildProcess->readLine(output, 2048)) {
+		string line = output;
+		formatBDSLog(line);
+	}
+	//emit insertBDSLog(Helper::stdString2QString(output));
+	//formatBDSLog(output);
+}
+
+
+//è·å–NormalStopå˜é‡
+bool Server::getNormalStop() {
+	return normalStop;
+};
+
+//è·å–Startedå˜é‡
+bool Server::getStarted() {
+	return started;
+};
+
+void Server::progressFinished(int exitCode) {
+	server->started = false;
+	emit insertBDSLog(u8"[CSPBot] è¿›ç¨‹å·²ç»ˆæ­¢. ç»“æŸä»£ç :"+QString(exitCode));
+	emit OtherCallback("onServerStop");
+	emit changeStatus(false);
+	emit chenableForce(false);
+	emit chLabel("world", "Unkown");
+	emit chLabel("version", "Unkown");
+	emit chLabel("difficult", "Unkown");
+
+	//Callback
+	if (server->getNormalStop()) {
+		server->TypeOfStop = normal;
+	}
+	else {
+		server->TypeOfStop = accident;
+	}
+}
+
 
 void Server::catchInfo(QString line) {
 	QRegExp world("worlds\\/(.+)\\/db");
@@ -269,7 +218,7 @@ void Server::catchInfo(QString line) {
 		emit chLabel("version", Helper::stdString2QString(version_string));
 	}
 	else if (pid_pos > -1) {
-		QString msg = Helper::stdString2QString(u8"[CSPBot] ÌáÊ¾:ÒÑÓĞÒ»¸öPIDÎª") + PID.cap(1) + Helper::stdString2QString(u8"µÄÏàÍ¬Ä¿Â¼½ø³Ì£¬ÊÇ·ñ½áÊø½ø³Ì?£¨È·ÈÏÇëÊäÈëy,È¡ÏûÇëÊäÈën)");
+		QString msg = Helper::stdString2QString(u8"[CSPBot] æç¤º:å·²æœ‰ä¸€ä¸ªPIDä¸º") + PID.cap(1) + Helper::stdString2QString(u8"çš„ç›¸åŒç›®å½•è¿›ç¨‹ï¼Œæ˜¯å¦ç»“æŸè¿›ç¨‹?ï¼ˆç¡®è®¤è¯·è¾“å…¥y,å–æ¶ˆè¯·è¾“å…¥n)");
 		emit insertBDSLog(msg);
 	}
 	else if (difficult_pos > -1) {
@@ -282,14 +231,14 @@ void Server::catchInfo(QString line) {
 
 YAML::Node getRegular() {
 	std::ifstream fin("data/regular.yml");
-	YAML::Node node = YAML::Load(fin); //¶ÁÈ¡regularÅäÖÃÎÄ¼ş
+	YAML::Node node = YAML::Load(fin); //è¯»å–regularé…ç½®æ–‡ä»¶
 	return node;
 }
 
 void Server::selfCatchLine(QString line) {
 	YAML::Node regular = getRegular();
 
-	//¶ÁÈ¡ÕıÔò×é
+	//è¯»å–æ­£åˆ™ç»„
 	for (YAML::Node i : regular) {
 		string Regular = i["Regular"].as<string>();
 		string Action = i["Action"].as<string>();
@@ -299,7 +248,7 @@ void Server::selfCatchLine(QString line) {
 		QRegExp r(Helper::stdString2QString(Regular));
 		int r_pos = r.indexIn(line);
 		//qDebug() << line << r << r_pos;
-		//Ö´ĞĞ²Ù×÷
+		//æ‰§è¡Œæ“ä½œ
 		if (r_pos > -1 && From == "console") {
 			string Action_type = Action.substr(0, 2);
 			int num = 0;

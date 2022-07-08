@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <QtWidgets/QMainWindow>
 #include "ui_regularEdit.h"
 #include "helper.h"
@@ -12,7 +12,7 @@ public:
     regularEdit(Regular regular, bool newRegular,QWidget* parent = Q_NULLPTR);
 
 private slots:
-    void on_actionClose_triggered();//�رմ���
+    void on_actionClose_triggered();//关闭窗口
     /////// Start Progress ////////
     void stratProgress();
     void saveRegular();
@@ -39,7 +39,7 @@ private:
 
     
 
-    //�洢
+    //存储
     Regular mRegular;
     bool mNewRegular;
     Ui::Regular regular_ui;

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include <windows.h> 
 #include "global.h"
@@ -16,61 +16,47 @@
 
 enum stopType;
 
-class Server :public QThread
+class Server :public QObject
 {
 	Q_OBJECT
-protected:
-	void run();
 signals:
-	void insertBDSLog(QString log); //²åÈëBDSÈÕÖ¾
+	void insertBDSLog(QString log); //æ’å…¥BDSæ—¥å¿—
 	void OtherCallback(QString listener, StringMap args = {}); //Callback
-	void changeStatus(bool a); //¸ü¸Ä×´Ì¬
-	void chLabel(QString title, QString content); //¸ü¸Ä±êÇ©
-	void chenableForce(bool a); //¸ü¸ÄÇ¿ÖÆÍ£Ö¹×´Ì¬
+	void changeStatus(bool a); //æ›´æ”¹çŠ¶æ€
+	void chLabel(QString title, QString content); //æ›´æ”¹æ ‡ç­¾
+	void chenableForce(bool a); //æ›´æ”¹å¼ºåˆ¶åœæ­¢çŠ¶æ€
 
 public:
 	Server(int mode=0,QObject* parent = NULL) {
 		startMode = mode;
 	};
 	~Server() {};
-	bool started = false;
-	bool normalStop = false;
-	stopType TypeOfStop;
+	
 	bool createServer();
 	bool forceStopServer();
 	bool stopServer();
 	bool sendCmd(std::string cmd);
 	bool getPoll();
-	BOOL bRet;
-	char ReadBuff[8192];
-	DWORD ReadNum = 0;
-	PROCESS_INFORMATION pi;
-	HANDLE g_hChildStd_IN_Rd = NULL;
-	HANDLE g_hChildStd_IN_Wr = NULL;
-	HANDLE g_hChildStd_OUT_Rd = NULL;
-	HANDLE g_hChildStd_OUT_Wr = NULL;
-	DEBUG_EVENT de;
+	void run();
+
+	//ä¸€äº›å…³äºæœåŠ¡å™¨çš„å˜é‡
+	bool getNormalStop();
+	bool getStarted();
+	
 private:
-	void catchInfo(QString line); //×¥È¡ĞÅÏ¢
-	void selfCatchLine(QString line); //×¥È¡ÃüÁî
-	int startMode = 0;
+	void catchInfo(QString line); //æŠ“å–ä¿¡æ¯
+	void selfCatchLine(QString line); //æŠ“å–å‘½ä»¤
+	void formatBDSLog(string line); //å¤„ç†BDSå‘æ¥çš„ä¿¡æ¯
+	int startMode = 0; //å¼€å¯æ¨¡å¼
+	QProcess* myChildProcess; //å­è¿›ç¨‹æŒ‡é’ˆ
+	bool started = false; //æ˜¯å¦å¼€å¯
+	bool normalStop = false; //æ­£å¸¸åœæ­¢
+	stopType TypeOfStop; //åœæ­¢çŠ¶æ€
 
 private slots:
-	inline void slotInsertBDSLog(QString log) {
-		emit insertBDSLog(log);
-	}; //²åÈëBDSÈÕÖ¾
-	inline void slotOtherCallback(QString listener, StringMap args = {}) {
-		emit OtherCallback(listener, args);
-	}; //Callback
-	inline void slotChangeStatus(bool a) {
-		emit changeStatus(a);
-	}; //¸ü¸Ä×´Ì¬
-	inline void slotChLabel(QString title, QString content) {
-		emit chLabel(title, content);
-	}; //¸ü¸Ä±êÇ©
-	inline void slotChenableForce(bool a) {
-		emit chenableForce(a);
-	}; //¸ü¸ÄÇ¿ÖÆÍ£Ö¹×´Ì¬
+
+	void receiver(); //æ”¶åˆ°æ—¥å¿—
+	void progressFinished(int exitCode); //è¿›ç¨‹ç»“æŸ
 };
 
 class ServerPoll :public QThread
@@ -83,10 +69,10 @@ public:
 	~ServerPoll() {};
 signals:
 	void stoped();
-	void insertBDSLog(QString log); //²åÈëBDSÈÕÖ¾
+	void insertBDSLog(QString log); //æ’å…¥BDSæ—¥å¿—
 	void OtherCallback(QString listener, StringMap args = {}); //Callback
-	void changeStatus(bool a); //¸ü¸Ä×´Ì¬
-	void chLabel(QString title, QString content); //¸ü¸Ä±êÇ©
-	void chenableForce(bool a); //¸ü¸ÄÇ¿ÖÆÍ£Ö¹×´Ì¬
+	void changeStatus(bool a); //æ›´æ”¹çŠ¶æ€
+	void chLabel(QString title, QString content); //æ›´æ”¹æ ‡ç­¾
+	void chenableForce(bool a); //æ›´æ”¹å¼ºåˆ¶åœæ­¢çŠ¶æ€
 
 };

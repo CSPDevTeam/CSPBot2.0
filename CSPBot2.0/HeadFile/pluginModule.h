@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-//ÒıÈëÍ·ÎÄ¼ş
+//å¼•å…¥å¤´æ–‡ä»¶
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 #include <string>
@@ -56,16 +56,16 @@ inline std::unordered_map<string, py::function> command;
 inline std::unordered_map<std::string, Plugin> plugins;
 inline std::unordered_map<EventCode, bool> enableEvent;
 
-//ÊÂ¼ş»Øµ÷£¬³õÊ¼»¯¶ÔÏó½«ÉêÇëGIL
+//äº‹ä»¶å›è°ƒï¼Œåˆå§‹åŒ–å¯¹è±¡å°†ç”³è¯·GIL
 class Callbacker {
 public:
 	Callbacker(EventCode t) :type_(t), arg_() {}
 	~Callbacker() {}
 
-	//ÊÂ¼ş»Øµ÷
+	//äº‹ä»¶å›è°ƒ
 	inline bool callback() {
 		bool pass = true;
-		arg_.inc_ref();//TODO: ÎªÊ²Ã´¼Ó1
+		arg_.inc_ref();//TODO: ä¸ºä»€ä¹ˆåŠ 1
 		for (auto &cb : g_cb_functions[type_]) {
 			
 			if (g_cb_functions[type_].size() > 0) {

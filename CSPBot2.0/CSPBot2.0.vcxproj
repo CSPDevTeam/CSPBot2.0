@@ -118,7 +118,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <QtMoc>
       <PrependInclude>stdafx.h;%(PrependInclude)</PrependInclude>
@@ -128,6 +128,7 @@
     <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp" />
     <ClCompile Include="SourceFile\Command.cpp" />
     <ClCompile Include="SourceFile\cspbot20.cpp" />
+    <ClCompile Include="SourceFile\debug.cpp" />
     <ClCompile Include="SourceFile\logger.cpp" />
     <ClCompile Include="SourceFile\main.cpp" />
     <ClCompile Include="SourceFile\PyAPI.cpp" />

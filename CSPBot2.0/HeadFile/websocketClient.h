@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "helper.h"
 #include <QObject>
@@ -18,9 +18,9 @@ private:
 	WebSocketClient ws;
 	bool connected = false;
 signals:
-	void sigConnected(mTime nowTime); //Á¬½Ó³É¹¦
-	void setUserImages(QString qqNum, QString qqNick); //¸ü¸ÄUserImages
-	void updateSendRecive(int send,int recive); //¸üĞÂ½çÃæ
+	void sigConnected(mTime nowTime); //è¿æ¥æˆåŠŸ
+	void setUserImages(QString qqNum, QString qqNick); //æ›´æ”¹UserImages
+	void updateSendRecive(int send,int recive); //æ›´æ–°ç•Œé¢
 public:
 	explicit WsClient();
 	//API
@@ -54,36 +54,36 @@ struct messagePacket {
 	Permission perm;
 };
 
-//ÏûÏ¢ÀàĞÍ
+//æ¶ˆæ¯ç±»å‹
 inline std::unordered_map<std::string, std::string> messageType = {
-	{"Image",u8" [Í¼Æ¬]"},
-	{"Quote",u8" [»Ø¸´µÄÏûÏ¢]"},
-	{"AtAll",u8" [@È«Ìå³ÉÔ±]"},
-	{"Face",u8" [QQ±íÇé]"},
-	{"FlashImage",u8" [ÉÁÕÕ]"},
-	{"Voice",u8" [ÓïÒô]"},
-	{"Xml",u8" [XMLÏûÏ¢]"},
-	{"Json",u8" [JSONÏûÏ¢]"},
-	{"App",u8" [Ğ¡³ÌĞò]"},
-	{"Poke",u8" [´ÁÒ»´Á]"},
-	{"Dice",u8" [Î´ÖªÏûÏ¢]"},
-	{"ForwardMessage",u8" [×ª·¢µÄÏûÏ¢]"}
+	{"Image",u8" [å›¾ç‰‡]"},
+	{"Quote",u8" [å›å¤çš„æ¶ˆæ¯]"},
+	{"AtAll",u8" [@å…¨ä½“æˆå‘˜]"},
+	{"Face",u8" [QQè¡¨æƒ…]"},
+	{"FlashImage",u8" [é—ªç…§]"},
+	{"Voice",u8" [è¯­éŸ³]"},
+	{"Xml",u8" [XMLæ¶ˆæ¯]"},
+	{"Json",u8" [JSONæ¶ˆæ¯]"},
+	{"App",u8" [å°ç¨‹åº]"},
+	{"Poke",u8" [æˆ³ä¸€æˆ³]"},
+	{"Dice",u8" [æœªçŸ¥æ¶ˆæ¯]"},
+	{"ForwardMessage",u8" [è½¬å‘çš„æ¶ˆæ¯]"}
 };
 
 inline std::string transMessage(json j) {
 	std::string msg = "";
 	for (auto& i : j["data"]["messageChain"]) {
-		//·ÖÎöÏûÏ¢
+		//åˆ†ææ¶ˆæ¯
 		if (i["type"] == "Plain") { msg += u8" " + i["text"].get<std::string>(); }
 		else if (i["type"] == "At") { msg += u8" " + i["display"].get<std::string>(); }
-		else if (i["type"] == "File") { msg += u8" [ÎÄ¼ş]" + i["name"].get<std::string>(); }
-		else if (i["type"] == "MusicShare") { msg += u8" [ÒôÀÖ·ÖÏí]" + i["musicUrl"]; }
+		else if (i["type"] == "File") { msg += u8" [æ–‡ä»¶]" + i["name"].get<std::string>(); }
+		else if (i["type"] == "MusicShare") { msg += u8" [éŸ³ä¹åˆ†äº«]" + i["musicUrl"]; }
 		else if (i["type"] == "Source") {}
 		else {
 			if (std::find(messageType.begin(), messageType.end(), i["type"]) != messageType.end()) {
 				msg += messageType[i["type"]];
 			}
-			else { msg += u8" [Î´ÖªÏûÏ¢]"; }
+			else { msg += u8" [æœªçŸ¥æ¶ˆæ¯]"; }
 		}
 	}
 	return msg;
@@ -111,11 +111,16 @@ inline messagePacket transMessagePacket(json j) {
 }
 
 
-class Mirai :public QObject
+class Mirai :public QThread
 {
 	Q_OBJECT
+protected:
+	void run();
 public:
-	explicit Mirai();
+	Mirai();
+	inline ~Mirai(){
+		//delete mirai;
+	};
 	bool login();
 	void sendGroupMsg(std::string group, std::string msg, bool callback = true);
 	void sendAllGroupMsg(std::string msg, bool callback = true);
@@ -124,6 +129,7 @@ public:
 	void changeName(std::string qq, std::string group, std::string name);
 	void send_app(std::string group, std::string code);
 	void SendPacket(std::string packet);
+	bool connectMirai();
 	bool logined = false;
 
 	//Callback Event
@@ -131,17 +137,20 @@ public:
 	void onError(WebSocketClient& client, string msg);
 	void onLost(WebSocketClient& client, int code);
 signals:
-	void setUserImages(QString qqNum, QString qqNick); //¸ü¸ÄUserImages
+	void setUserImages(QString qqNum, QString qqNick); //æ›´æ”¹UserImages
 	bool OtherCallback(QString listener, StringMap args={}); //Callback
-	void sigLogin(); //µÇÂ¼³É¹¦
-	void updateSendRecive(int send, int recive); //¸üĞÂ½çÃæ
-	void signalConnect(mTime time); //Á¬½Ó³É¹¦´«Êä
+	void sigLogin(); //ç™»å½•æˆåŠŸ
+	void updateSendRecive(int send, int recive); //æ›´æ–°ç•Œé¢
+	void signalConnect(mTime time); //è¿æ¥æˆåŠŸä¼ è¾“
+	void signalMiraiMessageBox(); //Miraiå¼¹çª—
+	void sendServerCommand(QString cmd);//è¾“å…¥å‘½ä»¤
 private slots:
 	void slotUpdateSendRecive(int send, int recive);
-	void slotConnected(mTime time); //Á¬½Ó³É¹¦
-	void slotSetUserImages(QString qqNum, QString qqNick);//¸üĞÂÓÃ»§Í¼Æ¬
+	void slotConnected(mTime time); //è¿æ¥æˆåŠŸ
+	void slotSetUserImages(QString qqNum, QString qqNick);//æ›´æ–°ç”¨æˆ·å›¾ç‰‡
 private:
 	void selfGroupCatchLine(messagePacket message);
+	
 	//WsClient* wsc;
 };
 

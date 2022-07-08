@@ -1,10 +1,12 @@
-#include "cspbot20.h"
+ï»¿#include "cspbot20.h"
 #include "stdafx.h"
 #include "global.h"
 #include <mysysinfo/mysysinfo.h>
 #include <QtWidgets/QApplication>
 #include "websocketClient.h"
 #include <QQueue>
+
+#pragma comment(lib, "dbghelp.lib")
 
 using namespace std;
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
@@ -15,7 +17,7 @@ Mirai* mirai;
 WsClient* wsc;
 CommandAPI* commandApi;
 MySysInfo* mysysinfo = new MySysInfo();
-int configVersion = 3;
+int configVersion = 4;
 QQueue<QString> q;
 
 string getConfig(string key){
@@ -23,16 +25,35 @@ string getConfig(string key){
     return config[key].as<string>();
 };
 
-void InitPython(); //³õÊ¼»¯Python½âÊÍÆ÷
+bool checkConfigVersion() {
+    auto config = YAML::LoadFile("config/config.yml");
+	if(config["Version"].as<int>() < configVersion) {
+		return false;
+	}
+    return true;
+}
+
+void InitPython(); //åˆå§‹åŒ–Pythonè§£é‡Šå™¨
+LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //å¼€å¯CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    //Õ¹Ê¾ssl°æ±¾
+    QTextCodec* codec = QTextCodec::codecForName("UTF-8");//GB2312ä¹Ÿå¯ä»¥
+    QTextCodec::setCodecForLocale(codec);//2
+    //å±•ç¤ºsslç‰ˆæœ¬
     qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
-	//¼ÓÔØ×ÖÌå
+    //æ³¨å†Œå¼‚å¸¸æ•è·å‡½æ•°
+    SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
+
+    // set printf and fprintf out immediately
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+	
+
+	//åŠ è½½å­—ä½“
     QFontDatabase database;
     bool hasFont = false;
     auto fontFamily = database.families();
@@ -44,13 +65,22 @@ int main(int argc, char *argv[])
     };
     
 	
-	
     CSPBot* window = new CSPBot;
+    //æ£€æµ‹æ–‡ä»¶ç‰ˆæœ¬
+    if (!checkConfigVersion()) {
+        QMessageBox::critical(window, u8"ä¸¥é‡é”™è¯¯", u8"é…ç½®æ–‡ä»¶ç‰ˆæœ¬è¿‡ä½,è¯·æ£€æŸ¥",
+            QMessageBox::Yes, QMessageBox::Yes);
+        return 1;
+    }
+	
+	//å±•ç¤ºçª—å£
     window->show();
     window->publicStartLogger();
     InitPython();
+
+    //æœªå®‰è£…å­—ä½“æç¤º
     if (!hasFont) {
-        QMessageBox::information(window, u8"ÌáÊ¾", u8"È±ÉÙ×ÖÌåÎÄ¼ş£¬¿ÉÄÜ»áÓ°ÏìÄúÊ¹ÓÃCSPBot\nÇë¸ù¾İÎÄµµÀ´°²×°×ÖÌå",
+        QMessageBox::information(window, u8"æç¤º", u8"ç¼ºå°‘å­—ä½“æ–‡ä»¶ï¼Œå¯èƒ½ä¼šå½±å“æ‚¨ä½¿ç”¨CSPBot\nè¯·æ ¹æ®æ–‡æ¡£æ¥å®‰è£…å­—ä½“",
             QMessageBox::Yes, QMessageBox::Yes);
     }
     return a.exec();
