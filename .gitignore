@@ -44,6 +44,7 @@ data/*.yml
 data/.vscode/
 config/.vscode/
 plugins/
+runner.bat
 
 
 # Visual Studio 2017 auto generated files
