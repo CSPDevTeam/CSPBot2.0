@@ -28,6 +28,11 @@
     <span>日志输出</span>
     <img src="https://img1.imgtp.com/2022/07/02/uxems0Zw.png">
   </details>
+  
+## CSPBot v2遇到BDS乱码的情况
+> 由于在1.19.2的版本中Mojang改掉了控制台导致乱码，现推出新解决方案
+
+👉点我查看[Link](https://github.com/CSPBot-Devloper/CSPBot-Server-Helper)👈
 
 ## CSPBot v2常见错误
 - Q: 软件提示缺Dll怎么办
