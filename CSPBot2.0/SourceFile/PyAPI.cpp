@@ -89,6 +89,10 @@ bool runcmd(const string& cmd) {
 	return server->sendCmd(cmd);
 }
 
+bool queryServerStarted() {
+	return server->getStarted();
+}
+
 //######################### Mirai #########################
 //Mirai发信息主API
 bool ThreadMirai(string cbe, StringMap qm) {
@@ -475,30 +479,38 @@ py::list getAdmin() {
 PYBIND11_EMBEDDED_MODULE(bot, m) {
 	using py::literals::operator""_a;
 #pragma region Logger
-	py::class_<PyLogger>(m, "Logger")
-		.def(py::init<string>())
-		.def("info", &PyLogger::info)
-		.def("debug", &PyLogger::debug)
-		.def("error", &PyLogger::error)
-		.def("warn", &PyLogger::warn)
-		;
+		py::class_<PyLogger>(m, "Logger")
+			.def(py::init<string>())
+			.def("info", &PyLogger::info)
+			.def("debug", &PyLogger::debug)
+			.def("error", &PyLogger::error)
+			.def("warn", &PyLogger::warn)
+			;
 #pragma endregion
+		
 #pragma region Functions
-	m
-		.def("getVersion", &getVersion)
-		.def("runCommand", &runcmd)
-		.def("sendGroupMsg", &sendGroup)
-		.def("sendAllGroupMsg", &sendAllGroup)
-		.def("recallMsg", &recallMsg)
-		.def("sendApp", &sendApp)
-		.def("sendPacket", &sendPacket)
-		.def("setListener", &setListener)
-		.def("motdbe", &pymotdbe)
-		.def("motdje", &pymotdje)
-		.def("tip", &ShowTipWindow)
-		.def("getAllAPIList",&getAllAPIList)
-		.def("getAPIVersion", &getAPIVersion)
-		.def("registerCommand", &registerCommand);
+		m
+			.def("getVersion", &getVersion)
+			.def("sendGroupMsg", &sendGroup)
+			.def("sendAllGroupMsg", &sendAllGroup)
+			.def("recallMsg", &recallMsg)
+			.def("sendApp", &sendApp)
+			.def("sendPacket", &sendPacket)
+			.def("setListener", &setListener)
+			.def("motdbe", &pymotdbe)
+			.def("motdje", &pymotdje)
+			.def("tip", &ShowTipWindow)
+			.def("getAllAPIList",&getAllAPIList)
+			.def("getAPIVersion", &getAPIVersion)
+			.def("registerCommand", &registerCommand);
+			;
+#pragma endregion
+
+#pragma region Server
+		m
+			.def("runCommand", &runcmd)
+			.def("getServerStatus",&queryServerStarted);
+			
 		;
 #pragma endregion
 

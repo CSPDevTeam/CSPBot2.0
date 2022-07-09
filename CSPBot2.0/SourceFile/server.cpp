@@ -50,7 +50,8 @@ bool Server::createServer()
 	myChildProcess->setProcessChannelMode(QProcess::MergedChannels);
 	string runProgress;
 	if (startMode == 0) {
-		runProgress = "runner.bat";
+		runProgress = "cmd.exe /c cd {}&{}";
+		runProgress = fmt::format(runProgress, getConfig("progressPath"), getConfig("progressName"));
 	}
 	else if (startMode == 1) {
 		runProgress = "cmd.exe";
