@@ -274,6 +274,7 @@ CSPBot::CSPBot(QWidget *parent)
     );
     connect(mirai, SIGNAL(signalMiraiMessageBox()), this, SLOT(slotMiraiMessageBox()));
     connect(mirai, SIGNAL(sendServerCommand(QString)), this, SLOT(slotSendCommand(QString)));
+    connect(mirai, SIGNAL(packetCallback(QString)), this, SLOT(slotPacketCallback(QString)));
 
     /////// Other /////////
     ui.inputCmd->setEnabled(false);
@@ -587,6 +588,16 @@ void CSPBot::slotCommandCallback(QString cmd,StringVector fArgs){
     }
 }
 
+void CSPBot::slotPacketCallback(QString msg) {
+    string msgJson = Helper::QString2stdString(msg);
+    //转换为dict
+    Callbacker packetcbe(EventCode::onReceivePacket);
+    py::module pyJsonModule = py::module::import("json");
+    py::dict msgDict = pyJsonModule.attr("loads")(msgJson);
+    packetcbe.insert("msg", msgDict);
+    bool pakctecb = packetcbe.callback();
+}
+
 //更改状态
 void CSPBot::slotChangeStatus(bool a) {
     if (a) {
@@ -650,8 +661,8 @@ void CSPBot::startCmd() {
 void CSPBot::stopServer() {
     server->stopServer();
     slotInsertBDSLog(u8"[CSPBot] 已向进程发出终止命令");
-    ui.stop->setEnabled(false);
-    ui.start->setEnabled(true);
+    //ui.stop->setEnabled(false);
+    //ui.start->setEnabled(true);
 }
 
 //强制停止进程

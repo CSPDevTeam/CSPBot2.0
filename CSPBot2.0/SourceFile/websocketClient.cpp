@@ -195,7 +195,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 	string syncId = msg_json["syncId"].get<string>();
 	emit updateSendRecive(sendMsg, reciveMsg); //更新
 	mirai_logger.debug(msg_json.dump());
-	//window->PacketCallback(msg);
+	emit packetCallback(Helper::stdString2QString(msg));
 	//登录包
 	if (syncId == "1") {
 		//设置UserImage

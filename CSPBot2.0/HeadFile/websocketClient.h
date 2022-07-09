@@ -144,6 +144,7 @@ signals:
 	void signalConnect(mTime time); //连接成功传输
 	void signalMiraiMessageBox(); //Mirai弹窗
 	void sendServerCommand(QString cmd);//输入命令
+	void packetCallback(QString msg); //自定义包
 private slots:
 	void slotUpdateSendRecive(int send, int recive);
 	void slotConnected(mTime time); //连接成功

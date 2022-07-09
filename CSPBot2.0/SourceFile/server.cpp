@@ -173,7 +173,9 @@ bool Server::getStarted() {
 
 void Server::progressFinished(int exitCode) {
 	server->started = false;
-	emit insertBDSLog(u8"[CSPBot] 进程已终止. 结束代码:"+QString(exitCode));
+	emit insertBDSLog(
+		u8"[CSPBot] 进程已终止. 结束代码:"+Helper::stdString2QString(to_string(exitCode))
+	);
 	emit OtherCallback("onServerStop");
 	emit changeStatus(false);
 	emit chenableForce(false);

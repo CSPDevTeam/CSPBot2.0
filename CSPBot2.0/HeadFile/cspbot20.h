@@ -68,6 +68,7 @@ private slots:
     void slotMiraiMessageBox(); //Mirai消息框
     void setUserImageError(QNetworkReply::NetworkError e); //设置头像时出现ERROR
     void slotSendCommand(QString cmd); //Mirai传输命令
+    void slotPacketCallback(QString msg); //Mirai收到包
     
 
     /////////////// Console //////////////////

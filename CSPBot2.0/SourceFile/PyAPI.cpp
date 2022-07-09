@@ -10,6 +10,7 @@
 using namespace std;
 using namespace tojson;
 //using namespace tojson::emitters;
+int versionPacket = 1; //api版本
 
 
 //Buttons
@@ -403,6 +404,10 @@ py::list getAllAPIList() {
 	return apilist;
 }
 
+int getAPIVersion() {
+	return versionPacket;
+}
+
 //######################### Command #########################
 
 bool registerCommand(const string& cmd, py::function cbf) {
@@ -434,6 +439,37 @@ py::dict queryInfo(const string& type, const string& arg) {
 	return queryData_Dict;
 }
 
+bool unbindXbox(string qq) {
+	return Bind::unbind(qq);
+}
+
+bool bindXbox(string name,string qq) {
+	return Bind::bind(qq,name);
+}
+
+//######################### Info #########################
+py::list getGroup() {
+	py::list groupList;
+	std::ifstream fin("config/config.yml");
+	YAML::Node config = YAML::Load(fin);
+	bool inGroup = false;
+	for (auto i : config["group"]) {
+		groupList.append(i.as<string>());
+	}
+	return groupList;
+}
+
+py::list getAdmin() {
+	py::list groupList;
+	std::ifstream fin("config/config.yml");
+	YAML::Node config = YAML::Load(fin);
+	bool inGroup = false;
+	for (auto i : config["admin"]) {
+		groupList.append(i.as<string>());
+	}
+	return groupList;
+}
+
 //######################### Module #########################
 
 PYBIND11_EMBEDDED_MODULE(bot, m) {
@@ -461,13 +497,22 @@ PYBIND11_EMBEDDED_MODULE(bot, m) {
 		.def("motdje", &pymotdje)
 		.def("tip", &ShowTipWindow)
 		.def("getAllAPIList",&getAllAPIList)
+		.def("getAPIVersion", &getAPIVersion)
 		.def("registerCommand", &registerCommand);
 		;
 #pragma endregion
 
 #pragma region Players
 		m
-			.def("queryData", &queryInfo);
+			.def("queryData", &queryInfo)
+			.def("unbind",&unbindXbox)
+			.def("bind",&bindXbox);
 		;
 #pragma endregion
+
+#pragma region config
+		m
+			.def("getAdmin", &getAdmin)
+			.def("getGroup", &getGroup);
+		;
 }
