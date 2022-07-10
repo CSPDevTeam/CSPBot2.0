@@ -1,0 +1,5 @@
+- [👜初始化程序](zh_CN/Usage/)
+- [📦安装插件](zh_CN/Usage/installPlugin.md)
+- [🤖与Mirai连接](zh_CN/Usage/connectMirai.md)
+- [❓配置服务端](zh_CN/Usage/server.md)
+- [👈返回上一页](zh_CN/)

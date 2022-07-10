@@ -1,2 +1,2 @@
-# CSPBot使用文档
-请移步至[https://cspbot.top/](https://cspbot.top/)
+#  CSPBot - PAPI Help Center
+👉[English](/en_US/)👈 👉[简体中文](/zh_CN/)👈

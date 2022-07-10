@@ -1,0 +1,5 @@
+- [👜Initializer](en_US/Usage/)
+- [📦Install plugins](en_US/Usage/installPlugin.md)
+- [🤖Connect with Mirai](en_US/Usage/connectMirai.md)
+- [❓Configure the server](en_US/Usage/server.md)
+- [👈Return to the previous page](en_US/)
