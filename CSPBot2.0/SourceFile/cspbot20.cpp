@@ -182,7 +182,13 @@ CSPBot::CSPBot(QWidget *parent)
     ui.background->setGraphicsEffect(shadow_effect);
 
     //滚动条
-    vector<QScrollBar*> bars = { ui.ServerLog->verticalScrollBar(),ui.botconsole->verticalScrollBar() };
+    vector<QScrollBar*> bars = { 
+        ui.ServerLog->verticalScrollBar(),
+        ui.botconsole->verticalScrollBar(),
+		ui.playerAdmin->verticalScrollBar(),
+		ui.regularAdmin->verticalScrollBar(),
+		ui.pluginAdmin->verticalScrollBar()
+    };
     for (QScrollBar* bar : bars) {
         setAllScrollbar(bar);
     }

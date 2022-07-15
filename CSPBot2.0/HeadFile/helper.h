@@ -129,7 +129,7 @@ namespace Helper{
 
 
 namespace Motd {
-	inline HMODULE h = LoadLibraryA("Motd.dll");
+	inline HMODULE h = LoadLibraryA("dllLibs/Motd.dll");
 	typedef char* (*funcPtrBE)(char* Host);
 	typedef char* (*funcPtrJE)(char* Host);
 

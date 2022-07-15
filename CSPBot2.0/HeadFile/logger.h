@@ -18,6 +18,7 @@
 #include <utility>
 #include <magic_enum.hpp>
 #include "helper.h"
+#include "websocketClient.h"
 
 std::string getConfig(std::string key);
 class Logger {
@@ -144,8 +145,7 @@ namespace fmtConsole {
 	std::string getCPUUsed();
 	std::string FmtConsoleRegular(std::string cmd);
 	std::string FmtGroupRegular(
-		std::string qqid,
-		std::string qqnick,
+		messagePacket message,
 		std::string cmd
 	);
 	QString getColoredLine(std::string line);

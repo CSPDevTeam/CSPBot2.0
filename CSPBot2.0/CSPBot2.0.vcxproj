@@ -144,9 +144,12 @@
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeadFile\framework.h" />
     <ClInclude Include="HeadFile\global.h" />
     <ClInclude Include="HeadFile\helper.h" />
     <ClInclude Include="HeadFile\stdafx.h" />
+    <ClInclude Include="HeadFile\Version.h" />
+    <ClInclude Include="ResourceFile\resource.h" />
     <QtMoc Include="HeadFile\regularEdit.h" />
     <QtMoc Include="HeadFile\websocketClient.h" />
     <QtMoc Include="HeadFile\server.h" />
@@ -160,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ResourceFile\CSPBot2.0.rc" />
+    <ResourceCompile Include="ResourceFile\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="ResourceFile\cspbot20.qrc" />

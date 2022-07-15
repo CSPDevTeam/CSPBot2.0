@@ -1,0 +1,5 @@
+dllLibs/python38.zip
+dllLibs/
+
+# Uncomment to run site.main() automatically
+#import site

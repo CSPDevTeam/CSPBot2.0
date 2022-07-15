@@ -231,6 +231,13 @@ string fmtConsole::getCPUUsed() {
 	return fmt::format("{0:.2f}", nCpuPercent);
 }
 
+string batchFormatting(StringMap fmter, string& str) {
+	for (auto i : fmter) {
+		str = Helper::replace(str, i.first, i.second);
+	}
+	return str;
+}
+
 string fmtConsole::FmtConsoleRegular(string cmd) {
 	/*
 	//系统
@@ -250,14 +257,14 @@ string fmtConsole::FmtConsoleRegular(string cmd) {
 	{min} 当前分钟
 	{second} 当前秒数
 	*/
-
+	std::unordered_map<string, string> fmter = {};
 	std::unordered_map<string, string> ram = getRam();
 	//系统
-	string cpu_ = Helper::replace(cmd, "{cpu}", getCPUUsed());
-	string ramAll_ = Helper::replace(cpu_, "{ramAll}", ram["all"]);
-	string ramUse_ = Helper::replace(ramAll_, "{ramUse}", ram["used"]);
-	string ramPercent_ = Helper::replace(ramUse_, "{ranPercent}", ram["percent"]);
-	string ramCan_ = Helper::replace(ramPercent_, "{ramCan}", ram["canuse"]);
+	fmter["{cpu}"] = getCPUUsed();
+	fmter["{ramAll}"] = ram["all"];
+	fmter["{ramUse}"] = ram["used"];
+	fmter["{ranPercent}"] = ram["percent"];
+	fmter["{ramCan}"] = ram["canuse"];
 
 	//日期
 	time_t tt = time(NULL);
@@ -270,22 +277,22 @@ string fmtConsole::FmtConsoleRegular(string cmd) {
 		t->tm_hour,
 		t->tm_min,
 		t->tm_sec);
-	string time_ = Helper::replace(ramCan_, "{time}", str);
-	string year_ = Helper::replace(time_, "{year}", std::to_string(t->tm_year + 1900));
-	string month_ = Helper::replace(year_, "{month}", std::to_string(t->tm_mon + 1));
-	string week_ = Helper::replace(month_, "{week}", std::to_string(t->tm_wday + 1));
-	string day_ = Helper::replace(week_, "{day}", std::to_string(t->tm_mday));
-	string hour_ = Helper::replace(day_, "{hour}", std::to_string(t->tm_hour));
-	string min_ = Helper::replace(hour_, "{min}", std::to_string(t->tm_min));
-	string second_ = Helper::replace(min_, "{second}", std::to_string(t->tm_sec));
+	fmter["{time}"] = str;
+	fmter["{year}"] = std::to_string(t->tm_year + 1900);
+	fmter["{month}"] = std::to_string(t->tm_mon + 1);
+	fmter["{week}"] = std::to_string(t->tm_wday + 1);
+	fmter["{day}"] = std::to_string(t->tm_mday);
+	fmter["{hour}"] = std::to_string(t->tm_hour);
+	fmter["{min}"] = std::to_string(t->tm_min);
+	fmter["{second}"] = std::to_string(t->tm_sec);
 
+	string second_ = batchFormatting(fmter, cmd);
 
 	return second_;
 }
 
 string fmtConsole::FmtGroupRegular(
-	string qqid,
-	string qqnick,
+	messagePacket message,
 	string cmd
 ) {
 	/*
@@ -293,6 +300,10 @@ string fmtConsole::FmtGroupRegular(
 	{qqid} QQ号
 	{qqnick} QQ昵称
 	{xboxid} XBOXID(未绑定则不改变)
+	{groupid} 群号
+	{groupnick} 群名
+	{message} 消息
+	{permission} 权限
 
 	//系统
 	{cpu} CPU占用率
@@ -312,23 +323,30 @@ string fmtConsole::FmtGroupRegular(
 	{second} 当前秒数
 	*/
 	//QQ
-	string qqid_ = Helper::replace(cmd, "{qqid}", qqid);
-	string qqnick_ = Helper::replace(qqid_, "{qqnick}", qqnick);
-	string xboxid_ = qqnick_;
+	std::unordered_map<string,string> fmter = {};
+	fmter["{qqid}"] = message.qq;
+	fmter["{qqnick}"] = message.memberName;
+	fmter["{groupid}"] = message.group;
+	fmter["{groupnick}"] = message.groupName;
+	fmter["{message}"] = message.message;
+	fmter["{permission}"] = message.perm;
+	string xboxid_ = message.memberName;
 	YAML::Node player = YAML::LoadFile("data/player.yml");
 	for (YAML::Node i : player) {
-		if (i["qq"].as<string>() == qqid) {
-			xboxid_ = Helper::replace(qqnick_, "{xboxid}", i["playerName"].as<string>());
+		if (i["qq"].as<string>() == message.qq) {
+			xboxid_ = i["playerName"].as<string>();
 		}
 	}
+	fmter["{xboxid}"] = xboxid_;
+	
 
 	std::unordered_map<string, string> ram = getRam();
 	//系统
-	string cpu_ = Helper::replace(xboxid_, "{cpu}", getCPUUsed());
-	string ramAll_ = Helper::replace(cpu_, "{ramAll}", ram["all"]);
-	string ramUse_ = Helper::replace(ramAll_, "{ramUse}", ram["used"]);
-	string ramPercent_ = Helper::replace(ramUse_, "{ranPercent}", ram["percent"]);
-	string ramCan_ = Helper::replace(ramPercent_, "{ramCan}", ram["canuse"]);
+	fmter["{cpu}"]=getCPUUsed();
+	fmter["{ramAll}"]=ram["all"];
+	fmter["{ramUse}"]=ram["used"];
+	fmter["{ranPercent}"]=ram["percent"];
+	fmter["{ramCan}"]=ram["canuse"];
 
 	//日期
 	time_t tt = time(NULL);
@@ -341,14 +359,16 @@ string fmtConsole::FmtGroupRegular(
 		t->tm_hour,
 		t->tm_min,
 		t->tm_sec);
-	string time_ = Helper::replace(ramCan_, "{time}", str);
-	string year_ = Helper::replace(time_, "{year}", std::to_string(t->tm_year + 1900));
-	string month_ = Helper::replace(year_, "{month}", std::to_string(t->tm_mon + 1));
-	string week_ = Helper::replace(month_, "{week}", std::to_string(t->tm_wday + 1));
-	string day_ = Helper::replace(week_, "{day}", std::to_string(t->tm_mday));
-	string hour_ = Helper::replace(day_, "{hour}", std::to_string(t->tm_hour));
-	string min_ = Helper::replace(hour_, "{min}", std::to_string(t->tm_min));
-	string second_ = Helper::replace(min_, "{second}", std::to_string(t->tm_sec));
+	fmter["{time}"]=str;
+	fmter["{year}"]=std::to_string(t->tm_year + 1900);
+	fmter["{month}"]=std::to_string(t->tm_mon + 1);
+	fmter["{week}"]=std::to_string(t->tm_wday + 1);
+	fmter["{day}"]=std::to_string(t->tm_mday);
+	fmter["{hour}"]=std::to_string(t->tm_hour);
+	fmter["{min}"]=std::to_string(t->tm_min);
+	fmter["{second}"]=std::to_string(t->tm_sec);
+	
+	string second_ = batchFormatting(fmter, cmd);
 
 	return second_;
 }

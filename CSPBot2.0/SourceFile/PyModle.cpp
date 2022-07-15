@@ -133,6 +133,7 @@ void InitPython() {
     //设置模块搜索路径
     wstring plugins_path = PLUGIN_PATH L";";
     plugins_path.append(Py_GetPath());
+    //plugins_path.append(L"dllLibs/");
     Py_SetPath(plugins_path.c_str());
 
     //初始化解释器

@@ -159,7 +159,13 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 		QRegExp r(i.regular);
 		int r_pos = r.indexIn(Helper::stdString2QString(message.message));
 		//bool qqAdmin = std::find(config["admin"].begin(), config["admin"].end(), message.qqNum) != config["admin"].end();
-		bool qqAdmin = true;
+		bool qqAdmin = false;
+		for (auto j : config["admin"]) {
+			if (j.as<string>() == message.qq) {
+				qqAdmin = true;
+				break;
+			}
+		}
 
 		//执行操作
 		if (r_pos > -1 && i.from == regularFrom::group && (i.permission == false || (i.permission == true && qqAdmin))) {
@@ -174,7 +180,7 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 				num++;
 			}
 			//执行操作
-			string cmd = fmtConsole::FmtGroupRegular(message.qq, message.memberName, Helper::QString2stdString(i.action));
+			string cmd = fmtConsole::FmtGroupRegular(message, Helper::QString2stdString(i.action));
 			if (i.type == regularAction::Console) {
 				string fCmd = cmd + "\n";
 				emit sendServerCommand(Helper::stdString2QString(fCmd));

@@ -1,21 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFile\Command.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFile\logger.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFile\main.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFile\server.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFile\websocketClient.cpp">
       <Filter>Source File\Websocket</Filter>
     </ClCompile>
@@ -24,9 +9,6 @@
     </ClCompile>
     <ClCompile Include="SourceFile\regularEdit.cpp">
       <Filter>Source File\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFile\stdafx.cpp">
-      <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="SourceFile\PyAPI.cpp">
       <Filter>Source File\plugin</Filter>
@@ -37,8 +19,26 @@
     <ClCompile Include="SourceFile\PyModle.cpp">
       <Filter>Source File\plugin</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFile\main.cpp">
+      <Filter>Source File\System</Filter>
+    </ClCompile>
     <ClCompile Include="SourceFile\debug.cpp">
-      <Filter>Source File</Filter>
+      <Filter>Source File\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp">
+      <Filter>Source File\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\Command.cpp">
+      <Filter>Source File\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\logger.cpp">
+      <Filter>Source File\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\server.cpp">
+      <Filter>Source File\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\stdafx.cpp">
+      <Filter>Source File\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,9 +54,6 @@
     <Filter Include="Head File\Websocket">
       <UniqueIdentifier>{b26da137-1716-4d57-a145-1083859505e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source File\Websocket">
-      <UniqueIdentifier>{7f8c84ed-c74c-47a1-bc10-e699d6aaa809}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Head File\UI">
       <UniqueIdentifier>{a43af4bc-0c09-4579-9b77-60fb2e2614e7}</UniqueIdentifier>
     </Filter>
@@ -69,17 +66,23 @@
     <Filter Include="Source File\plugin">
       <UniqueIdentifier>{00d65e6f-bfe8-45da-a1a6-d34511f29ebd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Head File\System">
+      <UniqueIdentifier>{47532a39-bda9-48cf-8b43-e4532b4fbbd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Head File\tools">
+      <UniqueIdentifier>{49029059-fa61-4720-873c-df44ef39fb98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\System">
+      <UniqueIdentifier>{9aaf6fe4-2e5d-43db-aaa5-8d617149693e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\tools">
+      <UniqueIdentifier>{2101e673-08d0-42a0-9269-f7c17c9bb7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Websocket">
+      <UniqueIdentifier>{7f8c84ed-c74c-47a1-bc10-e699d6aaa809}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="..\Include\mysysinfo\mysysinfo.h">
-      <Filter>Head File</Filter>
-    </QtMoc>
-    <QtMoc Include="HeadFile\logger.h">
-      <Filter>Head File</Filter>
-    </QtMoc>
-    <QtMoc Include="HeadFile\server.h">
-      <Filter>Head File</Filter>
-    </QtMoc>
     <QtMoc Include="HeadFile\websocketClient.h">
       <Filter>Head File\Websocket</Filter>
     </QtMoc>
@@ -89,19 +92,37 @@
     <QtMoc Include="HeadFile\regularEdit.h">
       <Filter>Head File\UI</Filter>
     </QtMoc>
+    <QtMoc Include="..\Include\mysysinfo\mysysinfo.h">
+      <Filter>Head File\tools</Filter>
+    </QtMoc>
+    <QtMoc Include="HeadFile\logger.h">
+      <Filter>Head File\tools</Filter>
+    </QtMoc>
+    <QtMoc Include="HeadFile\server.h">
+      <Filter>Head File\tools</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeadFile\global.h">
-      <Filter>Head File</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFile\helper.h">
-      <Filter>Head File</Filter>
-    </ClInclude>
     <ClInclude Include="HeadFile\pluginModule.h">
       <Filter>Head File\plugin</Filter>
     </ClInclude>
+    <ClInclude Include="HeadFile\framework.h">
+      <Filter>Head File\System</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\Version.h">
+      <Filter>Head File\System</Filter>
+    </ClInclude>
     <ClInclude Include="HeadFile\stdafx.h">
-      <Filter>Head File</Filter>
+      <Filter>Head File\System</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\helper.h">
+      <Filter>Head File\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceFile\resource.h">
+      <Filter>Head File\System</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\global.h">
+      <Filter>Head File\tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ResourceFile\CSPBot2.0.rc">
+      <Filter>Resource File</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="ResourceFile\Resource.rc">
       <Filter>Resource File</Filter>
     </ResourceCompile>
   </ItemGroup>

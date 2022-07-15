@@ -86,7 +86,7 @@ string getVersion() {
 //######################### Server #########################
 
 bool runcmd(const string& cmd) {
-	return server->sendCmd(cmd);
+	return server->sendCmd(cmd+"\n");
 }
 
 bool queryServerStarted() {

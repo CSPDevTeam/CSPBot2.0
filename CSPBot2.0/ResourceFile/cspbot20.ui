@@ -1213,6 +1213,40 @@ QPushButton:hover{
      <string>r</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="about">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>0</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Webdings</family>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton
+{
+	font-family:&quot;Webdings&quot;;
+	text-align:top;
+	border:none;
+	font-size:20px;
+	color:#666666;
+}
+QPushButton:hover{
+	color:#3681ff
+}
+
+</string>
+    </property>
+    <property name="text">
+     <string>i</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>

@@ -5,12 +5,15 @@
 #include <QtWidgets/QApplication>
 #include "websocketClient.h"
 #include <QQueue>
+#include "Version.h"
+#include "framework.h"
+#include "logger.h"
 
 #pragma comment(lib, "dbghelp.lib")
 
 using namespace std;
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
-std::string version = "2.0.1";
+std::string version = TO_VERSION_STRING(PLUGIN_VERSION_MAJOR.PLUGIN_VERSION_MINOR.PLUGIN_VERSION_REVISION);
 CSPBot* window;
 Server* server;
 Mirai* mirai;
@@ -19,6 +22,7 @@ CommandAPI* commandApi;
 MySysInfo* mysysinfo = new MySysInfo();
 int configVersion = 4;
 QQueue<QString> q;
+Logger logger("CSPBot");
 
 string getConfig(string key){
     auto config = YAML::LoadFile("config/config.yml");
@@ -37,6 +41,20 @@ void InitPython(); //初始化Python解释器
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
+void warnInfo() {
+    QMessageBox::warning(window, u8"注意", u8"未检测到安装Python\nCSPBot插件模块将不会运行",
+        QMessageBox::Yes, QMessageBox::Yes);
+    logger.warn("未检测到安装Python,CSPBot插件模块将不会运行");
+}
+void tryInitPython() {
+    __try {
+        InitPython();
+    }
+    __except (1) {
+        warnInfo();
+    }
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -76,7 +94,8 @@ int main(int argc, char *argv[])
 	//展示窗口
     window->show();
     window->publicStartLogger();
-    InitPython();
+    tryInitPython();
+    
 
     //未安装字体提示
     if (!hasFont) {
