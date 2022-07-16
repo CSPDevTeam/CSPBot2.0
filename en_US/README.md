@@ -57,7 +57,7 @@
 - Please check the document for more details
 
 # 📞How to contact me?
-- 📫 EMail: 2351078777@qq.com
+- 🐧QQ Channel 👉[Click me to join](https://qun.qq.com/qqweb/qunpro/share?_wv=3&_wwv=128&appChannel=share&inviteCode=1W74pRo&businessType=9&from=246610&biz=ka)👈
 - ✈ Telegarm: [https://t.me/HuoHuaCore](https://t.me/HuoHuaCore)
 
 # 📂Comparison between cspbot and naive

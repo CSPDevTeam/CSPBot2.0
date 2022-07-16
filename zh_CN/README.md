@@ -54,7 +54,7 @@
 - 更多详情请查看文档
 
 # 📞CSPBot v2如何联系我?
-- 📫 EMail: 2351078777@qq.com
+- 🐧 QQ频道 👉[点我加入](https://qun.qq.com/qqweb/qunpro/share?_wv=3&_wwv=128&appChannel=share&inviteCode=1W74pRo&businessType=9&from=246610&biz=ka)👈
 - ✈ Telegarm: [https://t.me/HuoHuaCore](https://t.me/HuoHuaCore)
 
 # 📂CSPBot与Naive的对比
