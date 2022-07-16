@@ -10,7 +10,7 @@
 - 使用`Mirai-Http-API`来与`QQ`通讯
 - 免修改`LiteLoader.json`就能屏蔽掉彩色输出
 
-## CSPBot v2 QQ频道
+## 🚦CSPBot v2 QQ频道
 👉[点我加入](https://qun.qq.com/qqweb/qunpro/share?_wv=3&_wwv=128&appChannel=share&inviteCode=1W74pRo&businessType=9&from=246610&biz=ka)👈
 
 ## 📄CSPBot v2文档站
