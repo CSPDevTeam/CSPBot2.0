@@ -57,7 +57,6 @@
 - Please check the document for more details
 
 # 📞How to contact me?
-- 🐧 QQ:2351078777
 - 📫 EMail: 2351078777@qq.com
 - ✈ Telegarm: [https://t.me/HuoHuaCore](https://t.me/HuoHuaCore)
 

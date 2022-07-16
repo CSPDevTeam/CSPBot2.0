@@ -54,7 +54,6 @@
 - 更多详情请查看文档
 
 # 📞CSPBot v2如何联系我?
-- 🐧 QQ:2351078777
 - 📫 EMail: 2351078777@qq.com
 - ✈ Telegarm: [https://t.me/HuoHuaCore](https://t.me/HuoHuaCore)
 
