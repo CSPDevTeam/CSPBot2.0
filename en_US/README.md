@@ -13,12 +13,12 @@
 - Use `Mirai HTTP API` to communicate with `QQ`
 - No modification `LiteLoader.json` can mask the color output
 
-<br>
+## CSPBot v2 QQ channel
+👉[Click me to join](https://qun.qq.com/qqweb/qunpro/share?_wv=3&_wwv=128&appChannel=share&inviteCode=1W74pRo&businessType=9&from=246610&biz=ka)👈
 
 ## 📄CSPBot V2 document station
 👉[I'll go there directly](https://cspbot.top/)👈
 
-<br>
 
 ## 🧩Screenshot of cspbot V2 software
 - <details>
