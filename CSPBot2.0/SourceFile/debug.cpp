@@ -4,6 +4,11 @@
 #include <QtWidgets/qmessagebox.h>
 #include <FMT/chrono.h>
 #include "logger.h"
+#include "Version.h"
+
+using namespace std;
+namespace fs = filesystem;
+string versionString = to_string(PLUGIN_VERSION_MAJOR)+ to_string(PLUGIN_VERSION_MINOR)+ to_string(PLUGIN_VERSION_REVISION);
 
 //获取格式化时间
 std::string getTime() {
@@ -31,8 +36,11 @@ wchar_t* multiByteToWideChar(const string& pKey)
 
 // 保存程序异常崩溃的信息
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException){
+    if (!fs::exists("logs\\"))
+        fs::create_directory("logs\\");
     //创建 Dump 文件
-    std::string fileName = "logs/CrashDump_" + getTime() + ".dmp";
+    std::string fileName = "logs/{}_CrashDump_{}.dmp";
+    fileName = fmt::format(fileName, versionString, getTime());
     wchar_t* wc = multiByteToWideChar(fileName);
     HANDLE hDumpFile = CreateFile(wc, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hDumpFile != INVALID_HANDLE_VALUE)
@@ -49,7 +57,7 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException){
 
     //弹出一个错误对话框
     QMessageBox msgBox;
-    std::string text = u8"CSPBot出现严重错误，正在退出\n具体请查阅logs/{}文件";
+    std::string text = u8"CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
     text = fmt::format(text, fileName);
     msgBox.setWindowTitle(u8"严重错误");
     msgBox.setText(Helper::stdString2QString(text));
