@@ -235,6 +235,7 @@ CSPBot::CSPBot(QWidget *parent)
     //功能性按钮
     connect(ui.close, SIGNAL(clicked()), this, SLOT(on_actionClose_triggered()));
     connect(ui.min, SIGNAL(clicked()), this, SLOT(on_actionMinimize_triggered()));
+    connect(ui.about, SIGNAL(clicked()), this, SLOT(showAbout()));
 
     //绑定事件
     connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
@@ -970,4 +971,10 @@ void CSPBot::InitPluginTableView()
     catch (...) {
 
     }
+}
+
+void CSPBot::showAbout() {
+    string text = u8"CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
+    text = fmt::format(text, version);
+    QMessageBox::about(this, u8"关于CSPBot", Helper::stdString2QString(text));
 }

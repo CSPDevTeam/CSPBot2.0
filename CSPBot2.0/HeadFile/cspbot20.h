@@ -47,6 +47,7 @@ private slots:
     void insertLog(QString a);//Logger 槽函数
     void setUserImage(QString qqNum, QString qqNick); //设置头像
     void startLogger(); //启动日志
+    void showAbout(); //展示About窗口
 
     /////////////// Server //////////////////
     //ServerRebackSlot

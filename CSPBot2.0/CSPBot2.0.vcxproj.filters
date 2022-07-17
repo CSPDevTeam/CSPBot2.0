@@ -40,6 +40,9 @@
     <ClCompile Include="SourceFile\stdafx.cpp">
       <Filter>Source File\System</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFile\Event.cpp">
+      <Filter>Source File\tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source File">
@@ -122,6 +125,9 @@
       <Filter>Head File\System</Filter>
     </ClInclude>
     <ClInclude Include="HeadFile\global.h">
+      <Filter>Head File\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="HeadFile\Event.h">
       <Filter>Head File\tools</Filter>
     </ClInclude>
   </ItemGroup>

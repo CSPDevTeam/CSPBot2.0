@@ -44,8 +44,6 @@ bool PluginManager::registerPlugin(
     catch (...) {
 
     }
-     
-   
 
     Plugin plugin{SelfName,SelfInfo,SelfAutor,SelfVersion};
     plugin.m = handler;

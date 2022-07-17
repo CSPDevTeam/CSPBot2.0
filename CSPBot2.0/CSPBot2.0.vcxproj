@@ -129,6 +129,7 @@
     <ClCompile Include="SourceFile\Command.cpp" />
     <ClCompile Include="SourceFile\cspbot20.cpp" />
     <ClCompile Include="SourceFile\debug.cpp" />
+    <ClCompile Include="SourceFile\Event.cpp" />
     <ClCompile Include="SourceFile\logger.cpp" />
     <ClCompile Include="SourceFile\main.cpp" />
     <ClCompile Include="SourceFile\PyAPI.cpp" />
@@ -144,6 +145,7 @@
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeadFile\Event.h" />
     <ClInclude Include="HeadFile\framework.h" />
     <ClInclude Include="HeadFile\global.h" />
     <ClInclude Include="HeadFile\helper.h" />

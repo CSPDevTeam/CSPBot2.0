@@ -303,7 +303,7 @@ string fmtConsole::FmtGroupRegular(
 	{groupid} 群号
 	{groupnick} 群名
 	{message} 消息
-	{permission} 权限
+	{permission} 权限 
 
 	//系统
 	{cpu} CPU占用率
