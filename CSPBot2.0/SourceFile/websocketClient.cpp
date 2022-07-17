@@ -17,7 +17,7 @@ string getConfig(string key);
 Logger mirai_logger("Mirai");
 int sendMsg = 0, reciveMsg = 0; //收发消息
 
-//API
+// API
 bool Mirai::connectMirai() {
 	bool connected = mirai->login();
 	if (connected) {
@@ -34,15 +34,12 @@ bool Mirai::connectMirai() {
 
 
 WsClient::WsClient() {
-	ws.OnTextReceived([]
-	(WebSocketClient& client, string msg) {
-			reciveMsg += 1;
-			mirai->onText(client, msg);
+	ws.OnTextReceived([](WebSocketClient& client, string msg) {
+		reciveMsg += 1;
+		mirai->onText(client, msg);
 	});
-	ws.OnError([]
-	(WebSocketClient& client, string msg) {mirai->onError(client, msg);});
-	ws.OnLostConnection([]
-	(WebSocketClient& client, int code) {mirai->onLost(client, code);});
+	ws.OnError([](WebSocketClient& client, string msg) { mirai->onError(client, msg); });
+	ws.OnLostConnection([](WebSocketClient& client, int code) { mirai->onLost(client, code); });
 }
 
 int WsClient::getStatus() {
@@ -68,7 +65,8 @@ bool WsClient::close() {
 			ws.Close();
 			return true;
 		}
-		catch (std::runtime_error e) {}
+		catch (std::runtime_error e) {
+		}
 	}
 	return false;
 }
@@ -81,7 +79,8 @@ bool WsClient::sendTextMsg(string msg) {
 			emit updateSendRecive(sendMsg, reciveMsg);
 			return true;
 		}
-		catch (std::runtime_error e) {}
+		catch (std::runtime_error e) {
+		}
 	}
 	return false;
 }
@@ -99,16 +98,17 @@ bool WsClient::shutdown() {
 			emit setUserImages("", "");
 			return true;
 		}
-		catch (std::runtime_error e) {}
+		catch (std::runtime_error e) {
+		}
 	}
 	return false;
 }
 
 Mirai::Mirai() {
 	wsc = new WsClient();
-	connect(wsc, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int,int)));
+	connect(wsc, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
 	connect(wsc, SIGNAL(sigConnected(mTime)), this, SLOT(slotConnected(mTime)));
-	connect(wsc, SIGNAL(setUserImages(QString,QString)), this, SLOT(slotSetUserImages(QString, QString)));
+	connect(wsc, SIGNAL(setUserImages(QString, QString)), this, SLOT(slotSetUserImages(QString, QString)));
 }
 
 void Mirai::run() {
@@ -135,22 +135,28 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 		//转换type
 		string Action_type = Action.substr(0, 2);
 		regularAction regular_action;
-		if (Action_type == "<<") { 
-			regular_action = regularAction::Console; 
+		if (Action_type == "<<") {
+			regular_action = regularAction::Console;
 			Action = Action.erase(0, 2);
 		}
 		else if (Action_type == ">>") {
-			regular_action = regularAction::Group; 
+			regular_action = regularAction::Group;
 			Action = Action.erase(0, 2);
 		}
-		else { regular_action = regularAction::Command; };
+		else {
+			regular_action = regularAction::Command;
+		};
 
 		//转换来源
 		regularFrom regular_from;
 		transform(From.begin(), From.end(), From.begin(), ::tolower);
-		if (From == "group") { regular_from = regularFrom::group; }
-		else { regular_from = regularFrom::console; };
-		Regular regular = { Helper::stdString2QString(mRegular),Helper::stdString2QString(Action),regular_action,regular_from,Permissions };
+		if (From == "group") {
+			regular_from = regularFrom::group;
+		}
+		else {
+			regular_from = regularFrom::console;
+		};
+		Regular regular = {Helper::stdString2QString(mRegular), Helper::stdString2QString(Action), regular_action, regular_from, Permissions};
 		//推入vector
 		regularList.push_back(regular);
 	}
@@ -158,7 +164,7 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 	for (Regular i : regularList) {
 		QRegExp r(i.regular);
 		int r_pos = r.indexIn(Helper::stdString2QString(message.message));
-		//bool qqAdmin = std::find(config["admin"].begin(), config["admin"].end(), message.qqNum) != config["admin"].end();
+		// bool qqAdmin = std::find(config["admin"].begin(), config["admin"].end(), message.qqNum) != config["admin"].end();
 		bool qqAdmin = false;
 		for (auto j : config["admin"]) {
 			if (j.as<string>() == message.qq) {
@@ -173,10 +179,8 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 			for (auto& replace : r.capturedTexts()) {
 				i.action = Helper::stdString2QString(
 					Helper::replace(Helper::QString2stdString(i.action),
-						"$" + std::to_string(num), 
-						Helper::QString2stdString(replace)
-					)
-				);
+						"$" + std::to_string(num),
+						Helper::QString2stdString(replace)));
 				num++;
 			}
 			//执行操作
@@ -195,7 +199,7 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 	}
 }
 
-//Msg
+// Msg
 void Mirai::onText(WebSocketClient& client, string msg) {
 	json msg_json = json::parse(msg);
 	string syncId = msg_json["syncId"].get<string>();
@@ -223,7 +227,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 		if (msg_json["data"].find("type") != msg_json["data"].end() && msg_json["data"]["type"] == "GroupMessage") {
 			messagePacket msgPacket = transMessagePacket(msg_json);
 
-			//vector<string> allowGroup;
+			// vector<string> allowGroup;
 			std::ifstream fin("config/config.yml");
 			YAML::Node config = YAML::Load(fin);
 			bool inGroup = false;
@@ -238,7 +242,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 				msgPacket.message = msgPacket.message.erase(0, 1);
 				//存储结构体
 
-				//Callback
+				// Callback
 				std::unordered_map<string, string> args;
 				args.emplace("group", msgPacket.group);
 				args.emplace("msg", msgPacket.message);
@@ -246,17 +250,13 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 				args.emplace("qqnick", msgPacket.memberName);
 				emit OtherCallback("onReceiveMsg", args);
 				selfGroupCatchLine(msgPacket);
-				
-
 			}
 		}
 		//事件处理(群成员改名)
-		else if (msg_json["data"].find("type") != msg_json["data"].end() && \
-			msg_json["data"]["type"] == "MemberCardChangeEvent") {
-
+		else if (msg_json["data"].find("type") != msg_json["data"].end() &&
+				 msg_json["data"]["type"] == "MemberCardChangeEvent") {
 		}
 	}
-
 }
 
 //相应连接报错
@@ -277,7 +277,7 @@ void Mirai::onLost(WebSocketClient& client, int code) {
 	sendMsg = 0;
 	emit updateSendRecive(sendMsg, reciveMsg);
 	emit OtherCallback("onConnectLost");
-	emit setUserImages("","");
+	emit setUserImages("", "");
 	slotConnected(0);
 }
 
@@ -317,27 +317,24 @@ void Mirai::botProfile() {
 void Mirai::sendGroupMsg(string group, string msg, bool callback) {
 	if (logined) {
 		string mj = "{\"syncId\": 2, \"command\":\"sendGroupMessage\", \"subCommand\" : null,\
-					\"content\": {\"target\":" + group + ", \"messageChain\": [{ \"type\":\"Plain\", \"text\" : \"" + msg + "\"}]}}";
+					\"content\": {\"target\":" +
+					group + ", \"messageChain\": [{ \"type\":\"Plain\", \"text\" : \"" + msg + "\"}]}}";
 		std::unordered_map<string, string> args;
 		args.emplace("group", group);
 		args.emplace("msg", msg);
 		emit OtherCallback("onSendMsg", args);
 		wsc->sendTextMsg(mj);
-		
-		
 	}
-
 }
 
 void Mirai::recallMsg(string target, bool callback) {
-	//recall
+	// recall
 	if (logined) {
 		string mj = "{\"syncId\": 3,\"command\" : \"recall\",\"subCommand\":null,\"content\":{\"target\":" + target + "}}";
 		std::unordered_map<string, string> args;
 		args.emplace("target", target);
 		emit OtherCallback("onRecall", args);
 		wsc->sendTextMsg(mj);
-		
 	}
 }
 
@@ -349,7 +346,6 @@ void Mirai::sendAllGroupMsg(string msg, bool callback) {
 			sendGroupMsg(group, msg, callback);
 		}
 	}
-
 }
 
 void Mirai::changeName(string qq, string group, string name) {

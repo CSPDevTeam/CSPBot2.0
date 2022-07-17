@@ -96,7 +96,8 @@
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <UsePrecompiledHeader>Use</UsePrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -114,7 +115,8 @@
       <Optimization>MaxSpeed</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <UsePrecompiledHeader>Use</UsePrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,10 +139,6 @@
     <ClCompile Include="SourceFile\PyModle.cpp" />
     <ClCompile Include="SourceFile\regularEdit.cpp" />
     <ClCompile Include="SourceFile\server.cpp" />
-    <ClCompile Include="SourceFile\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="SourceFile\websocketClient.cpp" />
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h" />
   </ItemGroup>
@@ -149,7 +147,6 @@
     <ClInclude Include="HeadFile\framework.h" />
     <ClInclude Include="HeadFile\global.h" />
     <ClInclude Include="HeadFile\helper.h" />
-    <ClInclude Include="HeadFile\stdafx.h" />
     <ClInclude Include="HeadFile\Version.h" />
     <ClInclude Include="ResourceFile\resource.h" />
     <QtMoc Include="HeadFile\regularEdit.h" />

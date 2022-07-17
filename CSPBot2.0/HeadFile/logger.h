@@ -33,18 +33,15 @@ public:
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 2) {
 				pushToQueue(
-					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + str + "\n</font>"
-				);
+					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 2) {
 				pushToQueue(
-					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + msg + "\n</font>"
-				);
+					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + msg + "\n</font>");
 			}
 		}
-
 	};
 	template <typename... Args>
 	inline void error(std::string msg, const Args&... args) {
@@ -52,15 +49,13 @@ public:
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 4) {
 				pushToQueue(
-					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + str + "\n</font>"
-				);
+					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 4) {
 				pushToQueue(
-					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + msg + "\n</font>"
-				);
+					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + msg + "\n</font>");
 			}
 		}
 	};
@@ -70,18 +65,15 @@ public:
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 3) {
 				pushToQueue(
-					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + str + "\n</font>"
-				);
+					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 3) {
 				pushToQueue(
-					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + msg + "\n</font>"
-				);
+					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + msg + "\n</font>");
 			}
 		}
-
 	};
 	template <typename... Args>
 	inline void debug(std::string msg, const Args&... args) {
@@ -89,15 +81,13 @@ public:
 			std::string str = fmt::format(msg, args...);
 			if (getLevel() <= 1) {
 				pushToQueue(
-					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + str + "\n</font>"
-				);
+					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 1) {
 				pushToQueue(
-					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + msg + "\n</font>"
-				);
+					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + msg + "\n</font>");
 			}
 		}
 	};
@@ -116,8 +106,6 @@ public:
 	};
 
 private:
-	
-
 	inline int getLevel() {
 		std::string level = getConfig("LoggerLevel");
 		if (level == "info") {
@@ -142,23 +130,21 @@ private:
 };
 
 namespace fmtConsole {
-	std::string getCPUUsed();
-	std::string FmtConsoleRegular(std::string cmd);
-	std::string FmtGroupRegular(
-		messagePacket message,
-		std::string cmd
-	);
-	QString getColoredLine(std::string line);
+std::string getCPUUsed();
+std::string FmtConsoleRegular(std::string cmd);
+std::string FmtGroupRegular(
+	messagePacket message,
+	std::string cmd);
+QString getColoredLine(std::string line);
 }
 
-class LoggerReader :public QThread
-{
+class LoggerReader : public QThread {
 	Q_OBJECT
 protected:
 	void run();
 signals:
 	void updateLog(QString log); //输出日志
 public:
-	LoggerReader(QObject* parent = NULL) {};
-	~LoggerReader() {};
+	LoggerReader(QObject* parent = NULL){};
+	~LoggerReader(){};
 };
