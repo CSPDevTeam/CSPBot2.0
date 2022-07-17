@@ -1,7 +1,7 @@
 # CSPBot2.0
 
 ## 基于CSPBot v1的升级版
-[![Logo](https://img1.imgtp.com/2022/07/02/wrNETzqc.png)](https://img1.imgtp.com/2022/07/02/wrNETzqc.png)
+![CSPBot2.0](https://socialify.git.ci/CSPBot-Devloper/CSPBot2.0/image?description=1&forks=1&issues=1&logo=https%3A%2F%2Favatars.githubusercontent.com%2Fu%2F108583239%3Fs%3D200%26v%3D4&pattern=Plus&pulls=1&stargazers=1&theme=Light)
 
 ## CSPBot v2介绍
 > ### 一款为BDS服主打造的设计美观简洁易用的`BDS`外置机器人
