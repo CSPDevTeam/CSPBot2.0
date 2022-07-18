@@ -213,7 +213,11 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 		mirai_logger.info("{}登录 Mirai 成功", qqNick);
 		logined = true;
 		emit OtherCallback("onLogin");
-		emit setUserImages(Helper::stdString2QString(getConfig("qq")), Helper::stdString2QString(qqNick));
+		string qqNum = getConfig("qq");
+		if (qqNum == "!failed!") {
+			qqNum = "0";
+		}
+		emit setUserImages(Helper::stdString2QString(qqNum), Helper::stdString2QString(qqNick));
 	}
 	//发消息包
 	else if (syncId == "2") {
@@ -299,6 +303,15 @@ bool Mirai::login() {
 		string qq = getConfig("qq");
 		string key = getConfig("key");
 		string wsUrl = getConfig("connectUrl");
+		if (qq == "!failed!") {
+			qq = "0";
+		}
+		if (key == "!failed!") {
+			key = "abcd";
+		}
+		if (wsUrl == "!failed!") {
+			return false;
+		}
 
 		//拼接URL
 		string url = wsUrl + "/all?verifyKey=" + key + "&qq=" + qq;

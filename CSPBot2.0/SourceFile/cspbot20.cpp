@@ -114,8 +114,11 @@ void CSPBot::slotDisConnectMirai() {
 	}
 }
 
+string getConfig(string key);
 void CSPBot::slotMiraiMessageBox() {
-	QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
+	if (getConfig("connectUrl") != "!failed!") {
+		QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
+	}
 }
 
 ///////////////////////////////////////////// Timer /////////////////////////////////////////////

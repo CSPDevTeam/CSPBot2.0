@@ -104,7 +104,11 @@ bool Server::sendCmd(string cmd) {
 
 //软停止服务器
 bool Server::stopServer() {
-	Server::sendCmd(getConfig("stopCmd") + "\n");
+	string stopCmd = getConfig("stopCmd");
+	if (stopCmd == "!failed!") {
+		stopCmd = "stop";
+	}
+	Server::sendCmd( + "\n");
 	normalStop = true;
 	return true;
 }

@@ -9,6 +9,7 @@
 #include "framework.h"
 #include "logger.h"
 #include <plugins.h>
+#include <fstream>
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -26,36 +27,48 @@ QQueue<QString> q;
 Logger logger("CSPBot");
 
 string getConfig(string key) {
-	try {
-		auto config = YAML::LoadFile("config/config.yml");
-		return config[key].as<string>();
+	std::ifstream fin("config/config.yml", ios::in);
+	if (!fin.is_open()) {
+		return "!failed!";
 	}
-	catch (const std::exception& e) {
-		//logger.error(e.what());
-	}
+	auto config = YAML::Load(fin);
+	return config[key].as<string>();
 };
 
-bool checkConfigVersion() {
-	try {
-		auto config = YAML::LoadFile("config/config.yml");
-		if (config["Version"].as<int>() < configVersion) {
-			return false;
-		}
-		return true;
+int checkConfigVersion() {
+	std::ifstream fin("config/config.yml", ios::in);
+	if (!fin.is_open()) {
+		return 2;
 	}
-	catch (const std::exception& e) {
-		//logger.error(e.what());
+	auto config = YAML::Load(fin);
+	if (config["Version"].as<int>() < configVersion) {
+		return 1;
 	}
+	return 0;
 }
 
-// void InitPython();											  //初始化Python解释器
+string checkConfigfull() {
+	vector<string> fileList = {
+		"config/config.yml",
+		"data/event.yml",
+		"data/player.yml",
+		"data/regular.yml",
+	};
+	
+	for (string i : fileList) {
+		std::ifstream fin(i, ios::in);
+		if (!fin.is_open()) {
+			return i;
+		}
+		fin.close();
+	}
+	
+	return "success.";
+}
+
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
-void warnInfo() {
-	QMessageBox::warning(window, "注意", "未检测到安装Python\nCSPBot插件模块将不会运行", QMessageBox::Yes, QMessageBox::Yes);
-	logger.warn("未检测到安装Python,CSPBot插件模块将不会运行");
-}
 
 int main(int argc, char* argv[]) {
 	PluginManager::LoadPlugin();
@@ -91,16 +104,29 @@ int main(int argc, char* argv[]) {
 
 
 	CSPBot* window = new CSPBot;
-	//检测文件版本
-	if (!checkConfigVersion()) {
-		QMessageBox::critical(window, "严重错误", "配置文件版本过低,请检查", QMessageBox::Yes, QMessageBox::Yes);
-		return 1;
-	}
-
 	//展示窗口
 	window->show();
 	window->publicStartLogger();
-	// tryInitPython();
+
+	//检测文件完整性
+	string f = checkConfigfull();
+	if (f != "success.") {
+		QMessageBox::critical(window, "严重错误", "配置文件不完整\n缺少:" + Helper::stdString2QString(f) + "文件", QMessageBox::Yes, QMessageBox::Yes);
+		return 1;
+	}
+	
+	//检测文件版本
+	switch (checkConfigVersion()) {
+	case 1:
+		QMessageBox::critical(window, "严重错误", "配置文件版本过低,请检查", QMessageBox::Yes, QMessageBox::Yes);
+		return 1;
+	case 2:
+		QMessageBox::critical(window, "严重错误", "无法初始化配置，请检查config/config.yml文件是否正常", QMessageBox::Yes, QMessageBox::Yes);
+		return 1;
+	default:
+		break;
+	}
+	
 
 
 	//未安装字体提示

@@ -108,6 +108,9 @@ public:
 private:
 	inline int getLevel() {
 		std::string level = getConfig("LoggerLevel");
+		if (level == "!failed!") {
+			level = "debug";
+		}
 		if (level == "info") {
 			return 2;
 		}
