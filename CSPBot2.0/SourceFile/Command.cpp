@@ -63,7 +63,10 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	string Action_Type = sp[0];
 	if (Action_Type == "bind") {
 		if (sp.size() > 2) {
-			Bind::bind(sp[1], sp[2]);
+			bool ret = Bind::bind(sp[1], sp[2]);
+			if (ret) {
+				emit Callback("onBinded", {});
+			}
 		}
 		else {
 			mirai->sendGroupMsg(group, u8"参数错误!");
@@ -71,7 +74,10 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	}
 	else if (Action_Type == "unbind") {
 		if (sp.size() > 1) {
-			Bind::unbind(sp[1]);
+			bool ret = Bind::unbind(sp[1]);
+			if (ret) {
+				emit Callback("onUnBinded", {});
+			}
 		}
 		else {
 			mirai->sendGroupMsg(group, u8"参数错误!");

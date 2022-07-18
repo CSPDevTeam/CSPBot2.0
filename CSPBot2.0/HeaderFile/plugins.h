@@ -46,6 +46,8 @@ enum EventCode {
 	onConnectError,	 // OK
 	onConnectLost,	 // OK
 	onConsoleUpdate, // OK
+	onBinded,		 // OK
+	onUnBinded,      // OK
 };
 
 inline lua_State* g_lua_State = InitLua();

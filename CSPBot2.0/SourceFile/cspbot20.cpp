@@ -7,6 +7,7 @@
 #include <regularEdit.h>
 #include <plugins.h>
 #include <QInputDialog>
+#include "Event.h"
 
 
 using namespace std;
@@ -286,7 +287,7 @@ CSPBot::CSPBot(QWidget* parent)
 	commandApi = new CommandAPI();
 	connect(commandApi, SIGNAL(signalStartServer()), this, SLOT(startServer()));
 	connect(commandApi, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
-
+	connect(commandApi, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
 	/////// timer /////////
 	QTimer* timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc()));
@@ -545,6 +546,7 @@ void CSPBot::slotInsertBDSLog(QString log) {
 
 // Callback
 bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
+	//Python Callbacker
 	qDebug() << "CallBack:" << listener;
 	string eventName = Helper::QString2stdString(listener);
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName.c_str());
@@ -562,6 +564,19 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 		cb.insert(key.c_str(), value);
 	}
 	bool ret = cb.callback();
+
+	//Event Callbacker
+	auto eCode = magic_enum::enum_cast<inLineEvent>(eventName.c_str());
+	if (!eCode) {
+		return false;
+	}
+	inLineEvent ect = eCode.value();
+	EventCallbacker ecb(ect);
+	std::vector<string> args_;
+	for (auto& i : args) {
+		ecb.insert(i.second);
+	}
+	ecb.callback();
 	return ret;
 };
 
