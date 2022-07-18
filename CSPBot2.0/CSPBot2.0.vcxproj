@@ -71,7 +71,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Include\libs\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>LightWSClient.lib;fmtd.lib;yaml-cpp.lib;libcrypto.lib;libssl.lib;python3.lib;python38.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LightWSClient.lib;fmtd.lib;libcrypto.lib;libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -87,7 +87,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Include\libs\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>LightWSClient.lib;fmt.lib;yaml-cpp.lib;libcrypto.lib;libssl.lib;python3.lib;python38.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LightWSClient.lib;fmt.lib;libcrypto.lib;libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -173,6 +173,37 @@
     <ClCompile Include="SourceFile\regularEdit.cpp" />
     <ClCompile Include="SourceFile\server.cpp" />
     <ClCompile Include="SourceFile\websocketClient.cpp" />
+    <ClCompile Include="Yaml\binary.cpp" />
+    <ClCompile Include="Yaml\contrib\graphbuilder.cpp" />
+    <ClCompile Include="Yaml\contrib\graphbuilderadapter.cpp" />
+    <ClCompile Include="Yaml\convert.cpp" />
+    <ClCompile Include="Yaml\depthguard.cpp" />
+    <ClCompile Include="Yaml\directives.cpp" />
+    <ClCompile Include="Yaml\emit.cpp" />
+    <ClCompile Include="Yaml\emitfromevents.cpp" />
+    <ClCompile Include="Yaml\emitter.cpp" />
+    <ClCompile Include="Yaml\emitterstate.cpp" />
+    <ClCompile Include="Yaml\emitterutils.cpp" />
+    <ClCompile Include="Yaml\exceptions.cpp" />
+    <ClCompile Include="Yaml\exp.cpp" />
+    <ClCompile Include="Yaml\memory.cpp" />
+    <ClCompile Include="Yaml\node.cpp" />
+    <ClCompile Include="Yaml\nodebuilder.cpp" />
+    <ClCompile Include="Yaml\nodeevents.cpp" />
+    <ClCompile Include="Yaml\node_data.cpp" />
+    <ClCompile Include="Yaml\null.cpp" />
+    <ClCompile Include="Yaml\ostream_wrapper.cpp" />
+    <ClCompile Include="Yaml\parse.cpp" />
+    <ClCompile Include="Yaml\parser.cpp" />
+    <ClCompile Include="Yaml\regex_yaml.cpp" />
+    <ClCompile Include="Yaml\scanner.cpp" />
+    <ClCompile Include="Yaml\scanscalar.cpp" />
+    <ClCompile Include="Yaml\scantag.cpp" />
+    <ClCompile Include="Yaml\scantoken.cpp" />
+    <ClCompile Include="Yaml\simplekey.cpp" />
+    <ClCompile Include="Yaml\singledocparser.cpp" />
+    <ClCompile Include="Yaml\stream.cpp" />
+    <ClCompile Include="Yaml\tag.cpp" />
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +243,28 @@
     <ClInclude Include="lua\lzio.h" />
     <ClInclude Include="ResourceFile\resource.h" />
     <ClInclude Include="HeaderFile\lua_api.h" />
+    <ClInclude Include="Yaml\collectionstack.h" />
+    <ClInclude Include="Yaml\contrib\graphbuilderadapter.h" />
+    <ClInclude Include="Yaml\directives.h" />
+    <ClInclude Include="Yaml\emitterstate.h" />
+    <ClInclude Include="Yaml\emitterutils.h" />
+    <ClInclude Include="Yaml\exp.h" />
+    <ClInclude Include="Yaml\indentation.h" />
+    <ClInclude Include="Yaml\nodebuilder.h" />
+    <ClInclude Include="Yaml\nodeevents.h" />
+    <ClInclude Include="Yaml\ptr_vector.h" />
+    <ClInclude Include="Yaml\regeximpl.h" />
+    <ClInclude Include="Yaml\regex_yaml.h" />
+    <ClInclude Include="Yaml\scanner.h" />
+    <ClInclude Include="Yaml\scanscalar.h" />
+    <ClInclude Include="Yaml\scantag.h" />
+    <ClInclude Include="Yaml\setting.h" />
+    <ClInclude Include="Yaml\singledocparser.h" />
+    <ClInclude Include="Yaml\stream.h" />
+    <ClInclude Include="Yaml\streamcharsource.h" />
+    <ClInclude Include="Yaml\stringsource.h" />
+    <ClInclude Include="Yaml\tag.h" />
+    <ClInclude Include="Yaml\token.h" />
     <QtMoc Include="HeaderFile\regularEdit.h" />
     <QtMoc Include="HeaderFile\websocketClient.h" />
     <QtMoc Include="HeaderFile\server.h" />

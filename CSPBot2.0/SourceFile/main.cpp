@@ -54,7 +54,7 @@ string checkConfigfull() {
 		"data/player.yml",
 		"data/regular.yml",
 	};
-	
+
 	for (string i : fileList) {
 		std::ifstream fin(i, ios::in);
 		if (!fin.is_open()) {
@@ -62,7 +62,7 @@ string checkConfigfull() {
 		}
 		fin.close();
 	}
-	
+
 	return "success.";
 }
 
@@ -71,8 +71,6 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogge
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 
 int main(int argc, char* argv[]) {
-	PluginManager::LoadPlugin();
-	PluginManager::registerPlugin("test");
 	QApplication a(argc, argv);
 	QTextCodec* codec = QTextCodec::codecForName("UTF-8"); // GB2312也可以
 	QTextCodec::setCodecForLocale(codec);				   // 2
@@ -90,7 +88,6 @@ int main(int argc, char* argv[]) {
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
 
-
 	//加载字体
 	QFontDatabase database;
 	bool hasFont = false;
@@ -101,7 +98,6 @@ int main(int argc, char* argv[]) {
 			"HarmonyOS Sans SC") != fontFamily.end()) {
 		hasFont = true;
 	};
-
 
 	CSPBot* window = new CSPBot;
 	//展示窗口
@@ -114,7 +110,7 @@ int main(int argc, char* argv[]) {
 		QMessageBox::critical(window, "严重错误", "配置文件不完整\n缺少:" + Helper::stdString2QString(f) + "文件", QMessageBox::Yes, QMessageBox::Yes);
 		return 1;
 	}
-	
+
 	//检测文件版本
 	switch (checkConfigVersion()) {
 	case 1:
@@ -126,7 +122,8 @@ int main(int argc, char* argv[]) {
 	default:
 		break;
 	}
-	
+
+	PluginManager::LoadPlugin();
 
 
 	//未安装字体提示
