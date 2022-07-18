@@ -54,6 +54,10 @@ int main(int argc, char* argv[]) {
 	//展示ssl版本
 	qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
+	//设置缩放
+	qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
+	QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
 	//注册异常捕获函数
 	SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
 
