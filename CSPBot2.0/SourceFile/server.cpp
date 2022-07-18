@@ -1,5 +1,5 @@
 ﻿#include <string>
-#include <windows.h> 
+#include <windows.h>
 #include "global.h"
 #include "cspbot20.h"
 #include "qthread.h"
@@ -19,7 +19,7 @@
 using namespace std;
 Logger serverLogger("Server");
 
-enum stopType :int {
+enum stopType : int {
 	normal,
 	force,
 	accident,
@@ -27,26 +27,25 @@ enum stopType :int {
 
 void setUTF8() {
 #ifdef _WIN32
-	SetConsoleOutputCP(65001);
-	CONSOLE_FONT_INFOEX info = { 0 };
+	// SetConsoleOutputCP(65001);
+	CONSOLE_FONT_INFOEX info = {0};
 	info.cbSize = sizeof(info);
 	info.dwFontSize.Y = 16; // leave X as zero
 	info.FontWeight = FW_NORMAL;
-	//wcscpy(info.FaceName, L"Consolas");
+	// wcscpy(info.FaceName, L"Consolas");
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &info);
 #endif
 }
 
-bool Server::createServer()
-{
+bool Server::createServer() {
 	setUTF8();
 	myChildProcess = new QProcess(this);
-	
+
 	//绑定事件
 	QObject::connect(myChildProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(receiver()));
 	QObject::connect(myChildProcess, SIGNAL(readyReadStandardError()), this, SLOT(receiver()));
 	QObject::connect(myChildProcess, SIGNAL(finished(int)), this, SLOT(progressFinished(int)));
-	
+
 	myChildProcess->setProcessChannelMode(QProcess::MergedChannels);
 	string runProgress;
 	if (startMode == 0) {
@@ -56,7 +55,7 @@ bool Server::createServer()
 	else if (startMode == 1) {
 		runProgress = "cmd.exe";
 	}
-	
+
 	myChildProcess->start(Helper::stdString2QString(runProgress));
 	if (myChildProcess->waitForStarted()) {
 		serverLogger.info(u8"服务器启动成功,PID为:{}", myChildProcess->processId());
@@ -67,12 +66,12 @@ bool Server::createServer()
 	else {
 		serverLogger.error(u8"服务器启动失败,原因:{}", Helper::QString2stdString(myChildProcess->errorString()));
 	}
-	
+
 
 	return true;
 }
 
-//Server主启动
+// Server主启动
 void Server::run() {
 	createServer();
 	if (started) {
@@ -89,13 +88,13 @@ bool Server::forceStopServer() {
 //发送命令
 bool Server::sendCmd(string cmd) {
 	qDebug() << Helper::stdString2QString(cmd);
-	
+
 	//检测停止
 	if (cmd == getConfig("stopCmd") + "\n") {
 		normalStop = true;
 	}
 
-	//Callback
+	// Callback
 	std::unordered_map<string, string> p;
 	p.emplace("cmd", cmd);
 	emit OtherCallback("onSendCommand", p);
@@ -119,7 +118,7 @@ void Server::formatBDSLog(string line) {
 
 	//色彩格式化
 	vector<string> words = Helper::split(line, "\n");
-	
+
 	//对控制台输出色彩
 	for (string i : words) {
 		string _line = Helper::replace(i, "\n", "");
@@ -142,7 +141,7 @@ void Server::formatBDSLog(string line) {
 			catchInfo(qline);
 			selfCatchLine(qline);
 
-			//Callback 
+			// Callback
 			std::unordered_map<string, string> p;
 			p.emplace("line", _line);
 			emit OtherCallback("onConsoleUpdate", p);
@@ -157,8 +156,8 @@ void Server::receiver() {
 		string line = output;
 		formatBDSLog(line);
 	}
-	//emit insertBDSLog(Helper::stdString2QString(output));
-	//formatBDSLog(output);
+	// emit insertBDSLog(Helper::stdString2QString(output));
+	// formatBDSLog(output);
 }
 
 
@@ -175,8 +174,7 @@ bool Server::getStarted() {
 void Server::progressFinished(int exitCode) {
 	server->started = false;
 	emit insertBDSLog(
-		u8"[CSPBot] 进程已终止. 结束代码:"+Helper::stdString2QString(to_string(exitCode))
-	);
+		u8"[CSPBot] 进程已终止. 结束代码:" + Helper::stdString2QString(to_string(exitCode)));
 	emit OtherCallback("onServerStop");
 	emit changeStatus(false);
 	emit chenableForce(false);
@@ -184,7 +182,7 @@ void Server::progressFinished(int exitCode) {
 	emit chLabel("version", "Unkown");
 	emit chLabel("difficult", "Unkown");
 
-	//Callback
+	// Callback
 	if (server->getNormalStop()) {
 		server->TypeOfStop = normal;
 	}
@@ -250,7 +248,7 @@ void Server::selfCatchLine(QString line) {
 
 		QRegExp r(Helper::stdString2QString(Regular));
 		int r_pos = r.indexIn(line);
-		//qDebug() << line << r << r_pos;
+		// qDebug() << line << r << r_pos;
 		//执行操作
 		if (r_pos > -1 && From == "console") {
 			string Action_type = Action.substr(0, 2);

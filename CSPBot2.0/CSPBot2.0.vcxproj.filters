@@ -37,9 +37,6 @@
     <ClCompile Include="SourceFile\server.cpp">
       <Filter>Source File\tools</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\stdafx.cpp">
-      <Filter>Source File\System</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFile\Event.cpp">
       <Filter>Source File\tools</Filter>
     </ClCompile>
@@ -113,9 +110,6 @@
       <Filter>Head File\System</Filter>
     </ClInclude>
     <ClInclude Include="HeadFile\Version.h">
-      <Filter>Head File\System</Filter>
-    </ClInclude>
-    <ClInclude Include="HeadFile\stdafx.h">
       <Filter>Head File\System</Filter>
     </ClInclude>
     <ClInclude Include="HeadFile\helper.h">

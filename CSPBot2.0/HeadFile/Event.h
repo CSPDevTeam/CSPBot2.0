@@ -5,36 +5,34 @@
 #include <yaml-cpp/yaml.h>
 #include <magic_enum.hpp>
 
-enum inLineEvent
-{
-	onServerStart, //OK
-	onServerStop, //OK 
-	onSendCommand, //OK
-	onReceiveMsg, //OK
-	onReceivePacket, //OK
-	onStop, //OK
-	onLogin, //OK
-	onImport, //OK
-	onSendMsg, //OK
-	onRecall, //OK
-	onConnectError, //OK
-	onConnectLost, //OK
-	onConsoleUpdate, //OK
+enum inLineEvent {
+	onServerStart,	 // OK
+	onServerStop,	 // OK
+	onSendCommand,	 // OK
+	onReceiveMsg,	 // OK
+	onReceivePacket, // OK
+	onStop,			 // OK
+	onLogin,		 // OK
+	onImport,		 // OK
+	onSendMsg,		 // OK
+	onRecall,		 // OK
+	onConnectError,	 // OK
+	onConnectLost,	 // OK
+	onConsoleUpdate, // OK
 	onBinded,
 	onUnBinded,
 };
 
 class EventCallbacker {
 public:
-	EventCallbacker(inLineEvent t) :type_(t), arg_() {}
+	EventCallbacker(inLineEvent t) : type_(t), arg_() {}
 	~EventCallbacker() {}
 
 	//事件回调
 	inline void callback() {
 		std::vector<std::string> ev = getEvent(type_);
-		
 	}
-	
+
 	//获取事件
 	inline std::vector<std::string> getEvent(inLineEvent ec) {
 		auto yf = YAML::LoadFile("data/event.yml");

@@ -18,32 +18,25 @@ using namespace std;
 string fmtMotdBE(string msgJson, string returnMsg);
 string fmtMotdJE(string msgJson, string returnMsg);
 
-vector<string> CommandAPI::SplitCommand(const std::string& paras)
-{
+vector<string> CommandAPI::SplitCommand(const std::string& paras) {
 	if (paras.empty())
 		return vector<string>();
 
 	vector<string> res;
 	string now, strInQuote = "";
 	istringstream strIn(paras);
-	while (strIn >> now)
-	{
-		if (!strInQuote.empty())
-		{
+	while (strIn >> now) {
+		if (!strInQuote.empty()) {
 			strInQuote = strInQuote + " " + now;
-			if (now.back() == '\"')
-			{
+			if (now.back() == '\"') {
 				strInQuote.pop_back();
 				res.push_back(strInQuote.erase(0, 1));
 				strInQuote = "";
 			}
 		}
-		else
-		{
-			if (now.front() == '\"')
-			{
-				if (now.back() == '\"')
-				{
+		else {
+			if (now.front() == '\"') {
+				if (now.back() == '\"') {
 					now = now.substr(1, now.size() - 2);
 					res.push_back(now);
 				}
@@ -54,8 +47,7 @@ vector<string> CommandAPI::SplitCommand(const std::string& paras)
 				res.push_back(now);
 		}
 	}
-	if (!strInQuote.empty())
-	{
+	if (!strInQuote.empty()) {
 		istringstream leftIn(strInQuote);
 		while (leftIn >> now)
 			res.push_back(now);
@@ -145,4 +137,3 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 		emit signalCommandCallback(Helper::stdString2QString(Action_Type), args);
 	}
 }
-

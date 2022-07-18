@@ -9,15 +9,15 @@
 
 using namespace std;
 using namespace tojson;
-//using namespace tojson::emitters;
-int versionPacket = 1; //api版本
+// using namespace tojson::emitters;
+int versionPacket = 1; // api版本
 
 
-//Buttons
-//Button
+// Buttons
+// Button
 enum SelfStandardButton {
-	NoButton=0,
-	Ok=1024,
+	NoButton = 0,
+	Ok = 1024,
 	Save,
 	SaveAll,
 	Open,
@@ -42,7 +42,7 @@ enum SelfStandardButton {
 struct PyLogger {
 	Logger thiz;
 
-	PyLogger(const string& title) :thiz("Plugin ["+title+"]") {}
+	PyLogger(const string& title) : thiz("Plugin [" + title + "]") {}
 	string forMatedString(py::args args) {
 		string forMatString = "";
 		bool first = true;
@@ -58,10 +58,10 @@ struct PyLogger {
 		}
 		return forMatString;
 	}
-	
+
 	void info(py::args args) {
 		string forMatString = forMatedString(args);
-		thiz.info(forMatString); 
+		thiz.info(forMatString);
 	}
 	void debug(py::args args) {
 		string forMatString = forMatedString(args);
@@ -78,7 +78,7 @@ struct PyLogger {
 };
 
 //######################### CSPBot #########################
-//API
+// API
 string getVersion() {
 	return version;
 }
@@ -86,7 +86,7 @@ string getVersion() {
 //######################### Server #########################
 
 bool runcmd(const string& cmd) {
-	return server->sendCmd(cmd+"\n");
+	return server->sendCmd(cmd + "\n");
 }
 
 bool queryServerStarted() {
@@ -94,7 +94,7 @@ bool queryServerStarted() {
 }
 
 //######################### Mirai #########################
-//Mirai发信息主API
+// Mirai发信息主API
 bool ThreadMirai(string cbe, StringMap qm) {
 	string type = cbe;
 	if (type == "sendGroup") {
@@ -121,9 +121,9 @@ bool ThreadMirai(string cbe, StringMap qm) {
 	}
 	return true;
 }
-//Mirai API
+// Mirai API
 void sendGroup(const string& group, const string& msg) {
-	std::unordered_map<string,string> data;
+	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("msg", msg);
 	ThreadMirai("sendGroup", data);
@@ -141,7 +141,7 @@ void recallMsg(const string& target) {
 	ThreadMirai("recallMsg", data);
 }
 
-void sendApp(const string & group, const string & code){
+void sendApp(const string& group, const string& code) {
 	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("code", code);
@@ -162,7 +162,7 @@ bool setListener(const string& eventName, const py::function& func) {
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code)
 		throw py::value_error("Invalid event name " + eventName);
-		
+
 	//添加回调函数
 	g_cb_functions[event_code.value()].push_back(func);
 	return true;
@@ -193,12 +193,11 @@ string pymotdbe(const string& host) {
 
 //######################### Window  #########################
 
-string QButtonToString(QMessageBox::StandardButton c)
-{
-	if(c == QMessageBox::NoButton){
+string QButtonToString(QMessageBox::StandardButton c) {
+	if (c == QMessageBox::NoButton) {
 		return "NoButton";
 	}
-	else if(c == QMessageBox::Ok){
+	else if (c == QMessageBox::Ok) {
 		return "Ok";
 	}
 	else if (c == QMessageBox::Save) {
@@ -252,14 +251,13 @@ string QButtonToString(QMessageBox::StandardButton c)
 	else if (c == QMessageBox::RestoreDefaults) {
 		return "RestoreDefaults";
 	}
-	else{
+	else {
 		return "";
 	}
 }
 
-QMessageBox::StandardButton StringToQButton(string c)
-{
-	if(c == "NoButton"){
+QMessageBox::StandardButton StringToQButton(string c) {
+	if (c == "NoButton") {
 		return QMessageBox::NoButton;
 	}
 	else if (c == "Ok") {
@@ -323,7 +321,7 @@ QMessageBox::StandardButton StringToQButton(string c)
 
 //构造弹窗
 string ShowTipWindow(
-	const string& type, //Type
+	const string& type, // Type
 	const string& title,
 	const string& content,
 	py::list buttonType
@@ -347,8 +345,7 @@ string ShowTipWindow(
 			window,
 			Helper::stdString2QString(title),
 			Helper::stdString2QString(content),
-			btn
-		);
+			btn);
 	}
 	//询问
 	else if (type == "question") {
@@ -356,8 +353,7 @@ string ShowTipWindow(
 			window,
 			Helper::stdString2QString(title),
 			Helper::stdString2QString(content),
-			btn
-		);
+			btn);
 	}
 	//警告
 	else if (type == "warning") {
@@ -365,8 +361,7 @@ string ShowTipWindow(
 			window,
 			Helper::stdString2QString(title),
 			Helper::stdString2QString(content),
-			btn
-		);
+			btn);
 	}
 	//错误
 	else if (type == "critical") {
@@ -374,8 +369,7 @@ string ShowTipWindow(
 			window,
 			Helper::stdString2QString(title),
 			Helper::stdString2QString(content),
-			btn
-		);
+			btn);
 	}
 	//未知
 	else {
@@ -415,14 +409,13 @@ int getAPIVersion() {
 //######################### Command #########################
 
 bool registerCommand(const string& cmd, py::function cbf) {
-	if (command.find(cmd) != command.end()&&
+	if (command.find(cmd) != command.end() &&
 		cmd != "bind" &&
 		cmd != "unbind" &&
 		cmd != "motdbe" &&
 		cmd != "motdje" &&
 		cmd != "start" &&
-		cmd != "stop"
-		) {
+		cmd != "stop") {
 		return false;
 		throw py::value_error("Invalid command:" + cmd);
 	}
@@ -447,8 +440,8 @@ bool unbindXbox(string qq) {
 	return Bind::unbind(qq);
 }
 
-bool bindXbox(string name,string qq) {
-	return Bind::bind(qq,name);
+bool bindXbox(string name, string qq) {
+	return Bind::bind(qq, name);
 }
 
 //######################### Info #########################
@@ -479,52 +472,51 @@ py::list getAdmin() {
 PYBIND11_EMBEDDED_MODULE(bot, m) {
 	using py::literals::operator""_a;
 #pragma region Logger
-		py::class_<PyLogger>(m, "Logger")
-			.def(py::init<string>())
-			.def("info", &PyLogger::info)
-			.def("debug", &PyLogger::debug)
-			.def("error", &PyLogger::error)
-			.def("warn", &PyLogger::warn)
-			;
+	py::class_<PyLogger>(m, "Logger")
+		.def(py::init<string>())
+		.def("info", &PyLogger::info)
+		.def("debug", &PyLogger::debug)
+		.def("error", &PyLogger::error)
+		.def("warn", &PyLogger::warn);
 #pragma endregion
-		
+
 #pragma region Functions
-		m
-			.def("getVersion", &getVersion)
-			.def("sendGroupMsg", &sendGroup)
-			.def("sendAllGroupMsg", &sendAllGroup)
-			.def("recallMsg", &recallMsg)
-			.def("sendApp", &sendApp)
-			.def("sendPacket", &sendPacket)
-			.def("setListener", &setListener)
-			.def("motdbe", &pymotdbe)
-			.def("motdje", &pymotdje)
-			.def("tip", &ShowTipWindow)
-			.def("getAllAPIList",&getAllAPIList)
-			.def("getAPIVersion", &getAPIVersion)
-			.def("registerCommand", &registerCommand);
-			;
+	m
+		.def("getVersion", &getVersion)
+		.def("sendGroupMsg", &sendGroup)
+		.def("sendAllGroupMsg", &sendAllGroup)
+		.def("recallMsg", &recallMsg)
+		.def("sendApp", &sendApp)
+		.def("sendPacket", &sendPacket)
+		.def("setListener", &setListener)
+		.def("motdbe", &pymotdbe)
+		.def("motdje", &pymotdje)
+		.def("tip", &ShowTipWindow)
+		.def("getAllAPIList", &getAllAPIList)
+		.def("getAPIVersion", &getAPIVersion)
+		.def("registerCommand", &registerCommand);
+	;
 #pragma endregion
 
 #pragma region Server
-		m
-			.def("runCommand", &runcmd)
-			.def("getServerStatus",&queryServerStarted);
-			
-		;
+	m
+		.def("runCommand", &runcmd)
+		.def("getServerStatus", &queryServerStarted);
+
+	;
 #pragma endregion
 
 #pragma region Players
-		m
-			.def("queryData", &queryInfo)
-			.def("unbind",&unbindXbox)
-			.def("bind",&bindXbox);
-		;
+	m
+		.def("queryData", &queryInfo)
+		.def("unbind", &unbindXbox)
+		.def("bind", &bindXbox);
+	;
 #pragma endregion
 
 #pragma region config
-		m
-			.def("getAdmin", &getAdmin)
-			.def("getGroup", &getGroup);
-		;
+	m
+		.def("getAdmin", &getAdmin)
+		.def("getGroup", &getGroup);
+	;
 }

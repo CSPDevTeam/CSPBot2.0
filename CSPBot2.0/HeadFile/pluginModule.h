@@ -30,25 +30,24 @@ public:
 	static Plugin* getPlugin(py::module handler);
 	static bool hasPlugin(std::string name);
 	static bool LoadPlugin();
-private:
 
+private:
 };
 
-enum EventCode
-{
-	onServerStart, //OK
-	onServerStop, //OK 
-	onSendCommand, //OK
-	onReceiveMsg, //OK
-	onReceivePacket, //OK
-	onStop, //OK
-	onLogin, //OK
-	onImport, //OK
-	onSendMsg, //OK
-	onRecall, //OK
-	onConnectError, //OK
-	onConnectLost, //OK
-	onConsoleUpdate, //OK
+enum EventCode {
+	onServerStart,	 // OK
+	onServerStop,	 // OK
+	onSendCommand,	 // OK
+	onReceiveMsg,	 // OK
+	onReceivePacket, // OK
+	onStop,			 // OK
+	onLogin,		 // OK
+	onImport,		 // OK
+	onSendMsg,		 // OK
+	onRecall,		 // OK
+	onConnectError,	 // OK
+	onConnectLost,	 // OK
+	onConsoleUpdate, // OK
 };
 
 inline std::unordered_map<EventCode, vector<py::function>> g_cb_functions;
@@ -59,15 +58,15 @@ inline std::unordered_map<EventCode, bool> enableEvent;
 //事件回调，初始化对象将申请GIL
 class Callbacker {
 public:
-	Callbacker(EventCode t) :type_(t), arg_() {}
+	Callbacker(EventCode t) : type_(t), arg_() {}
 	~Callbacker() {}
 
 	//事件回调
 	inline bool callback() {
 		bool pass = true;
-		arg_.inc_ref();//TODO: 为什么加1
-		for (auto &cb : g_cb_functions[type_]) {
-			
+		arg_.inc_ref(); // TODO: 为什么加1
+		for (auto& cb : g_cb_functions[type_]) {
+
 			if (g_cb_functions[type_].size() > 0) {
 				try {
 					if (arg_.size() > 0) {
@@ -76,7 +75,6 @@ public:
 					else {
 						pass = cb() != py::bool_(false);
 					}
-
 				}
 				catch (const std::exception& e) {
 					pluginLogger.error(e.what());
@@ -97,6 +95,3 @@ private:
 	py::dict arg_;
 	py::gil_scoped_acquire gil_;
 };
-
-
-
