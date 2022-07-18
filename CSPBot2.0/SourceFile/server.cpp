@@ -1,8 +1,8 @@
 ﻿#include <string>
 #include <windows.h>
-#include "global.h"
-#include "cspbot20.h"
-#include "qthread.h"
+#include <global.h>
+#include <cspbot20.h>
+#include <qthread.h>
 #include <iostream>
 #include <tchar.h>
 #include <stdio.h>
@@ -10,10 +10,10 @@
 #include <regex>
 #include <yaml-cpp/yaml.h>
 #include <stdio.h>
-#include "logger.h"
-#include "websocketClient.h"
-#include "helper.h"
-#include "server.h"
+#include <logger.h>
+#include <websocketClient.h>
+#include <helper.h>
+#include <server.h>
 #include <qprocess.h>
 
 using namespace std;

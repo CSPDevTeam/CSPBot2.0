@@ -1,11 +1,14 @@
 ﻿#pragma once
-
+//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
+//Self
+#include "helper.h"
+//third-party
 #include <QtWidgets/QMainWindow>
 #include "qnetworkreply.h"
 #include "ui_cspbot20.h"
-#include <string>
-#include "helper.h"
 #include <QQueue>
+//system
+#include <string>
 
 // Type
 typedef std::unordered_map<std::string, std::string> StringMap;

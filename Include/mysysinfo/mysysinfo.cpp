@@ -205,7 +205,7 @@ bool MySysInfo::GetdiskSpace(unsigned long& lFreeAll, unsigned long& lTotalAll) 
 }
 bool MySysInfo::GetPathSpace(const QString& path) {
 #if defined(Q_OS_LINUX)
-	struct statfs diskInfo; //需要#include "sys/statfs.h"
+	struct statfs diskInfo; //需要#include <sys/statfs.h>
 	statfs(path.toUtf8().data(), &diskInfo);
 	// qDebug("%s 总大小:%.0lfMB 可用大小:%.0lfMB", path.toStdString().c_str(), (diskInfo.f_blocks * diskInfo.f_bsize) / 1024.0 / 1024.0, (diskInfo.f_bavail * diskInfo.f_bsize) / 1024.0 / 1024.0);
 #endif

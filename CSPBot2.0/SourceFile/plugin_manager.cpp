@@ -3,6 +3,7 @@
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include <filesystem>
 
 #define PLUGIN_PATH	   "plugins\\"
 

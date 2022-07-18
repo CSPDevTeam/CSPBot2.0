@@ -3,8 +3,9 @@
 #include <QApplication>
 #include <QtWidgets/qmessagebox.h>
 #include <FMT/chrono.h>
-#include "logger.h"
-#include "Version.h"
+#include <logger.h>
+#include <Version.h>
+#include <filesystem>
 
 using namespace std;
 namespace fs = filesystem;

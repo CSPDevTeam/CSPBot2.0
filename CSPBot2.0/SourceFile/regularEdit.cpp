@@ -1,8 +1,8 @@
-﻿#include "regularEdit.h"
+﻿#include <regularEdit.h>
 #include <QGraphicsDropShadowEffect>
 #include <qevent.h>
-#include "qdebug.h"
-#include "qprocess.h"
+#include <qdebug.h>
+#include <qprocess.h>
 #include <QtCore/qpropertyanimation.h>
 #include <QtWidgets/qmessagebox.h>
 

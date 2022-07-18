@@ -1,7 +1,8 @@
 ﻿#pragma once
 #pragma execution_character_set("utf-8")
-#include <queue>
-#include "qstring.h"
+//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
+//third-party
+#include <qstring.h>
 #include <QQueue>
 
 class CSPBot;

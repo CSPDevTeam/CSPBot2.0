@@ -1,12 +1,14 @@
 ﻿#pragma once
-
-#include "helper.h"
+//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
+//Self
+#include <helper.h>
+#include <cspbot20.h>
+//third-party
 #include <QObject>
 #include <QtWebSockets>
 #include <QDebug>
 #include <QUrl>
 #include <LightWSClient/WebSocketClient.h>
-#include "cspbot20.h"
 #include <magic_enum.hpp>
 
 using namespace cyanray;

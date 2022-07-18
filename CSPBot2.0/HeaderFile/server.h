@@ -1,18 +1,20 @@
 ﻿#pragma once
+//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
+//Self
+#include <global.h>
+#include <cspbot20.h>
+#include <logger.h>
+#include <websocketClient.h>
+//third-party
+#include <qthread.h>
+#include <yaml-cpp/yaml.h>
+//system
 #include <string>
 #include <windows.h>
-#include "global.h"
-#include "cspbot20.h"
-#include "qthread.h"
-#include <iostream>
 #include <tchar.h>
 #include <stdio.h>
-#include <string>
 #include <regex>
-#include <yaml-cpp/yaml.h>
-#include <stdio.h>
-#include "logger.h"
-#include "websocketClient.h"
+
 
 enum stopType;
 

@@ -1,21 +1,15 @@
 ﻿#include <mysysinfo/mysysinfo.h>
-#include "logger.h"
-#include "helper.h"
+#include <logger.h>
+#include <helper.h>
 #include <Nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
-#include <iostream>
 #include <windows.h>
-#include <Pdh.h>
-#include <PdhMsg.h>
 #include <time.h>
 #include <string>
 #include <sstream>
 #include <regex>
 #include <cctype>
 
-
-
-#pragma comment(lib, "pdh.lib")
 
 using namespace std;
 using json = nlohmann::json;

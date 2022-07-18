@@ -7,7 +7,7 @@
 #include <regularEdit.h>
 #include <plugins.h>
 #include <QInputDialog>
-#include "Event.h"
+#include <Event.h>
 
 
 using namespace std;

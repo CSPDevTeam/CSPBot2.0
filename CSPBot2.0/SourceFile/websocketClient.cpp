@@ -1,13 +1,16 @@
-﻿//引入头文件
-#include "websocketClient.h"
-#include "global.h"
-//#include "CPython.h"
-#include "logger.h"
+﻿//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
+//Self
+#include <websocketClient.h>
+#include <global.h>
+#include <logger.h>
+#include <helper.h>
+#include <server.h>
+//third-party
 #include <qmessagebox.h>
 #include <qdebug.h>
+//system
 #include <string>
-#include "helper.h"
-#include "server.h"
+
 
 using namespace std;
 

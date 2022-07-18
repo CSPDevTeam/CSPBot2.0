@@ -1,13 +1,13 @@
-﻿#include "cspbot20.h"
-#include "stdafx.h"
-#include "global.h"
+﻿#include <cspbot20.h>
+#include <stdafx.h>
+#include <global.h>
 #include <mysysinfo/mysysinfo.h>
 #include <QtWidgets/QApplication>
-#include "websocketClient.h"
+#include <websocketClient.h>
 #include <QQueue>
-#include "Version.h"
-#include "framework.h"
-#include "logger.h"
+#include <Version.h>
+#include <framework.h>
+#include <logger.h>
 #include <plugins.h>
 #include <fstream>
 

@@ -1,7 +1,10 @@
 ﻿#pragma once
+//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
+//Self
+#include "helper.h"
+//third-party
 #include <QtWidgets/QMainWindow>
 #include "ui_regularEdit.h"
-#include "helper.h"
 #include <QButtonGroup>
 
 class regularEdit : public QWidget {

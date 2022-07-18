@@ -1,12 +1,18 @@
 ﻿#pragma once
+//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
+//Self
+#include <helper.h>
+#include <logger.h>
+#include <plugins.h>
+//third-party
+#include <yaml-cpp/yaml.h>
+#include <magic_enum.hpp>
+//system
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <yaml-cpp/yaml.h>
-#include <magic_enum.hpp>
-#include "helper.h"
-#include "logger.h"
-#include "plugins.h"
+
+
 
 class EventCallbacker {
 public:
