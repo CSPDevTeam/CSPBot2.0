@@ -50,6 +50,7 @@ enum EventCode {
 	onUnBinded,      // OK
 };
 
+lua_State* InitLua();
 inline lua_State* g_lua_State = InitLua();
 
 class LuaValue {

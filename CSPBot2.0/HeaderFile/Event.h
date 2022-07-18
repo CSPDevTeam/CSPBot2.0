@@ -6,28 +6,11 @@
 #include <magic_enum.hpp>
 #include "helper.h"
 #include "logger.h"
-
-enum inLineEvent {
-	onServerStart,	 // OK
-	onServerStop,	 // OK
-	onSendCommand,	 // OK
-	onReceiveMsg,	 // OK
-	onReceivePacket, // OK
-	onStop,			 // OK
-	onLogin,		 // OK
-	onImport,		 // OK
-	onSendMsg,		 // OK
-	onRecall,		 // OK
-	onConnectError,	 // OK
-	onConnectLost,	 // OK
-	onConsoleUpdate, // OK
-	onBinded,
-	onUnBinded,
-};
+#include "plugins.h"
 
 class EventCallbacker {
 public:
-	EventCallbacker(inLineEvent t) : type_(t), arg_() {}
+	EventCallbacker(EventCode t) : type_(t), arg_() {}
 	~EventCallbacker() {}
 
 	//事件回调
@@ -55,10 +38,10 @@ public:
 	}
 
 	//获取事件
-	inline std::vector<std::string> getEvent(inLineEvent ec) {
+	inline std::vector<std::string> getEvent(EventCode ec) {
 		auto yf							   = YAML::LoadFile("data/event.yml");
 		std::vector<std::string> eventList = {};
-		auto event_code					   = magic_enum::enum_name<inLineEvent>(ec);
+		auto event_code = magic_enum::enum_name<EventCode>(ec);
 		std::string code				   = std::string(event_code);
 		for (auto i : yf[code]) {
 			eventList.push_back(i.as<std::string>());
@@ -72,7 +55,7 @@ public:
 	}
 
 private:
-	inLineEvent type_;
+	EventCode type_;
 	std::vector<std::string> arg_;
 	int num = 1;
 };

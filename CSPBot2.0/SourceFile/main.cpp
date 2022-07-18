@@ -37,7 +37,7 @@ bool checkConfigVersion() {
 	return true;
 }
 
-void InitPython();											  //初始化Python解释器
+//void InitPython();											  //初始化Python解释器
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
@@ -45,14 +45,6 @@ void warnInfo() {
 	QMessageBox::warning(window, u8"注意", u8"未检测到安装Python\nCSPBot插件模块将不会运行",
 		QMessageBox::Yes, QMessageBox::Yes);
 	logger.warn("未检测到安装Python,CSPBot插件模块将不会运行");
-}
-void tryInitPython() {
-	__try {
-		InitPython();
-	}
-	__except (1) {
-		warnInfo();
-	}
 }
 
 int main(int argc, char* argv[]) {
@@ -93,7 +85,7 @@ int main(int argc, char* argv[]) {
 	//展示窗口
 	window->show();
 	window->publicStartLogger();
-	tryInitPython();
+	//tryInitPython();
 
 
 	//未安装字体提示

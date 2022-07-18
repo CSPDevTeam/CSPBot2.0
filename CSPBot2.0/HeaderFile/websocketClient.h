@@ -169,7 +169,7 @@ class CommandAPI : public QObject {
 signals:
 	void signalStartServer();
 	void signalCommandCallback(QString cmd, StringVector args);
-	// void Callback(QString listener,StringMap args);
+	void Callback(QString listener,StringMap args);
 public:
 	explicit CommandAPI(){};
 	std::vector<std::string> SplitCommand(const std::string& parent);
