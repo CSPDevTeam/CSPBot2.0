@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // clang-format off
 #define PLUGIN_VERSION_DEV     0

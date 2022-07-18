@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lzio.c $
 ** Buffered streams
 ** See Copyright Notice in lua.h

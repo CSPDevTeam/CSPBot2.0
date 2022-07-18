@@ -43,7 +43,7 @@ string fmtMotdBE(string msgJson, string returnMsg) {
 		return tempReturnMsg;
 	}
 	else {
-		return u8"发生错误!原因:服务器状态为" + msg["status"].get<string>();
+		return "发生错误!原因:服务器状态为" + msg["status"].get<string>();
 	}
 }
 
@@ -81,7 +81,7 @@ string fmtMotdJE(string msgJson, string returnMsg) {
 		return tempReturnMsg;
 	}
 	else {
-		return u8"发生错误!原因:服务器状态为" + msg["status"].get<string>();
+		return "发生错误!原因:服务器状态为" + msg["status"].get<string>();
 	}
 }
 
@@ -233,7 +233,7 @@ string fmtConsole::getCPUUsed() {
 }
 
 string batchFormatting(StringMap fmter, string& str) {
-	for (auto i : fmter) {
+	for (auto& i : fmter) {
 		str = Helper::replace(str, i.first, i.second);
 	}
 	return str;
@@ -270,7 +270,7 @@ string fmtConsole::FmtConsoleRegular(string cmd) {
 	//日期
 	time_t tt = time(NULL);
 	struct tm* t = localtime(&tt);
-	char time[1000];
+	//char time[1000];
 	string str = fmt::format("{}-{}-{} {}:{}:{}",
 		t->tm_year + 1900,
 		t->tm_mon + 1,
@@ -351,7 +351,7 @@ string fmtConsole::FmtGroupRegular(
 	//日期
 	time_t tt = time(NULL);
 	struct tm* t = localtime(&tt);
-	char time[1000];
+	//char time[1000];
 	string str = fmt::format("{}-{}-{} {}:{}:{}",
 		t->tm_year + 1900,
 		t->tm_mon + 1,

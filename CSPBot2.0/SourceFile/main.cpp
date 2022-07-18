@@ -8,6 +8,7 @@
 #include "Version.h"
 #include "framework.h"
 #include "logger.h"
+#include <plugins.h>
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -25,29 +26,40 @@ QQueue<QString> q;
 Logger logger("CSPBot");
 
 string getConfig(string key) {
-	auto config = YAML::LoadFile("config/config.yml");
-	return config[key].as<string>();
+	try {
+		auto config = YAML::LoadFile("config/config.yml");
+		return config[key].as<string>();
+	}
+	catch (const std::exception& e) {
+		//logger.error(e.what());
+	}
 };
 
 bool checkConfigVersion() {
-	auto config = YAML::LoadFile("config/config.yml");
-	if (config["Version"].as<int>() < configVersion) {
-		return false;
+	try {
+		auto config = YAML::LoadFile("config/config.yml");
+		if (config["Version"].as<int>() < configVersion) {
+			return false;
+		}
+		return true;
 	}
-	return true;
+	catch (const std::exception& e) {
+		//logger.error(e.what());
+	}
 }
 
-//void InitPython();											  //初始化Python解释器
+// void InitPython();											  //初始化Python解释器
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 void warnInfo() {
-	QMessageBox::warning(window, u8"注意", u8"未检测到安装Python\nCSPBot插件模块将不会运行",
-		QMessageBox::Yes, QMessageBox::Yes);
+	QMessageBox::warning(window, "注意", "未检测到安装Python\nCSPBot插件模块将不会运行", QMessageBox::Yes, QMessageBox::Yes);
 	logger.warn("未检测到安装Python,CSPBot插件模块将不会运行");
 }
 
 int main(int argc, char* argv[]) {
+	PluginManager::LoadPlugin();
+	PluginManager::registerPlugin("test");
 	QApplication a(argc, argv);
 	QTextCodec* codec = QTextCodec::codecForName("UTF-8"); // GB2312也可以
 	QTextCodec::setCodecForLocale(codec);				   // 2
@@ -81,21 +93,19 @@ int main(int argc, char* argv[]) {
 	CSPBot* window = new CSPBot;
 	//检测文件版本
 	if (!checkConfigVersion()) {
-		QMessageBox::critical(window, u8"严重错误", u8"配置文件版本过低,请检查",
-			QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::critical(window, "严重错误", "配置文件版本过低,请检查", QMessageBox::Yes, QMessageBox::Yes);
 		return 1;
 	}
 
 	//展示窗口
 	window->show();
 	window->publicStartLogger();
-	//tryInitPython();
+	// tryInitPython();
 
 
 	//未安装字体提示
 	if (!hasFont) {
-		QMessageBox::information(window, u8"提示", u8"缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体",
-			QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::information(window, "提示", "缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体", QMessageBox::Yes, QMessageBox::Yes);
 	}
 	return a.exec();
 }

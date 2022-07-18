@@ -10,7 +10,7 @@
     <ClCompile Include="SourceFile\regularEdit.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\PyModle.cpp">
+    <ClCompile Include="SourceFile\plugin_manager.cpp">
       <Filter>Source File\Plugins</Filter>
     </ClCompile>
     <ClCompile Include="SourceFile\main.cpp">
@@ -309,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="lua\lzio.h">
       <Filter>Header File\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFile\lua_api.h">
+      <Filter>Header File\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

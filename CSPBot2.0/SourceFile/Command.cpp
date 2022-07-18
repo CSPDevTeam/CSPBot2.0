@@ -69,7 +69,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"参数错误!");
+			mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "unbind") {
@@ -80,7 +80,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"参数错误!");
+			mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "motdbe") {
@@ -94,11 +94,11 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 				mirai->sendGroupMsg(group, fmt_respone);
 			}
 			else {
-				mirai->sendGroupMsg(group, u8"Motd地址错误!");
+				mirai->sendGroupMsg(group, "Motd地址错误!");
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"参数错误!");
+			mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "motdje") {
@@ -112,15 +112,15 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 				mirai->sendGroupMsg(group, fmt_respone);
 			}
 			else {
-				mirai->sendGroupMsg(group, u8"Motd地址错误!");
+				mirai->sendGroupMsg(group, "Motd地址错误!");
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, u8"参数错误!");
+			mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "start") {
-		mirai->sendGroupMsg(group, u8"正在开启服务器...");
+		mirai->sendGroupMsg(group, "正在开启服务器...");
 		emit signalStartServer();
 	}
 	else if (Action_Type == "stop") {
@@ -128,7 +128,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			server->stopServer();
 		}
 		else if (server->getStarted() != false && group != "0") {
-			mirai->sendGroupMsg(group, u8"服务器不在运行中");
+			mirai->sendGroupMsg(group, "服务器不在运行中");
 		}
 	}
 	else if (command.find(Action_Type) != command.end()) {

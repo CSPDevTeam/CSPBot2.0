@@ -55,18 +55,18 @@ struct messagePacket {
 
 //消息类型
 inline std::unordered_map<std::string, std::string> messageType = {
-	{"Image",		  u8" [图片]"		 },
-	{"Quote",		  u8" [回复的消息]"},
-	{"AtAll",		  u8" [@全体成员]"  },
-	{"Face",			 u8" [QQ表情]"		  },
-	{"FlashImage",	   u8" [闪照]"		  },
-	{"Voice",		  u8" [语音]"		 },
-	{"Xml",			u8" [XML消息]"	  },
-	{"Json",			 u8" [JSON消息]"		},
-	{"App",			u8" [小程序]"		 },
-	{"Poke",			 u8" [戳一戳]"	  },
-	{"Dice",			 u8" [未知消息]"	},
-	{"ForwardMessage", u8" [转发的消息]"}
+	{"Image",		  " [图片]"		 },
+	{"Quote",		  " [回复的消息]"},
+	{"AtAll",		  " [@全体成员]"  },
+	{"Face",			 " [QQ表情]"		  },
+	{"FlashImage",	   " [闪照]"		  },
+	{"Voice",		  " [语音]"		 },
+	{"Xml",			" [XML消息]"	  },
+	{"Json",			 " [JSON消息]"		},
+	{"App",			" [小程序]"		 },
+	{"Poke",			 " [戳一戳]"	  },
+	{"Dice",			 " [未知消息]"	},
+	{"ForwardMessage", " [转发的消息]"}
 };
 
 inline std::string transMessage(json j) {
@@ -74,16 +74,16 @@ inline std::string transMessage(json j) {
 	for (auto& i : j["data"]["messageChain"]) {
 		//分析消息
 		if (i["type"] == "Plain") {
-			msg += u8" " + i["text"].get<std::string>();
+			msg += " " + i["text"].get<std::string>();
 		}
 		else if (i["type"] == "At") {
-			msg += u8" " + i["display"].get<std::string>();
+			msg += " " + i["display"].get<std::string>();
 		}
 		else if (i["type"] == "File") {
-			msg += u8" [文件]" + i["name"].get<std::string>();
+			msg += " [文件]" + i["name"].get<std::string>();
 		}
 		else if (i["type"] == "MusicShare") {
-			msg += u8" [音乐分享]" + i["musicUrl"];
+			msg += " [音乐分享]" + i["musicUrl"];
 		}
 		else if (i["type"] == "Source") {
 		}
@@ -92,7 +92,7 @@ inline std::string transMessage(json j) {
 				msg += messageType[i["type"]];
 			}
 			else {
-				msg += u8" [未知消息]";
+				msg += " [未知消息]";
 			}
 		}
 	}
@@ -100,22 +100,22 @@ inline std::string transMessage(json j) {
 }
 
 inline messagePacket transMessagePacket(json j) {
-	qqNum qq					 = std::to_string(j["data"]["sender"]["id"].get<long long>());
-	std::string qqnick			 = j["data"]["sender"]["memberName"].get<std::string>();
-	groupNum group				 = std::to_string(j["data"]["sender"]["group"]["id"].get<long long>());
-	std::string message			 = transMessage(j);
-	std::string syncId			 = j["syncId"].get<string>();
-	std::string groupName		 = j["data"]["sender"]["group"]["name"].get<std::string>();
+	qqNum qq = std::to_string(j["data"]["sender"]["id"].get<long long>());
+	std::string qqnick = j["data"]["sender"]["memberName"].get<std::string>();
+	groupNum group = std::to_string(j["data"]["sender"]["group"]["id"].get<long long>());
+	std::string message = transMessage(j);
+	std::string syncId = j["syncId"].get<string>();
+	std::string groupName = j["data"]["sender"]["group"]["name"].get<std::string>();
 	std::string permissionString = j["data"]["sender"]["permission"].get<std::string>();
-	auto permission				 = magic_enum::enum_cast<Permission>(permissionString);
-	messagePacket msgPacket		 = {
-		 message,
-		 group,
-		 groupName,
-		 qq,
-		 qqnick,
-		 syncId,
-		 permission.value()};
+	auto permission = magic_enum::enum_cast<Permission>(permissionString);
+	messagePacket msgPacket = {
+		message,
+		group,
+		groupName,
+		qq,
+		qqnick,
+		syncId,
+		permission.value()};
 	return msgPacket;
 }
 
@@ -169,7 +169,8 @@ class CommandAPI : public QObject {
 signals:
 	void signalStartServer();
 	void signalCommandCallback(QString cmd, StringVector args);
-	void Callback(QString listener,StringMap args);
+	void Callback(QString listener, StringMap args);
+
 public:
 	explicit CommandAPI(){};
 	std::vector<std::string> SplitCommand(const std::string& parent);

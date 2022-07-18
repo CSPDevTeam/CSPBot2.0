@@ -1,4 +1,4 @@
-#include <plugins.h>
+ï»¿#include <plugins.h>
 #include <global.h>
 #include <server.h>
 #include <websocketClient.h>
@@ -9,7 +9,7 @@
 using namespace std;
 using namespace tojson;
 using namespace luabridge;
-int versionPacket = 1; // api°æ±¾
+int versionPacket = 1; // apiç‰ˆæœ¬
 
 // Buttons
 enum SelfStandardButton {
@@ -45,7 +45,7 @@ bool queryServerStarted(lua_State* L) {
 }
 
 //######################### Mirai #########################
-// Mirai·¢ĞÅÏ¢Ö÷API
+// Miraiå‘ä¿¡æ¯ä¸»API
 bool ThreadMirai(string cbe, StringMap qm) {
 	string type = cbe;
 	if (type == "sendGroup") {
@@ -112,7 +112,7 @@ bool setListener(const string& eventName, const LuaRef& func, lua_State* L) {
 	if (!event_code)
 		throw std::invalid_argument("Invalid event name " + eventName);
 
-	//Ìí¼Ó»Øµ÷º¯Êı
+	//æ·»åŠ å›è°ƒå‡½æ•°
 	g_cb_functions[event_code.value()].push_back(func);
 	return true;
 }
@@ -268,7 +268,7 @@ QMessageBox::StandardButton StringToQButton(string c) {
 	}
 }
 
-//¹¹Ôìµ¯´°
+//æ„é€ å¼¹çª—
 string ShowTipWindow(
 	const string& type,
 	const string& title,
@@ -286,7 +286,7 @@ string ShowTipWindow(
 
 		btn = btn | event_code;
 	}
-	//Õ¹Ê¾´°¿Ú
+	//å±•ç¤ºçª—å£
 	QMessageBox::StandardButton Choosedbtn;
 	if (type == "information") {
 		Choosedbtn = QMessageBox::information(
@@ -295,7 +295,7 @@ string ShowTipWindow(
 			Helper::stdString2QString(content),
 			btn);
 	}
-	//Ñ¯ÎÊ
+	//è¯¢é—®
 	else if (type == "question") {
 		Choosedbtn = QMessageBox::question(
 			window,
@@ -303,7 +303,7 @@ string ShowTipWindow(
 			Helper::stdString2QString(content),
 			btn);
 	}
-	//¾¯¸æ
+	//è­¦å‘Š
 	else if (type == "warning") {
 		Choosedbtn = QMessageBox::warning(
 			window,
@@ -311,7 +311,7 @@ string ShowTipWindow(
 			Helper::stdString2QString(content),
 			btn);
 	}
-	//´íÎó
+	//é”™è¯¯
 	else if (type == "critical") {
 		Choosedbtn = QMessageBox::critical(
 			window,
@@ -319,13 +319,13 @@ string ShowTipWindow(
 			Helper::stdString2QString(content),
 			btn);
 	}
-	//Î´Öª
+	//æœªçŸ¥
 	else {
 		throw invalid_argument("Invalid TipWindowType name " + type);
 		return "";
 	}
 
-	//·µ»ØÖµ
+	//è¿”å›å€¼
 	return QButtonToString(Choosedbtn);
 }
 

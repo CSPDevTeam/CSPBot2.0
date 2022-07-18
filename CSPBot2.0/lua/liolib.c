@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: liolib.c $
 ** Standard I/O (and system) library
 ** See Copyright Notice in lua.h

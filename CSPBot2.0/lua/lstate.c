@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lstate.c $
 ** Global State
 ** See Copyright Notice in lua.h

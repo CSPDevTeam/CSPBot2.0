@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: ldblib.c $
 ** Interface from Lua to its debug API
 ** See Copyright Notice in lua.h

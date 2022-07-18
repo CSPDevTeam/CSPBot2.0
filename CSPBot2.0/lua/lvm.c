@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lvm.c $
 ** Lua virtual machine
 ** See Copyright Notice in lua.h

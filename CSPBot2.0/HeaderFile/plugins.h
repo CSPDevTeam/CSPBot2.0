@@ -1,49 +1,31 @@
 ﻿#pragma once
-#include "../lua/lua.hpp"
-#include <LuaBridge/LuaBridge.h>
-
+#include "lua_api.h"
 #include <string>
 #include <logger.h>
 
-inline Logger pluginLogger("PluginModle");
-enum EventCode {
-	onServerStart,	 // OK
-	onServerStop,	 // OK
-	onSendCommand,	 // OK
-	onReceiveMsg,	 // OK
-	onReceivePacket, // OK
-	onStop,			 // OK
-	onLogin,		 // OK
-	onImport,		 // OK
-	onSendMsg,		 // OK
-	onRecall,		 // OK
-	onConnectError,	 // OK
-	onConnectLost,	 // OK
-	onConsoleUpdate, // OK
-	onBinded,		 // OK
-	onUnBinded,		 // OK
+extern Logger logger;
+
+enum class EventCode {
+	onServerStart,
+	onServerStop,
+	onSendCommand,
+	onReceiveMsg,
+	onReceivePacket,
+	onStop,
+	onLogin,
+	onImport,
+	onSendMsg,
+	onRecall,
+	onConnectError,
+	onConnectLost,
+	onConsoleUpdate,
+	onBinded,
+	onUnBinded,
 };
 
-lua_State* InitLua();
-inline lua_State* g_lua_State = InitLua();
-
-class LuaValue {
-public:
-	LuaValue() : thiz(g_lua_State) {}
-	LuaValue(const luabridge::LuaRef& ref) : thiz(ref) {}
-	~LuaValue(){};
-	template <typename... Arguments>
-	LuaValue operator()(Arguments&&... arguments) {
-		return thiz(std::forward<Arguments>(arguments)...);
-	};
-	operator bool() { return thiz; }
-
-private:
-	luabridge::LuaRef thiz;
-};
 inline std::unordered_map<EventCode, vector<LuaValue>> g_cb_functions;
 inline std::unordered_map<string, LuaValue> command;
-inline std::unordered_map<std::string,struct Plugin> plugins;
+inline std::vector<struct Plugin> g_plugins;
 inline std::unordered_map<EventCode, bool> enableEvent;
 
 //事件回调，初始化对象将申请GIL
@@ -66,7 +48,7 @@ public:
 					}
 				}
 				catch (const std::exception& e) {
-					pluginLogger.error(e.what());
+					logger.error(e.what());
 				}
 			}
 		}
@@ -86,19 +68,14 @@ private:
 
 struct Plugin {
 	std::string name;
-	std::string info;
+	std::string description;
 	std::string author;
 	std::string version;
-	LuaValue m;
 };
 
-class PluginManager {
-public:
-	static bool registerPlugin(LuaValue handle, std::string name, std::string info = "", std::string autor = "Unkown", std::string version = "v1.0.0");
-	static Plugin* getPlugin(std::string name);
-	static Plugin* getPlugin(LuaValue handler);
-	static bool hasPlugin(std::string name);
+struct PluginManager {
+	static bool registerPlugin(const std::string& name, const std::string& description = "", const std::string& author = "Unknown", const std::string& version = "v1.0.0");
+	static Plugin* getPlugin(const std::string& name);
+	static bool hasPlugin(const std::string& name);
 	static bool LoadPlugin();
-
-private:
 };

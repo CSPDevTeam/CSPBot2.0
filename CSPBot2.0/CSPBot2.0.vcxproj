@@ -67,7 +67,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>Default</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Include\libs\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -81,7 +81,9 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Include\libs\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -111,7 +113,8 @@
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <UsePrecompiledHeader>Use</UsePrecompiledHeader>
@@ -120,7 +123,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <QtMoc>
       <PrependInclude>stdafx.h;%(PrependInclude)</PrependInclude>
@@ -166,7 +169,7 @@
     <ClCompile Include="SourceFile\debug.cpp" />
     <ClCompile Include="SourceFile\logger.cpp" />
     <ClCompile Include="SourceFile\main.cpp" />
-    <ClCompile Include="SourceFile\PyModle.cpp" />
+    <ClCompile Include="SourceFile\plugin_manager.cpp" />
     <ClCompile Include="SourceFile\regularEdit.cpp" />
     <ClCompile Include="SourceFile\server.cpp" />
     <ClCompile Include="SourceFile\websocketClient.cpp" />
@@ -208,6 +211,7 @@
     <ClInclude Include="lua\lvm.h" />
     <ClInclude Include="lua\lzio.h" />
     <ClInclude Include="ResourceFile\resource.h" />
+    <ClInclude Include="HeaderFile\lua_api.h" />
     <QtMoc Include="HeaderFile\regularEdit.h" />
     <QtMoc Include="HeaderFile\websocketClient.h" />
     <QtMoc Include="HeaderFile\server.h" />

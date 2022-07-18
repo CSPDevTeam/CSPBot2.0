@@ -21,11 +21,11 @@ int sendMsg = 0, reciveMsg = 0; //收发消息
 bool Mirai::connectMirai() {
 	bool connected = mirai->login();
 	if (connected) {
-		mirai_logger.info(u8"连接到Mirai成功");
+		mirai_logger.info("连接到Mirai成功");
 	}
 	else {
 		emit signalMiraiMessageBox();
-		mirai_logger.error(u8"无法连接到 Mirai");
+		mirai_logger.error("无法连接到 Mirai");
 	}
 
 	mirai->botProfile();
@@ -90,7 +90,7 @@ bool WsClient::shutdown() {
 		try {
 			ws.Shutdown();
 			mirai->logined = false;
-			mirai_logger.warn(u8"Mirai已断开连接");
+			mirai_logger.warn("Mirai已断开连接");
 			reciveMsg = 0;
 			sendMsg = 0;
 			emit updateSendRecive(sendMsg, reciveMsg);
@@ -112,9 +112,9 @@ Mirai::Mirai() {
 }
 
 void Mirai::run() {
-	mirai_logger.info(u8"Mirai启动中...");
+	mirai_logger.info("Mirai启动中...");
 	connectMirai();
-	mirai_logger.info(u8"Mirai启动完成");
+	mirai_logger.info("Mirai启动完成");
 }
 
 void otherSendCmd(string cmd);
@@ -210,7 +210,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 	if (syncId == "1") {
 		//设置UserImage
 		string qqNick = msg_json["data"]["nickname"].get<string>();
-		mirai_logger.info(u8"{}登录 Mirai 成功", qqNick);
+		mirai_logger.info("{}登录 Mirai 成功", qqNick);
 		logined = true;
 		emit OtherCallback("onLogin");
 		emit setUserImages(Helper::stdString2QString(getConfig("qq")), Helper::stdString2QString(qqNick));
@@ -219,7 +219,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 	else if (syncId == "2") {
 		int msgId = msg_json["data"]["messageId"];
 		if (msgId == -1) {
-			mirai_logger.warn(u8"已发出信息但可能遭到屏蔽");
+			mirai_logger.warn("已发出信息但可能遭到屏蔽");
 		}
 	}
 	else if (syncId == "-1") {

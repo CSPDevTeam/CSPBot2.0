@@ -4,3 +4,5 @@ x64
 plugins/
 config/config.yml
 data/*.yml
+CSPBot2.0/*.user
+CSPBot2.0/x64

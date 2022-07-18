@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lbaselib.c $
 ** Basic library
 ** See Copyright Notice in lua.h

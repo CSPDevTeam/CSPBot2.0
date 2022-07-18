@@ -55,9 +55,9 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 
 	//弹出一个错误对话框
 	QMessageBox msgBox;
-	std::string text = u8"CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
+	std::string text = "CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
 	text = fmt::format(text, fileName);
-	msgBox.setWindowTitle(u8"严重错误");
+	msgBox.setWindowTitle("严重错误");
 	msgBox.setText(Helper::stdString2QString(text));
 	msgBox.exec();
 

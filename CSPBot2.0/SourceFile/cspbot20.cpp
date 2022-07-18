@@ -41,20 +41,20 @@ void CSPBot::startLogger() {
 //保存控制台日志
 void CSPBot::slotSaveConsole() {
 	if (ui.botconsole->toPlainText() == "") {
-		QMessageBox::information(this, u8"提示", u8"控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::information(this, "提示", "控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
 		return;
 	}
 	QString fileName = QFileDialog::getSaveFileName(this,
-		tr(u8"保存当前日志"),
+		tr("保存当前日志"),
 		"",
-		tr(u8"日志文件(*.txt)"));
+		tr("日志文件(*.txt)"));
 	if (fileName == "") {
 		return;
 	}
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-		QMessageBox::critical(this, u8"严重错误", u8"文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::critical(this, "严重错误", "文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
 	}
 	else {
 		QTextStream stream(&file);
@@ -79,7 +79,7 @@ void CSPBot::slotUpdateSendRecive(int send, int recive) {
 	if (recive > 99) {
 		reciveString = "99+";
 	}
-	string reFormat = fmt::format(u8"消息:{}发;{}收", sendString, reciveString);
+	string reFormat = fmt::format("消息:{}发;{}收", sendString, reciveString);
 	ui.websocketMsg->setText(Helper::stdString2QString(reFormat));
 }
 
@@ -91,12 +91,12 @@ void CSPBot::slotConnected(mTime getTime) {
 //手动连接Mirai
 void CSPBot::slotConnectMirai() {
 	if (mirai->logined == false) {
-		string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"正在连接Mirai...");
+		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在连接Mirai...");
 		insertLog(Helper::stdString2QString(formatLog));
 		mirai->connectMirai();
 	}
 	else {
-		string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"现在已处于已连接状态.");
+		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在已处于已连接状态.");
 		insertLog(Helper::stdString2QString(formatLog));
 	}
 }
@@ -104,18 +104,18 @@ void CSPBot::slotConnectMirai() {
 //手动断开Mirai
 void CSPBot::slotDisConnectMirai() {
 	if (mirai->logined == false) {
-		string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"现在未处于已连接状态.");
+		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在未处于已连接状态.");
 		insertLog(Helper::stdString2QString(formatLog));
 	}
 	else {
-		string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"正在断开Mirai...");
+		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在断开Mirai...");
 		insertLog(Helper::stdString2QString(formatLog));
 		wsc->shutdown();
 	}
 }
 
 void CSPBot::slotMiraiMessageBox() {
-	QMessageBox::critical(this, u8"Mirai错误", u8"无法连接到Mirai", QMessageBox::Ok);
+	QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
 }
 
 ///////////////////////////////////////////// Timer /////////////////////////////////////////////
@@ -140,15 +140,15 @@ void CSPBot::slotTimerFunc() {
 	if (min > 99) {
 		minString = "99+";
 	}
-	string minFormat = fmt::format(u8"连接时间:{}m", minString);
+	string minFormat = fmt::format("连接时间:{}m", minString);
 	ui.websocketConnectedTime->setText(Helper::stdString2QString(minFormat));
 
 	//////// Mirai ////////
 	if (mirai->logined) {
-		ui.websocketStatus->setText(u8"状态: 已连接");
+		ui.websocketStatus->setText("状态: 已连接");
 	}
 	else {
-		ui.websocketStatus->setText(u8"状态: 未连接");
+		ui.websocketStatus->setText("状态: 未连接");
 	}
 
 	/////// Table ////////
@@ -169,7 +169,7 @@ CSPBot::CSPBot(QWidget* parent)
 	//设置无边框
 	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 	this->setAttribute(Qt::WA_TranslucentBackground);
-	this->setWindowTitle(u8"CSPBot v" + Helper::stdString2QString(version));
+	this->setWindowTitle("CSPBot v" + Helper::stdString2QString(version));
 	//设置窗口阴影
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
 	shadow_effect->setOffset(0, 0);
@@ -374,8 +374,8 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
 	if (qqNum == "" || qqNick == "") {
 		QPixmap pixmap = QPixmap();
 		ui.userImage->setPixmap(pixmap);
-		ui.user->setText(u8"用户未登录");
-		ui.userImage->setText(u8"用户未登录");
+		ui.user->setText("用户未登录");
+		ui.userImage->setText("用户未登录");
 		return;
 	}
 	QString szUrl = "https://q.qlogo.cn/g?b=qq&nk=" + qqNum + "&s=640";
@@ -396,7 +396,7 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
 		ui.userImage->setPixmap(PixmapToRound(pixmap, 45)); // 你在QLabel显示图片
 	}
 	else {
-		ui.userImage->setText(u8"图片加载错误");
+		ui.userImage->setText("图片加载错误");
 	}
 
 	ui.user->setText(qqNick);
@@ -502,8 +502,8 @@ bool CSPBot::checkClose() {
 	if (server != nullptr && server->getStarted()) {
 		auto temp = QMessageBox::warning(
 			this,
-			u8"警告",
-			u8"服务器还在运行，你是否要关闭?",
+			"警告",
+			"服务器还在运行，你是否要关闭?",
 			QMessageBox::Yes | QMessageBox::No);
 		if (temp == QMessageBox::Yes) {
 			server->forceStopServer();
@@ -604,23 +604,23 @@ void CSPBot::slotPacketCallback(QString msg) {
 //更改状态
 void CSPBot::slotChangeStatus(bool a) {
 	if (a) {
-		ui.ServerStatus->setText(u8"状态: 已启动");
+		ui.ServerStatus->setText("状态: 已启动");
 	}
 	else {
-		ui.ServerStatus->setText(u8"状态: 未启动");
+		ui.ServerStatus->setText("状态: 未启动");
 	}
 };
 
 //更改标签
 void CSPBot::slotChLabel(QString title, QString content) {
 	if (title == "world") {
-		ui.ServerWorld->setText(u8"世界:" + content);
+		ui.ServerWorld->setText("世界:" + content);
 	}
 	else if (title == "version") {
-		ui.ServerVersion->setText(u8"版本:" + content);
+		ui.ServerVersion->setText("版本:" + content);
 	}
 	else if (title == "difficult") {
-		ui.ServerDifficult->setText(u8"难度:" + content);
+		ui.ServerDifficult->setText("难度:" + content);
 	}
 };
 
@@ -628,14 +628,14 @@ void CSPBot::slotChLabel(QString title, QString content) {
 void CSPBot::slotChenableForce(bool a) {
 	ui.forceStop->setEnabled(a);
 	if (a) {
-		/*ui.change->setText(u8"停止");*/
+		/*ui.change->setText("停止");*/
 		ui.stop->setEnabled(true);
 		ui.start->setEnabled(false);
 		ui.inputCmd->setEnabled(true);
 		ui.runCmd->setEnabled(true);
 	}
 	else {
-		/*ui.change->setText(u8"启动");*/
+		/*ui.change->setText("启动");*/
 		ui.stop->setEnabled(false);
 		ui.start->setEnabled(true);
 		ui.inputCmd->setEnabled(false);
@@ -647,7 +647,7 @@ void CSPBot::slotChenableForce(bool a) {
 void CSPBot::startServer() {
 	buildServer(0);
 	ui.stop->setEnabled(true);
-	slotInsertBDSLog(u8"[CSPBot] 已向进程发出启动命令");
+	slotInsertBDSLog("[CSPBot] 已向进程发出启动命令");
 	ui.start->setEnabled(false);
 }
 
@@ -655,25 +655,25 @@ void CSPBot::startServer() {
 void CSPBot::startCmd() {
 	buildServer(1);
 	ui.stop->setEnabled(true);
-	slotInsertBDSLog(u8"<font style=\"color:#FFCC66;\">!!![WARNNING] [CSPBot] 您已进入<font color=\"#008000\">CMD</font>调试模式. [WARNNING]!!!</font>");
-	slotInsertBDSLog(u8"[CSPBot] 已向进程发出启动命令");
+	slotInsertBDSLog("<font style=\"color:#FFCC66;\">!!![WARNNING] [CSPBot] 您已进入<font color=\"#008000\">CMD</font>调试模式. [WARNNING]!!!</font>");
+	slotInsertBDSLog("[CSPBot] 已向进程发出启动命令");
 	ui.start->setEnabled(false);
 }
 
 //关闭服务器
 void CSPBot::stopServer() {
 	server->stopServer();
-	slotInsertBDSLog(u8"[CSPBot] 已向进程发出终止命令");
+	slotInsertBDSLog("[CSPBot] 已向进程发出终止命令");
 	// ui.stop->setEnabled(false);
 	// ui.start->setEnabled(true);
 }
 
 //强制停止进程
 void CSPBot::forceStopServer() {
-	auto temp = QMessageBox::warning(this, u8"警告", u8"服务器还在运行，你是否要强制停止?", QMessageBox::Yes | QMessageBox::No);
+	auto temp = QMessageBox::warning(this, "警告", "服务器还在运行，你是否要强制停止?", QMessageBox::Yes | QMessageBox::No);
 	if (temp == QMessageBox::Yes) {
 		server->forceStopServer();
-		ui.ServerLog->append(u8"[CSPBot] 已向进程发出强制终止命令");
+		ui.ServerLog->append("[CSPBot] 已向进程发出强制终止命令");
 	}
 }
 
@@ -702,7 +702,7 @@ void CSPBot::slotSendCommand(QString cmd) {
 ///////////////////////////////////////////// Debug /////////////////////////////////////////////
 void CSPBot::slotDebug() {
 	bool bRet = false;
-	QString text = QInputDialog::getText(this, u8"CSPBot Debug", u8"Debug调试器用户请退出.", QLineEdit::Normal, "", &bRet);
+	QString text = QInputDialog::getText(this, "CSPBot Debug", "Debug调试器用户请退出.", QLineEdit::Normal, "", &bRet);
 	if (!bRet || text.isEmpty()) {
 		return;
 	}
@@ -737,7 +737,7 @@ void CSPBot::InitPlayerTableView() {
 		YAML::Node node = YAML::LoadFile("data/player.yml"); //读取player配置文件
 		int line_num = node.size();
 		QStringList strHeader;
-		strHeader << u8"玩家名称" << u8"玩家Xuid" << u8"玩家QQ号";
+		strHeader << "玩家名称" << "玩家Xuid" << "玩家QQ号";
 
 		QStandardItemModel* m_model = new QStandardItemModel();
 		m_model->setHorizontalHeaderLabels(strHeader);
@@ -779,7 +779,7 @@ void CSPBot::InitRegularTableView() {
 		YAML::Node node = YAML::LoadFile("data/regular.yml"); //读取player配置文件
 		int line_num = node.size();
 		QStringList strHeader;
-		strHeader << u8"正则" << u8"来源" << u8"执行" << u8"权限";
+		strHeader << "正则" << "来源" << "执行" << "权限";
 
 		QStandardItemModel* m_model = new QStandardItemModel();
 		//添加表头数据
@@ -802,10 +802,10 @@ void CSPBot::InitRegularTableView() {
 			string From = i["From"].as<string>();
 			string Permissions;
 			if (i["Permissions"].as<bool>()) {
-				Permissions = u8"是";
+				Permissions = "是";
 			}
 			else if (!i["Permissions"].as<bool>()) {
-				Permissions = u8"否";
+				Permissions = "否";
 			}
 			QStandardItem* item1 = new QStandardItem(Helper::stdString2QString(Regular));
 			item1->setTextAlignment(Qt::AlignCenter);
@@ -851,7 +851,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 		regularFrom from;
 		bool permission;
 	};
-	strHeader << u8"正则" << u8"来源" << u8"执行" << u8"权限";
+	strHeader << "正则" << "来源" << "执行" << "权限";
 	*/
 	for (int i = 0; i < 5; i++) {
 		QModelIndex index = modelViewOneUp->index(row, i);
@@ -877,7 +877,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	};
 
 	//转换权限
-	bool Permission = (mPermission == u8"是");
+	bool Permission = (mPermission == "是");
 
 	//转换来源
 	regularFrom regular_from;
@@ -913,9 +913,9 @@ void CSPBot::newRegular() {
 
 void CSPBot::InitPluginTableView() {
 	try {
-		int line_num = plugins.size();
+		int line_num = g_plugins.size();
 		QStringList strHeader;
-		strHeader << u8"文件名" << u8"插件" << u8"介绍" << u8"版本" << u8"作者";
+		strHeader << "插件" << "介绍" << "版本" << "作者";
 
 		QStandardItemModel* m_model = new QStandardItemModel();
 		m_model->setHorizontalHeaderLabels(strHeader);
@@ -924,25 +924,22 @@ void CSPBot::InitPluginTableView() {
 		ui.pluginAdmin->verticalHeader()->hide();
 		ui.pluginAdmin->setModel(m_model);
 		int in = 0;
-		for (auto& i : plugins) {
-			QStandardItem* item1 = new QStandardItem(Helper::stdString2QString(i.first));
-			QStandardItem* item2 = new QStandardItem(Helper::stdString2QString(i.second.name));
-			QStandardItem* item3 = new QStandardItem(Helper::stdString2QString(i.second.info));
-			QStandardItem* item4 = new QStandardItem(Helper::stdString2QString(i.second.version));
-			QStandardItem* item5 = new QStandardItem(Helper::stdString2QString(i.second.author));
+		for (auto& x : g_plugins) {
+			QStandardItem* item1 = new QStandardItem(Helper::stdString2QString(x.name));
+			QStandardItem* item2 = new QStandardItem(Helper::stdString2QString(x.description));
+			QStandardItem* item3 = new QStandardItem(Helper::stdString2QString(x.version));
+			QStandardItem* item4 = new QStandardItem(Helper::stdString2QString(x.author));
 
 			//居中文本
 			item1->setTextAlignment(Qt::AlignCenter);
 			item2->setTextAlignment(Qt::AlignCenter);
 			item3->setTextAlignment(Qt::AlignCenter);
 			item4->setTextAlignment(Qt::AlignCenter);
-			item5->setTextAlignment(Qt::AlignCenter);
 
 			m_model->setItem(in, 0, item1);
 			m_model->setItem(in, 1, item2);
 			m_model->setItem(in, 2, item3);
 			m_model->setItem(in, 3, item4);
-			m_model->setItem(in, 4, item5);
 			in++;
 		}
 		ui.pluginAdmin->horizontalHeader()->setStretchLastSection(true);
@@ -956,7 +953,7 @@ void CSPBot::InitPluginTableView() {
 }
 
 void CSPBot::showAbout() {
-	string text = u8"CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
+	string text = "CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
 	text = fmt::format(text, version);
-	QMessageBox::about(this, u8"关于CSPBot", Helper::stdString2QString(text));
+	QMessageBox::about(this, "关于CSPBot", Helper::stdString2QString(text));
 }

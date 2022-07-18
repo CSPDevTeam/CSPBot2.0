@@ -58,13 +58,13 @@ bool Server::createServer() {
 
 	myChildProcess->start(Helper::stdString2QString(runProgress));
 	if (myChildProcess->waitForStarted()) {
-		serverLogger.info(u8"服务器启动成功,PID为:{}", myChildProcess->processId());
+		serverLogger.info("服务器启动成功,PID为:{}", myChildProcess->processId());
 		emit changeStatus(true);
 		emit chenableForce(true);
 		started = true;
 	}
 	else {
-		serverLogger.error(u8"服务器启动失败,原因:{}", Helper::QString2stdString(myChildProcess->errorString()));
+		serverLogger.error("服务器启动失败,原因:{}", Helper::QString2stdString(myChildProcess->errorString()));
 	}
 
 
@@ -174,7 +174,7 @@ bool Server::getStarted() {
 void Server::progressFinished(int exitCode) {
 	server->started = false;
 	emit insertBDSLog(
-		u8"[CSPBot] 进程已终止. 结束代码:" + Helper::stdString2QString(to_string(exitCode)));
+		"[CSPBot] 进程已终止. 结束代码:" + Helper::stdString2QString(to_string(exitCode)));
 	emit OtherCallback("onServerStop");
 	emit changeStatus(false);
 	emit chenableForce(false);
@@ -219,7 +219,7 @@ void Server::catchInfo(QString line) {
 		emit chLabel("version", Helper::stdString2QString(version_string));
 	}
 	else if (pid_pos > -1) {
-		QString msg = Helper::stdString2QString(u8"[CSPBot] 提示:已有一个PID为") + PID.cap(1) + Helper::stdString2QString(u8"的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
+		QString msg = Helper::stdString2QString("[CSPBot] 提示:已有一个PID为") + PID.cap(1) + Helper::stdString2QString("的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
 		emit insertBDSLog(msg);
 	}
 	else if (difficult_pos > -1) {

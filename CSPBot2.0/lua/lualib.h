@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lualib.h $
 ** Lua standard libraries
 ** See Copyright Notice in lua.h

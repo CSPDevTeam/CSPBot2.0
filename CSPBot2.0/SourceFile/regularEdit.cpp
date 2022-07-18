@@ -95,8 +95,8 @@ void regularEdit::saveRegular() {
 		if (!removed) {
 			QMessageBox::warning(
 				this,
-				u8"警告",
-				u8"无法正常删除原正则，请手动删除",
+				"警告",
+				"无法正常删除原正则，请手动删除",
 				QMessageBox::Yes);
 		}
 	}
@@ -167,8 +167,8 @@ void regularEdit::deleteRegular() {
 	if (!removed) {
 		QMessageBox::warning(
 			this,
-			u8"警告",
-			u8"无法正常删除正则，请手动删除",
+			"警告",
+			"无法正常删除正则，请手动删除",
 			QMessageBox::Yes);
 	}
 

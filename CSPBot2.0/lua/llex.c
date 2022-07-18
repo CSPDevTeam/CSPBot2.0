@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: llex.c $
 ** Lexical Analyzer
 ** See Copyright Notice in lua.h

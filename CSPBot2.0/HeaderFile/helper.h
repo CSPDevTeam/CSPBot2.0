@@ -13,24 +13,18 @@ using json = nlohmann::json;
 namespace Helper {
 
 //将std::string转换为QString
-inline QString stdString2QString(std::string str) {
-	QByteArray byteArray(str.c_str(), str.length());
-	QString msg = byteArray;
-	return msg;
+inline QString stdString2QString(const std::string& str) {
+	return QByteArray(str.c_str(), static_cast<int>(str.length()));
 }
 
 //将QString转换为std::string
 inline std::string QString2stdString(QString str) {
-	QByteArray bytes = str.toUtf8();
-	std::string msg = bytes;
-	return msg;
+	auto&& bytes = str.toUtf8();
+	return std::string(bytes.data(),bytes.size());
 }
 
 //字符串替换
-inline std::string replace(std::string strSrc,
-	const std::string& oldStr,
-	const std::string& newStr,
-	int count = -1) {
+inline std::string replace(const std::string& strSrc, const std::string& oldStr, const std::string& newStr, size_t count = -1) {
 	std::string strRet = strSrc;
 	size_t pos = 0;
 	int l_count = 0;

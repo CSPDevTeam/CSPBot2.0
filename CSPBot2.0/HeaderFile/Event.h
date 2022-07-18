@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -13,7 +13,7 @@ public:
 	EventCallbacker(EventCode t) : type_(t), arg_() {}
 	~EventCallbacker() {}
 
-	//ÊÂ¼ş»Øµ÷
+	//äº‹ä»¶å›è°ƒ
 	inline void callback() {
 		std::vector<std::string> ev = getEvent(type_);
 		for (std::string i : ev) {
@@ -37,7 +37,7 @@ public:
 		}
 	}
 
-	//»ñÈ¡ÊÂ¼ş
+	//è·å–äº‹ä»¶
 	inline std::vector<std::string> getEvent(EventCode ec) {
 		auto yf							   = YAML::LoadFile("data/event.yml");
 		std::vector<std::string> eventList = {};

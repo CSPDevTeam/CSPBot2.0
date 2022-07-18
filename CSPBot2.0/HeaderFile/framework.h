@@ -1,5 +1,4 @@
-#pragma once
-
-#define WIN32_LEAN_AND_MEAN // ╢с Windows м╥нд╪ЧжпееЁЩ╪╚иый╧сц╣ддзхщ
-// Windows м╥нд╪Ч
+О╩©#pragma once
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>

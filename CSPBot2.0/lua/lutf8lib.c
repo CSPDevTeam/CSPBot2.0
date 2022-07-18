@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lutf8lib.c $
 ** Standard library for UTF-8 manipulation
 ** See Copyright Notice in lua.h

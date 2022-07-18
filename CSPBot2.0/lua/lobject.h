@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lobject.h $
 ** Type definitions for Lua objects
 ** See Copyright Notice in lua.h

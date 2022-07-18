@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** $Id: lparser.c $
 ** Lua Parser
 ** See Copyright Notice in lua.h
