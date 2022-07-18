@@ -1,15 +1,16 @@
-﻿#include "cspbot20.h"
-#include "stdafx.h"
-#include "helper.h"
-#include "global.h"
-#include "logger.h"
-#include "websocketClient.h"
-#include "regularEdit.h"
-#include "pluginModule.h"
+﻿#include <cspbot20.h>
+#include <stdafx.h>
+#include <helper.h>
+#include <global.h>
+#include <logger.h>
+#include <websocketClient.h>
+#include <regularEdit.h>
+#include <plugins.h>
 #include <QInputDialog>
 
 
 using namespace std;
+using namespace luabridge;
 
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
 //关闭动画Animation
@@ -39,8 +40,7 @@ void CSPBot::startLogger() {
 //保存控制台日志
 void CSPBot::slotSaveConsole() {
 	if (ui.botconsole->toPlainText() == "") {
-		QMessageBox::information(this, u8"提示", u8"控制台日志为空",
-			QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::information(this, u8"提示", u8"控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
 		return;
 	}
 	QString fileName = QFileDialog::getSaveFileName(this,
@@ -53,8 +53,7 @@ void CSPBot::slotSaveConsole() {
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-		QMessageBox::critical(this, u8"严重错误", u8"文件保存失败！",
-			QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::critical(this, u8"严重错误", u8"文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
 	}
 	else {
 		QTextStream stream(&file);
@@ -104,7 +103,6 @@ void CSPBot::slotConnectMirai() {
 //手动断开Mirai
 void CSPBot::slotDisConnectMirai() {
 	if (mirai->logined == false) {
-
 		string formatLog = fmt::format(u8"<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), u8"现在未处于已连接状态.");
 		insertLog(Helper::stdString2QString(formatLog));
 	}
@@ -561,7 +559,7 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 		if (!Helper::is_str_utf8(value.c_str())) {
 			return false;
 		}
-		cb.insert(key.c_str(), py::str(value.c_str()));
+		cb.insert(key.c_str(), value);
 	}
 	bool ret = cb.callback();
 	return ret;
@@ -570,12 +568,17 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 void CSPBot::slotCommandCallback(QString cmd, StringVector fArgs) {
 	string type = Helper::QString2stdString(cmd);
 	if (command.find(type) != command.end()) {
-		py::list args;
-		for (auto& i : fArgs) {
-			args.append(py::str(i));
+		LuaRef args = newTable(g_lua_State);
+
+		Iterator begin(args, false);
+		Iterator end(args, true);
+		for (; begin != end; ++begin) {
+			
 		}
-		py::function cbe = command[type];
-		cbe(args);
+		for (auto& i : fArgs) {
+			args.append(i.c_str());
+		}
+		command[type](args);
 	}
 }
 
@@ -583,9 +586,8 @@ void CSPBot::slotPacketCallback(QString msg) {
 	string msgJson = Helper::QString2stdString(msg);
 	//转换为dict
 	Callbacker packetcbe(EventCode::onReceivePacket);
-	py::module pyJsonModule = py::module::import("json");
-	py::dict msgDict = pyJsonModule.attr("loads")(msgJson);
-	packetcbe.insert("msg", msgDict);
+	// TODO: convert to table
+	packetcbe.insert("msg", msgJson);
 	bool pakctecb = packetcbe.callback();
 }
 

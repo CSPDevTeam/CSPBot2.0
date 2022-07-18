@@ -5,13 +5,13 @@
 #include <optional>
 #include <sstream>
 
-#include "cspbot20.h"
-#include "helper.h"
-#include "websocketClient.h"
-#include "pluginModule.h"
-#include "helper.h"
-#include "server.h"
-#include "global.h"
+#include <cspbot20.h>
+#include <helper.h>
+#include <websocketClient.h>
+#include <plugins.h>
+#include <helper.h>
+#include <server.h>
+#include <global.h>
 
 using namespace std;
 

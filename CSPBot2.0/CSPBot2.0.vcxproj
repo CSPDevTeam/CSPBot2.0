@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeadFile;$(SolutionDir)Include\python;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeaderFile;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeadFile;$(SolutionDir)Include\python;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeaderFile;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -128,14 +128,45 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp" />
+    <ClCompile Include="lua\lapi.c" />
+    <ClCompile Include="lua\lauxlib.c" />
+    <ClCompile Include="lua\lbaselib.c" />
+    <ClCompile Include="lua\lcode.c" />
+    <ClCompile Include="lua\lcorolib.c" />
+    <ClCompile Include="lua\lctype.c" />
+    <ClCompile Include="lua\ldblib.c" />
+    <ClCompile Include="lua\ldebug.c" />
+    <ClCompile Include="lua\ldo.c" />
+    <ClCompile Include="lua\ldump.c" />
+    <ClCompile Include="lua\lfunc.c" />
+    <ClCompile Include="lua\lgc.c" />
+    <ClCompile Include="lua\linit.c" />
+    <ClCompile Include="lua\liolib.c" />
+    <ClCompile Include="lua\llex.c" />
+    <ClCompile Include="lua\lmathlib.c" />
+    <ClCompile Include="lua\lmem.c" />
+    <ClCompile Include="lua\loadlib.c" />
+    <ClCompile Include="lua\lobject.c" />
+    <ClCompile Include="lua\lopcodes.c" />
+    <ClCompile Include="lua\loslib.c" />
+    <ClCompile Include="lua\lparser.c" />
+    <ClCompile Include="lua\lstate.c" />
+    <ClCompile Include="lua\lstring.c" />
+    <ClCompile Include="lua\lstrlib.c" />
+    <ClCompile Include="lua\ltable.c" />
+    <ClCompile Include="lua\ltablib.c" />
+    <ClCompile Include="lua\ltm.c" />
+    <ClCompile Include="lua\lundump.c" />
+    <ClCompile Include="lua\lutf8lib.c" />
+    <ClCompile Include="lua\lvm.c" />
+    <ClCompile Include="lua\lzio.c" />
+    <ClCompile Include="SourceFile\plugins.cpp" />
     <ClCompile Include="SourceFile\Command.cpp" />
     <ClCompile Include="SourceFile\cspbot20.cpp" />
     <ClCompile Include="SourceFile\debug.cpp" />
     <ClCompile Include="SourceFile\Event.cpp" />
     <ClCompile Include="SourceFile\logger.cpp" />
     <ClCompile Include="SourceFile\main.cpp" />
-    <ClCompile Include="SourceFile\PyAPI.cpp" />
-    <ClCompile Include="SourceFile\PyEvent.cpp" />
     <ClCompile Include="SourceFile\PyModle.cpp" />
     <ClCompile Include="SourceFile\regularEdit.cpp" />
     <ClCompile Include="SourceFile\server.cpp" />
@@ -143,18 +174,47 @@
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeadFile\Event.h" />
-    <ClInclude Include="HeadFile\framework.h" />
-    <ClInclude Include="HeadFile\global.h" />
-    <ClInclude Include="HeadFile\helper.h" />
-    <ClInclude Include="HeadFile\Version.h" />
+    <ClInclude Include="HeaderFile\Event.h" />
+    <ClInclude Include="HeaderFile\framework.h" />
+    <ClInclude Include="HeaderFile\global.h" />
+    <ClInclude Include="HeaderFile\helper.h" />
+    <ClInclude Include="HeaderFile\stdafx.h" />
+    <ClInclude Include="HeaderFile\Version.h" />
+    <ClInclude Include="lua\lapi.h" />
+    <ClInclude Include="lua\lauxlib.h" />
+    <ClInclude Include="lua\lcode.h" />
+    <ClInclude Include="lua\lctype.h" />
+    <ClInclude Include="lua\ldebug.h" />
+    <ClInclude Include="lua\ldo.h" />
+    <ClInclude Include="lua\lfunc.h" />
+    <ClInclude Include="lua\lgc.h" />
+    <ClInclude Include="lua\ljumptab.h" />
+    <ClInclude Include="lua\llex.h" />
+    <ClInclude Include="lua\llimits.h" />
+    <ClInclude Include="lua\lmem.h" />
+    <ClInclude Include="lua\lobject.h" />
+    <ClInclude Include="lua\lopcodes.h" />
+    <ClInclude Include="lua\lopnames.h" />
+    <ClInclude Include="lua\lparser.h" />
+    <ClInclude Include="lua\lprefix.h" />
+    <ClInclude Include="lua\lstate.h" />
+    <ClInclude Include="lua\lstring.h" />
+    <ClInclude Include="lua\ltable.h" />
+    <ClInclude Include="lua\ltm.h" />
+    <ClInclude Include="lua\lua.h" />
+    <ClInclude Include="lua\lua.hpp" />
+    <ClInclude Include="lua\luaconf.h" />
+    <ClInclude Include="lua\lualib.h" />
+    <ClInclude Include="lua\lundump.h" />
+    <ClInclude Include="lua\lvm.h" />
+    <ClInclude Include="lua\lzio.h" />
     <ClInclude Include="ResourceFile\resource.h" />
-    <QtMoc Include="HeadFile\regularEdit.h" />
-    <QtMoc Include="HeadFile\websocketClient.h" />
-    <QtMoc Include="HeadFile\server.h" />
-    <QtMoc Include="HeadFile\logger.h" />
-    <QtMoc Include="HeadFile\cspbot20.h" />
-    <ClInclude Include="HeadFile\pluginModule.h" />
+    <QtMoc Include="HeaderFile\regularEdit.h" />
+    <QtMoc Include="HeaderFile\websocketClient.h" />
+    <QtMoc Include="HeaderFile\server.h" />
+    <QtMoc Include="HeaderFile\logger.h" />
+    <QtMoc Include="HeaderFile\cspbot20.h" />
+    <ClInclude Include="HeaderFile\plugins.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ResourceFile\CSPBot.ico" />
