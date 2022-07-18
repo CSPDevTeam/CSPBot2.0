@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <yaml-cpp/yaml.h>
 #include <magic_enum.hpp>
+#include "helper.h"
+#include "logger.h"
 
 enum inLineEvent {
 	onServerStart,	 // OK
@@ -31,6 +33,25 @@ public:
 	//事件回调
 	inline void callback() {
 		std::vector<std::string> ev = getEvent(type_);
+		for (std::string i : ev) {
+			i = fmtConsole::FmtConsoleRegular(i);
+			string Action_type = i.substr(0, 2);
+			for (string j : arg_) {
+				i = Helper::replace(i, "$" + std::to_string(num), j);
+				num++;
+			}
+			if (Action_type == "<<") {
+				string cmd = i.erase(0, 2);
+				server->sendCmd(cmd + "\n");
+			}
+			else if (Action_type == ">>") {
+				string cmd = i.erase(0, 2);
+				mirai->sendAllGroupMsg(cmd);
+			}
+			else {
+				commandApi->CustomCmd(i, "");
+			}
+		}
 	}
 
 	//获取事件
@@ -45,12 +66,13 @@ public:
 		return eventList;
 	}
 
-	inline EventCallbacker& insert(const char* key, const std::string& item) {
-		arg_[key] = item;
+	inline EventCallbacker& insert(const std::string& item) {
+		arg_.push_back(item);
 		return *this;
 	}
 
 private:
 	inLineEvent type_;
-	std::unordered_map<std::string, std::string> arg_;
+	std::vector<std::string> arg_;
+	int num = 1;
 };
