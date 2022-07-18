@@ -1,0 +1,80 @@
+[Crashed!]
+-- Unhandled Exception in -> KERNELBASE.dll
+-- Exception Code: 0xE06D7363
+-- C++ STL Exception detected!
+
+[StackTrace] Function RaiseException at 0x7FF9656393B0  [KERNELBASE.dll<6.2.25151.1000>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF96563941C  [KERNELBASE.dll<6.2.25151.1000>]
+[StackTrace] Function CxxThrowException at 0x7FF9468C6630  [VCRUNTIME140.dll<14.32.31332.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF9468C66C0  [VCRUNTIME140.dll<14.32.31332.0>]
+[StackTrace] Function pybind11::error_already_set::value at 0x7FF79F26E790  [CSPBot2.0.exe]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF79F2E2D69  [CSPBot2.0.exe]
+[StackTrace] Function pybind11::error_already_set::value at 0x7FF79F26E790  [CSPBot2.0.exe]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF79F27C434  [CSPBot2.0.exe]
+[StackTrace] Function pybind11::error_already_set::value at 0x7FF79F26E790  [CSPBot2.0.exe]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF79F2CA549  [CSPBot2.0.exe]
+[StackTrace] Function QObject::qt_static_metacall at 0x7FF8CA336090  [Qt5Core.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA336D8D  [Qt5Core.dll<5.14.2.0>]
+[StackTrace] Function QWidget::event at 0x7FF8CA77CC90  [Qt5Widgets.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA77CECA  [Qt5Widgets.dll<5.14.2.0>]
+[StackTrace] Function QApplicationPrivate::notify_helper at 0x7FF8CA757A10  [Qt5Widgets.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA757B4A  [Qt5Widgets.dll<5.14.2.0>]
+[StackTrace] Function QApplication::notify at 0x7FF8CA754EE0  [Qt5Widgets.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA755389  [Qt5Widgets.dll<5.14.2.0>]
+[StackTrace] Function QCoreApplication::notifyInternal2 at 0x7FF8CA317780  [Qt5Core.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA317839  [Qt5Core.dll<5.14.2.0>]
+[StackTrace] Function QSizePolicy::QSizePolicy at 0x7FF8CA7A42B0  [Qt5Widgets.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA7A4E15  [Qt5Widgets.dll<5.14.2.0>]
+[StackTrace] Function QApplicationPrivate::notify_helper at 0x7FF8CA757A10  [Qt5Widgets.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA757B4A  [Qt5Widgets.dll<5.14.2.0>]
+[StackTrace] Function QApplication::notify at 0x7FF8CA754EE0  [Qt5Widgets.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA756AA7  [Qt5Widgets.dll<5.14.2.0>]
+[StackTrace] Function QCoreApplication::notifyInternal2 at 0x7FF8CA317780  [Qt5Core.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA317839  [Qt5Core.dll<5.14.2.0>]
+[StackTrace] Function QGuiApplicationPrivate::processKeyEvent at 0x7FF8CB698300  [Qt5Gui.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CB698400  [Qt5Gui.dll<5.14.2.0>]
+[StackTrace] Function QWindowSystemInterface::sendWindowSystemEvents at 0x7FF8CB683960  [Qt5Gui.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CB6839FB  [Qt5Gui.dll<5.14.2.0>]
+[StackTrace] Function QEventDispatcherWin32::processEvents at 0x7FF8CA361840  [Qt5Core.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA3618B0  [Qt5Core.dll<5.14.2.0>]
+[StackTrace] Function qt_plugin_query_metadata at 0x7FF8CB3C3540  [qwindows.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CB3C53E9  [qwindows.dll<5.14.2.0>]
+[StackTrace] Function QEventLoop::exec at 0x7FF8CA313660  [Qt5Core.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA31384B  [Qt5Core.dll<5.14.2.0>]
+[StackTrace] Function QCoreApplication::exec at 0x7FF8CA316720  [Qt5Core.dll<5.14.2.0>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF8CA31687E  [Qt5Core.dll<5.14.2.0>]
+[StackTrace] Function pybind11::error_already_set::value at 0x7FF79F26E790  [CSPBot2.0.exe]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF79F29DB9D  [CSPBot2.0.exe]
+[StackTrace] Function pybind11::error_already_set::value at 0x7FF79F26E790  [CSPBot2.0.exe]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF79F2FD0F7  [CSPBot2.0.exe]
+[StackTrace] Function pybind11::error_already_set::value at 0x7FF79F26E790  [CSPBot2.0.exe]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF79F2FC6B6  [CSPBot2.0.exe]
+[StackTrace] Function BaseThreadInitThunk at 0x7FF9664E3FD0  [KERNEL32.DLL<6.2.25151.1000>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF9664E3FED  [KERNEL32.DLL<6.2.25151.1000>]
+[StackTrace] Function RtlUserThreadStart at 0x7FF967C14280  [ntdll.dll<6.2.25151.1000>]
+-- At File (null) : Line 0 
+[StackTrace] Function ???????? at 0x7FF967C142A8  [ntdll.dll<6.2.25151.1000>]

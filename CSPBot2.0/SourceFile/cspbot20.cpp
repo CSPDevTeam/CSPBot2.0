@@ -566,12 +566,7 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 	bool ret = cb.callback();
 
 	//Event Callbacker
-	auto eCode = magic_enum::enum_cast<inLineEvent>(eventName.c_str());
-	if (!eCode) {
-		return false;
-	}
-	inLineEvent ect = eCode.value();
-	EventCallbacker ecb(ect);
+	EventCallbacker ecb(ct);
 	std::vector<string> args_;
 	for (auto& i : args) {
 		ecb.insert(i.second);

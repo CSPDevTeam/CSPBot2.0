@@ -24,16 +24,7 @@ enum EventCode {
 	onUnBinded,		 // OK
 };
 
-/*struct BotVersion {
-	int major;
-
-	int minor;
-	int revision;
-};*/
-
-void EnableListener(EventCode evc);
 lua_State* InitLua();
-void DeinitLua(lua_State* L);
 inline lua_State* g_lua_State = InitLua();
 
 class LuaValue {

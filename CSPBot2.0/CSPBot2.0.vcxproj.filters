@@ -31,9 +31,6 @@
     <ClCompile Include="SourceFile\server.cpp">
       <Filter>Source File\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\Event.cpp">
-      <Filter>Source File\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFile\plugins.cpp">
       <Filter>Source File\Plugins</Filter>
     </ClCompile>
