@@ -6,32 +6,6 @@
 #include <logger.h>
 
 inline Logger pluginLogger("PluginModle");
-
-/*struct BotVersion {
-	int major;
-	int minor;
-	int revision;
-};*/
-
-struct Plugin {
-	std::string name;
-	std::string info;
-	std::string author;
-	std::string version;
-	luabridge::LuaRef m;
-};
-
-class PluginManager {
-public:
-	static bool registerPlugin(luabridge::LuaRef handle, std::string name, std::string info = "", std::string autor = "Unkown", std::string version = "v1.0.0");
-	static Plugin* getPlugin(std::string name);
-	static Plugin* getPlugin(luabridge::LuaRef handler);
-	static bool hasPlugin(std::string name);
-	static bool LoadPlugin();
-
-private:
-};
-
 enum EventCode {
 	onServerStart,	 // OK
 	onServerStop,	 // OK
@@ -47,9 +21,19 @@ enum EventCode {
 	onConnectLost,	 // OK
 	onConsoleUpdate, // OK
 	onBinded,		 // OK
-	onUnBinded,      // OK
+	onUnBinded,		 // OK
 };
 
+/*struct BotVersion {
+	int major;
+
+	int minor;
+	int revision;
+};*/
+
+void EnableListener(EventCode evc);
+lua_State* InitLua();
+void DeinitLua(lua_State* L);
 inline lua_State* g_lua_State = InitLua();
 
 class LuaValue {
@@ -68,12 +52,9 @@ private:
 };
 inline std::unordered_map<EventCode, vector<LuaValue>> g_cb_functions;
 inline std::unordered_map<string, LuaValue> command;
-inline std::unordered_map<std::string, Plugin> plugins;
+inline std::unordered_map<std::string,struct Plugin> plugins;
 inline std::unordered_map<EventCode, bool> enableEvent;
 
-void EnableListener(EventCode evc);
-lua_State* InitLua();
-void DeinitLua(lua_State* L);
 //事件回调，初始化对象将申请GIL
 class Callbacker {
 public:
@@ -110,4 +91,23 @@ public:
 private:
 	EventCode type_;
 	luabridge::LuaRef arg_;
+};
+
+struct Plugin {
+	std::string name;
+	std::string info;
+	std::string author;
+	std::string version;
+	LuaValue m;
+};
+
+class PluginManager {
+public:
+	static bool registerPlugin(LuaValue handle, std::string name, std::string info = "", std::string autor = "Unkown", std::string version = "v1.0.0");
+	static Plugin* getPlugin(std::string name);
+	static Plugin* getPlugin(LuaValue handler);
+	static bool hasPlugin(std::string name);
+	static bool LoadPlugin();
+
+private:
 };
