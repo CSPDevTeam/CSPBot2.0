@@ -1,6 +1,9 @@
 .vs
 .vscode
 x64
+data
+plugins
+config
 *.user
 *.aps
 Bot
