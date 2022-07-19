@@ -9,6 +9,7 @@
 #include <QInputDialog>
 #include <Event.h>
 #include <dialog.h>
+#include <messageBox.h>
 
 using namespace std;
 
@@ -40,7 +41,8 @@ void CSPBot::startLogger() {
 //保存控制台日志
 void CSPBot::slotSaveConsole() {
 	if (ui.botconsole->toPlainText() == "") {
-		QMessageBox::information(this, "提示", "控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
+		messageBox::ShowHint("控制台日志为空");
+		//QMessageBox::information(this, "提示", "控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
 		return;
 	}
 	QString fileName = QFileDialog::getSaveFileName(this, tr("保存当前日志"), "", tr("日志文件(*.txt)"));
@@ -50,7 +52,8 @@ void CSPBot::slotSaveConsole() {
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-		QMessageBox::critical(this, "严重错误", "文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
+		messageBox::ShowError("日志文件保存失败!");
+		//QMessageBox::critical(this, "严重错误", "文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
 	}
 	else {
 		QTextStream stream(&file);
@@ -109,7 +112,8 @@ void CSPBot::slotDisConnectMirai() {
 string getConfig(string key);
 void CSPBot::slotMiraiMessageBox() {
 	if (getConfig("connectUrl") != "!failed!") {
-		QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
+		messageBox::ShowError("无法连接到Mirai");
+		//QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
 	}
 }
 

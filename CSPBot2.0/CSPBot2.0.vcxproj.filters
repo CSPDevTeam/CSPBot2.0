@@ -220,11 +220,11 @@
     <ClCompile Include="Yaml\tag.cpp">
       <Filter>Source File\Yaml</Filter>
     </ClCompile>
-	<ClCompile Include="SourceFile\error.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-	<ClCompile Include="SourceFile\dialog.cpp">
+    <ClCompile Include="SourceFile\dialog.cpp">
       <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFile\messageBox.cpp">
+      <Filter>Source File\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -484,8 +484,8 @@
     <ClInclude Include="HeaderFile\yaml2json.hpp">
       <Filter>Header File\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFile\error.h">
-      <Filter>Header File</Filter>
+    <ClInclude Include="HeaderFile\messageBox.h">
+      <Filter>Header File\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

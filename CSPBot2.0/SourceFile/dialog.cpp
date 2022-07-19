@@ -1,7 +1,9 @@
 ﻿// self
 #include <helper.h>
 #include <dialog.h>
+//third-party
 #include <QGraphicsDropShadowEffect>
+#include <qevent.h>
 
 CDialog::CDialog(diaLogStatus status, QWidget* parent){
 	dialogUi.setupUi(this);
@@ -16,10 +18,10 @@ CDialog::CDialog(diaLogStatus status, QWidget* parent){
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
 	shadow_effect->setOffset(0, 0);
 	shadow_effect->setColor(Qt::gray);
-	shadow_effect->setBlurRadius(10);
+	shadow_effect->setBlurRadius(15);
 	dialogUi.background->setGraphicsEffect(shadow_effect);
 	changeIconStatus(); //改变图标
-
+	QApplication::beep();
 	//绑定事件
 	connect(dialogUi.pushButton, &QPushButton::clicked, this, &QDialog::close);
 }
@@ -58,4 +60,34 @@ void CDialog::changeIconStatus() {
 		dialogUi.content->setGeometry(QRect(10, 40, 361, 121));
 		break;
 	}
+}
+
+///////////////////////////////////////////// MoveWindow /////////////////////////////////////////////
+//标题栏的长度
+const static int pos_min_x = 0;
+const static int pos_max_x = 381;
+const static int pos_min_y = 0;
+const static int pos_max_y = 30;
+//自己实现的窗口拖动操作
+void CDialog::mousePressEvent(QMouseEvent* event) {
+	mousePosition = event->pos();
+	//只对标题栏范围内的鼠标事件进行处理
+	if (mousePosition.x() <= pos_min_x)
+		return;
+	if (mousePosition.x() >= pos_max_x)
+		return;
+	if (mousePosition.y() <= pos_min_y)
+		return;
+	if (mousePosition.y() >= pos_max_y)
+		return;
+	isMousePressed = true;
+}
+void CDialog::mouseMoveEvent(QMouseEvent* event) {
+	if (isMousePressed == true) {
+		QPoint movePot = event->globalPos() - mousePosition;
+		move(movePot);
+	}
+}
+void CDialog::mouseReleaseEvent(QMouseEvent* event) {
+	isMousePressed = false;
 }

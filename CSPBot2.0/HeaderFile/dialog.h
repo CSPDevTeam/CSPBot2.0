@@ -2,6 +2,7 @@
 // third-party
 #include <ui_dialog.h>
 
+
 //枚举状态
 enum diaLogStatus {
 	info,
@@ -20,6 +21,14 @@ public:
 	void setContent(QString content); //设置内容
 
 private:
+	//////// Window ////////
+	void mouseMoveEvent(QMouseEvent* event);
+	// void setGraphics(QWidget* bt);
+	void mousePressEvent(QMouseEvent* event);
+	void mouseReleaseEvent(QMouseEvent*);
+	QPoint mousePosition;
+	bool isMousePressed;
+	
 	void changeIconStatus(); //设置图标状态
 	diaLogStatus sStatus; //图标状态
 	Ui::Dialog dialogUi; //UI指针

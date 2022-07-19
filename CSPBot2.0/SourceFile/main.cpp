@@ -9,7 +9,7 @@
 #include <plugins.h>
 #include <fstream>
 #include <global.h>
-#include <error.h>
+#include <messageBox.h>
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -94,21 +94,21 @@ int main(int argc, char* argv[]) {
 		//检测文件完整性
 		string f = checkConfigfull();
 		if (f != "success.") {
-			ShowError(QString::fromStdString("配置文件不完整\n缺少:") + f.c_str() + "文件");
+			messageBox::ShowError(QString::fromStdString("配置文件不完整\n缺少:") + f.c_str() + "文件");
 			return 1;
 		}
 	}
 	catch (const std::exception& e) {
-		ShowError(e.what());
+		messageBox::ShowError(e.what());
 	}
 
 	//检测文件版本
 	switch (checkConfigVersion()) {
 	case 1:
-		ShowError("配置文件版本过低,请检查");
+		messageBox::ShowError("配置文件版本过低,请检查");
 		return 1;
 	case 2:
-		ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
+		messageBox::ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
 		return 1;
 	default:
 		break;

@@ -1,0 +1,31 @@
+#服务器开启时
+onServerStart:
+  - ">>服务器开启"
+#服务器关闭时
+onServerStop: []
+#发送命令时
+onSendCommand: []
+#收到消息时
+onReceiveMsg: []
+#收到Mirai包时
+onReceivePacket: []
+#CSPBot被停止时
+onStop: []
+#登陆成功时
+onLogin: []
+#其他插件被加载时
+onImport: []
+#发送消息时
+onSendMsg: []
+#撤回消息时
+onRecall: []
+#Websocket出现错误
+onConnectError: []
+#Websocket断开连接
+onConnectLost: []
+#控制台日志更新时
+onConsoleUpdate: []
+#绑定XboxId成功
+onBinded: []
+#解绑XboxId成功
+onUnBinded: []
