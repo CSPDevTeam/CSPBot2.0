@@ -3,12 +3,10 @@
 #include <server.h>
 #include <websocketClient.h>
 #include <qmessagebox.h>
-#include <tojson.hpp>
+#include <yaml2json.hpp>
 #include <helper.h>
 
 using namespace std;
-using namespace tojson;
-using namespace luabridge;
 int versionPacket = 1; // api版本
 
 // Buttons
@@ -107,7 +105,7 @@ void sendPacket(const string& packet, lua_State* L) {
 
 //######################### Listener #########################
 
-bool setListener(const string& eventName, const LuaRef& func, lua_State* L) {
+bool setListener(const string& eventName, const luabridge::LuaRef& func, lua_State* L) {
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code)
 		throw std::invalid_argument("Invalid event name " + eventName);
@@ -273,7 +271,7 @@ string ShowTipWindow(
 	const string& type,
 	const string& title,
 	const string& content,
-	const LuaRef& buttonType,
+	const luabridge::LuaRef& buttonType,
 	lua_State* L) {
 	QFlags<QMessageBox::StandardButton> btn;
 	for (int i = 0; i < buttonType.length(); ++i) {
@@ -331,7 +329,7 @@ string ShowTipWindow(
 
 //######################### Command #########################
 
-bool registerCommand(const string& cmd, const LuaRef& cbf, lua_State* L) {
+bool registerCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State* L) {
 	if (command.find(cmd) != command.end() &&
 		cmd != "bind" &&
 		cmd != "unbind" &&
@@ -347,7 +345,7 @@ bool registerCommand(const string& cmd, const LuaRef& cbf, lua_State* L) {
 }
 
 //######################### Player #########################
-LuaRef queryInfo(const string& type, const string& arg, lua_State* L) {
+luabridge::LuaRef queryInfo(const string& type, const string& arg, lua_State* L) {
 	if (type != "qq" && type != "xuid" && type != "player") {
 		throw std::invalid_argument("Invalid type:" + type);
 	}
@@ -366,8 +364,8 @@ bool bindXbox(string name, string qq, lua_State* L) {
 }
 
 //######################### Info #########################
-LuaRef getGroup(lua_State* L) {
-	LuaRef groupList = newTable(L);
+luabridge::LuaRef getGroup(lua_State* L) {
+	luabridge::LuaRef groupList = luabridge::newTable(L);
 	std::ifstream fin("config/config.yml");
 	YAML::Node config = YAML::Load(fin);
 	bool inGroup = false;
@@ -377,8 +375,8 @@ LuaRef getGroup(lua_State* L) {
 	return groupList;
 }
 
-LuaRef getAdmin(lua_State* L) {
-	LuaRef groupList = newTable(L);
+luabridge::LuaRef getAdmin(lua_State* L) {
+	luabridge::LuaRef groupList = luabridge::newTable(L);
 	std::ifstream fin("config/config.yml");
 	YAML::Node config = YAML::Load(fin);
 	bool inGroup = false;
@@ -395,7 +393,7 @@ void EnableListener(EventCode evc) {
 lua_State* InitLua() {
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
-	getGlobalNamespace(L)
+	luabridge::getGlobalNamespace(L)
 		.beginClass<Logger>("Logger")
 		.addConstructor<void (*)(string)>()
 		.addFunction("info", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->info(msg); }))

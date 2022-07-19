@@ -9,9 +9,7 @@
 #include <QInputDialog>
 #include <Event.h>
 
-
 using namespace std;
-using namespace luabridge;
 
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
 //关闭动画Animation
@@ -549,7 +547,7 @@ void CSPBot::slotInsertBDSLog(QString log) {
 
 // Callback
 bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
-	//Python Callbacker
+	// Python Callbacker
 	qDebug() << "CallBack:" << listener;
 	string eventName = Helper::QString2stdString(listener);
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName.c_str());
@@ -568,7 +566,7 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 	}
 	bool ret = cb.callback();
 
-	//Event Callbacker
+	// Event Callbacker
 	EventCallbacker ecb(ct);
 	std::vector<string> args_;
 	for (auto& i : args) {
@@ -581,13 +579,7 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 void CSPBot::slotCommandCallback(QString cmd, StringVector fArgs) {
 	string type = Helper::QString2stdString(cmd);
 	if (command.find(type) != command.end()) {
-		LuaRef args = newTable(g_lua_State);
-
-		Iterator begin(args, false);
-		Iterator end(args, true);
-		for (; begin != end; ++begin) {
-			
-		}
+		luabridge::LuaRef args = luabridge::newTable(g_lua_State);
 		for (auto& i : fArgs) {
 			args.append(i.c_str());
 		}
@@ -738,9 +730,12 @@ void CSPBot::keyPressEvent(QKeyEvent* e) {
 void CSPBot::InitPlayerTableView() {
 	try {
 		YAML::Node node = YAML::LoadFile("data/player.yml"); //读取player配置文件
-		int line_num = node.size();
+		int line_num = static_cast<int>(node.size());
 		QStringList strHeader;
-		strHeader << "玩家名称" << "玩家Xuid" << "玩家QQ号";
+		strHeader
+			<< "玩家名称"
+			<< "玩家Xuid"
+			<< "玩家QQ号";
 
 		QStandardItemModel* m_model = new QStandardItemModel();
 		m_model->setHorizontalHeaderLabels(strHeader);
@@ -780,9 +775,13 @@ void CSPBot::InitPlayerTableView() {
 void CSPBot::InitRegularTableView() {
 	try {
 		YAML::Node node = YAML::LoadFile("data/regular.yml"); //读取player配置文件
-		int line_num = node.size();
+		int line_num = static_cast<int>(node.size());
 		QStringList strHeader;
-		strHeader << "正则" << "来源" << "执行" << "权限";
+		strHeader
+			<< "正则"
+			<< "来源"
+			<< "执行"
+			<< "权限";
 
 		QStandardItemModel* m_model = new QStandardItemModel();
 		//添加表头数据
@@ -916,9 +915,13 @@ void CSPBot::newRegular() {
 
 void CSPBot::InitPluginTableView() {
 	try {
-		int line_num = g_plugins.size();
+		int line_num = static_cast<int>(g_plugins.size());
 		QStringList strHeader;
-		strHeader << "插件" << "介绍" << "版本" << "作者";
+		strHeader
+			<< "插件"
+			<< "介绍"
+			<< "版本"
+			<< "作者";
 
 		QStandardItemModel* m_model = new QStandardItemModel();
 		m_model->setHorizontalHeaderLabels(strHeader);

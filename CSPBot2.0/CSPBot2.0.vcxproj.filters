@@ -478,6 +478,9 @@
     <ClInclude Include="Yaml\token.h">
       <Filter>Header File\Yaml</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFile\yaml2json.hpp">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="ResourceFile\CSPBot2.0.ico">

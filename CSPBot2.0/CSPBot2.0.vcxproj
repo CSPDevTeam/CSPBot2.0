@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeaderFile;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDIr)Include;$(SolutionDIr)CSPBot2.0\HeaderFile;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>$(SolutionDir)Include;$(SolutionDir)Include\openssl;$(SolutionDir)CSPBot2.0\HeaderFile;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDIr)Include;$(SolutionDIr)CSPBot2.0\HeaderFile;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -67,7 +67,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <LanguageStandard_C>Default</LanguageStandard_C>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Include\libs\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -81,7 +81,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <LanguageStandard_C>Default</LanguageStandard_C>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
@@ -212,6 +212,7 @@
     <ClInclude Include="HeaderFile\global.h" />
     <ClInclude Include="HeaderFile\helper.h" />
     <ClInclude Include="HeaderFile\stdafx.h" />
+    <ClInclude Include="HeaderFile\yaml2json.hpp" />
     <ClInclude Include="HeaderFile\Version.h" />
     <ClInclude Include="lua\lapi.h" />
     <ClInclude Include="lua\lauxlib.h" />

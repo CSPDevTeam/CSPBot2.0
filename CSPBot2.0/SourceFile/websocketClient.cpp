@@ -320,7 +320,7 @@ bool Mirai::login() {
 		string url = wsUrl + "/all?verifyKey=" + key + "&qq=" + qq;
 		return wsc->connect(url);
 	}
-	catch (const char e) {
+	catch (...) {
 		return false;
 	}
 }

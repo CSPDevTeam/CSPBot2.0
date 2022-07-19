@@ -68,7 +68,7 @@ public:
 
 private:
 	EventCode type_;
-	luabridge::LuaRef arg_;
+	LuaValue arg_;
 };
 
 struct Plugin {
