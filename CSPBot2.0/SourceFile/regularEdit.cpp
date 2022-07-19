@@ -7,8 +7,6 @@
 #include <QtWidgets/qmessagebox.h>
 
 using namespace std;
-QPropertyAnimation* m_pAnimation = new QPropertyAnimation();
-QGraphicsOpacityEffect* m_pOpacity = new QGraphicsOpacityEffect();
 
 regularEdit::regularEdit(Regular regular, bool newRegular, QWidget* parent)
 	: QWidget(parent) {

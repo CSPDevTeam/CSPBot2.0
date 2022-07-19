@@ -220,6 +220,9 @@
     <ClCompile Include="Yaml\tag.cpp">
       <Filter>Source File\Yaml</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFile\error.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source File">
@@ -474,6 +477,9 @@
     </ClInclude>
     <ClInclude Include="HeaderFile\yaml2json.hpp">
       <Filter>Header File\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFile\error.h">
+      <Filter>Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

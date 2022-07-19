@@ -37,7 +37,7 @@ void setUTF8() {
 }
 
 bool Server::createServer() {
-	setUTF8();
+	// setUTF8();
 	myChildProcess = new QProcess(this);
 
 	//绑定事件
@@ -79,7 +79,7 @@ void Server::run() {
 
 //强制停止
 bool Server::forceStopServer() {
-	myChildProcess->kill();
+	QProcess::startDetached("taskkill -t  -f /pid " + QString::number(myChildProcess->processId()));
 	return true;
 }
 

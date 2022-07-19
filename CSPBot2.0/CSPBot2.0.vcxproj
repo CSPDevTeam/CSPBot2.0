@@ -163,6 +163,7 @@
     <ClCompile Include="lua\lutf8lib.c" />
     <ClCompile Include="lua\lvm.c" />
     <ClCompile Include="lua\lzio.c" />
+    <ClCompile Include="SourceFile\error.cpp" />
     <ClCompile Include="SourceFile\plugins.cpp" />
     <ClCompile Include="SourceFile\Command.cpp" />
     <ClCompile Include="SourceFile\cspbot20.cpp" />
@@ -206,6 +207,7 @@
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeaderFile\error.h" />
     <ClInclude Include="HeaderFile\Event.h" />
     <ClInclude Include="HeaderFile\framework.h" />
     <ClInclude Include="HeaderFile\global.h" />
