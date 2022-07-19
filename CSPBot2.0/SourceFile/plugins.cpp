@@ -1,7 +1,6 @@
 ﻿#include <plugins.h>
 #include <global.h>
 #include <server.h>
-#include <websocketClient.h>
 #include <qmessagebox.h>
 #include <yaml2json.hpp>
 #include <helper.h>

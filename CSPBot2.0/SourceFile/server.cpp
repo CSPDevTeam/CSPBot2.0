@@ -11,7 +11,6 @@
 #include <yaml-cpp/yaml.h>
 #include <stdio.h>
 #include <logger.h>
-#include <websocketClient.h>
 #include <helper.h>
 #include <server.h>
 #include <qprocess.h>

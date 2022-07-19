@@ -1,5 +1,5 @@
 ﻿// self
-#include <websocketClient.h>
+#include <ws_client.h>
 #include <global.h>
 #include <logger.h>
 #include <helper.h>
@@ -12,7 +12,6 @@
 
 using namespace std;
 
-string getConfig(string key);
 int sendMsg = 0, reciveMsg = 0; //收发消息
 
 // API

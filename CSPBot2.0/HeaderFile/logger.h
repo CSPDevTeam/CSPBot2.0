@@ -4,85 +4,75 @@
 #include "server.h"
 #include "global.h"
 #include "helper.h"
-#include "websocketClient.h"
+#include "ws_client.h"
 // third-party
 #include <FMT/chrono.h>
 
-string getConfig(string key);
+string getConfig(const string& key);
 
 class Logger {
 public:
-	inline Logger(string moduleName) {
-		Module = moduleName;
-	}
+	Logger(const string& title) : title_(title) {}
 
 	template <typename... Args>
-	inline void info(string msg, const Args&... args) {
+	void info(const string& msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
 			if (getLevel() <= 2) {
-				pushToQueue(
-					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + str + "\n</font>");
+				pushToQueue("<font color = \"#008000\">" + getTime() + " I/" + title_ + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 2) {
-				pushToQueue(
-					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + msg + "\n</font>");
+				pushToQueue("<font color = \"#008000\">" + getTime() + " I/" + title_ + ": " + msg + "\n</font>");
 			}
 		}
 	};
 	template <typename... Args>
-	inline void error(string msg, const Args&... args) {
+	void error(const string& msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
 			if (getLevel() <= 4) {
-				pushToQueue(
-					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + str + "\n</font>");
+				pushToQueue("<font color = \"#FF0000\">" + getTime() + " E/" + title_ + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 4) {
-				pushToQueue(
-					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + msg + "\n</font>");
+				pushToQueue("<font color = \"#FF0000\">" + getTime() + " E/" + title_ + ": " + msg + "\n</font>");
 			}
 		}
 	};
 	template <typename... Args>
-	inline void warn(string msg, const Args&... args) {
+	void warn(const string& msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
 			if (getLevel() <= 3) {
-				pushToQueue(
-					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + str + "\n</font>");
+				pushToQueue("<font color = \"#FFCC66\">" + getTime() + " W/" + title_ + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 3) {
-				pushToQueue(
-					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + msg + "\n</font>");
+				pushToQueue("<font color = \"#FFCC66\">" + getTime() + " W/" + title_ + ": " + msg + "\n</font>");
 			}
 		}
 	};
 	template <typename... Args>
-	inline void debug(string msg, const Args&... args) {
+	void debug(const string& msg, const Args&... args) {
 		try {
 			string str = fmt::format(msg, args...);
 			if (getLevel() <= 1) {
-				pushToQueue(
-					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + str + "\n</font>");
+				pushToQueue("<font color = \"#6699FF\">" + getTime() + " D/" + title_ + ": " + str + "\n</font>");
 			}
 		}
 		catch (...) {
 			if (getLevel() <= 1) {
-				pushToQueue(
-					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + msg + "\n</font>");
+				pushToQueue("<font color = \"#6699FF\">" + getTime() + " D/" + title_ + ": " + msg + "\n</font>");
 			}
 		}
 	};
 
 	//获取格式化时间
-	inline static string getTime() {
+	static string getTime() {
 		time_t tt = time(NULL);
 		struct tm* t = localtime(&tt);
 		std::ostringstream buffer;
@@ -95,7 +85,7 @@ public:
 	};
 
 private:
-	inline int getLevel() {
+	int getLevel() {
 		string level = getConfig("LoggerLevel");
 		if (level == "!failed!") {
 			level = "debug";
@@ -114,11 +104,11 @@ private:
 		}
 	};
 
-	inline void pushToQueue(const string& log) {
+	void pushToQueue(const string& log) {
 		g_queue.push(log);
 	};
 
-	string Module = "";
+	string title_ = "";
 };
 
 namespace fmtConsole {

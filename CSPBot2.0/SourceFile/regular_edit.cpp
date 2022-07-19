@@ -1,4 +1,4 @@
-﻿#include <regularEdit.h>
+﻿#include <regular_edit.h>
 #include <QGraphicsDropShadowEffect>
 #include <qevent.h>
 #include <qdebug.h>
@@ -8,7 +8,7 @@
 
 using namespace std;
 
-regularEdit::regularEdit(Regular regular, bool newRegular, QWidget* parent)
+RegularEdit::RegularEdit(Regular regular, bool newRegular, QWidget* parent)
 	: QWidget(parent) {
 	regular_ui.setupUi(this);
 	mRegular = regular;
@@ -55,7 +55,7 @@ regularEdit::regularEdit(Regular regular, bool newRegular, QWidget* parent)
 	connect(regular_ui.remove, SIGNAL(clicked()), this, SLOT(deleteRegular()));
 }
 
-void regularEdit::saveRegular() {
+void RegularEdit::saveRegular() {
 	//读取Yaml
 	YAML::Node regular = YAML::LoadFile("data/regular.yml");
 
@@ -129,7 +129,7 @@ void regularEdit::saveRegular() {
 	this->close();
 }
 
-void regularEdit::deleteRegular() {
+void RegularEdit::deleteRegular() {
 	//读取Yaml
 	YAML::Node regular = YAML::LoadFile("data/regular.yml");
 	//转换成存储的Regular
@@ -177,7 +177,7 @@ void regularEdit::deleteRegular() {
 	this->close();
 }
 
-void regularEdit::setRegular() {
+void RegularEdit::setRegular() {
 	//设置正则
 	regular_ui.regularEdit->setText(mRegular.regular);
 	regular_ui.actionEdit->setText(mRegular.action);
@@ -193,13 +193,13 @@ void regularEdit::setRegular() {
 	regular_ui.checkBox->setChecked(mRegular.permission);
 }
 
-void regularEdit::stratProgress() {
+void RegularEdit::stratProgress() {
 	QProcess process(this);
 	process.startDetached("regularTester.exe");
 }
 
 ///////////////////////////////////////////// Style /////////////////////////////////////////////
-void regularEdit::setGraphics(QWidget* bt) {
+void RegularEdit::setGraphics(QWidget* bt) {
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
 	shadow_effect->setOffset(0, 0);
 	shadow_effect->setColor(Qt::gray);
@@ -214,7 +214,7 @@ const static int pos_max_x = 500;
 const static int pos_min_y = 0;
 const static int pos_max_y = 30;
 //自己实现的窗口拖动操作
-void regularEdit::mousePressEvent(QMouseEvent* event) {
+void RegularEdit::mousePressEvent(QMouseEvent* event) {
 	mousePosition = event->pos();
 	//只对标题栏范围内的鼠标事件进行处理
 	if (mousePosition.x() <= pos_min_x)
@@ -227,16 +227,16 @@ void regularEdit::mousePressEvent(QMouseEvent* event) {
 		return;
 	isMousePressed = true;
 }
-void regularEdit::mouseMoveEvent(QMouseEvent* event) {
+void RegularEdit::mouseMoveEvent(QMouseEvent* event) {
 	if (isMousePressed == true) {
 		QPoint movePot = event->globalPos() - mousePosition;
 		move(movePot);
 	}
 }
-void regularEdit::mouseReleaseEvent(QMouseEvent* event) {
+void RegularEdit::mouseReleaseEvent(QMouseEvent* event) {
 	isMousePressed = false;
 }
 
-void regularEdit::on_actionClose_triggered() {
+void RegularEdit::on_actionClose_triggered() {
 	close();
 }

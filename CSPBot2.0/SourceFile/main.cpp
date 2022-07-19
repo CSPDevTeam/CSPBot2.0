@@ -3,13 +3,13 @@
 #include <global.h>
 #include <mysysinfo/mysysinfo.h>
 #include <QtWidgets/QApplication>
-#include <websocketClient.h>
+#include <ws_client.h>
 #include <framework.h>
 #include <logger.h>
 #include <plugins.h>
 #include <fstream>
 #include <global.h>
-#include <messageBox.h>
+#include <message_box.h>
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -19,7 +19,7 @@ Logger logger("CSPBot");
 Logger serverLogger("Server");
 Logger mirai_logger("Mirai");
 
-string getConfig(string key) {
+string getConfig(const string& key) {
 	std::ifstream fin("config/config.yml", ios::in);
 	if (!fin.is_open()) {
 		return "!failed!";
@@ -94,21 +94,21 @@ int main(int argc, char* argv[]) {
 		//检测文件完整性
 		string f = checkConfigfull();
 		if (f != "success.") {
-			messageBox::ShowError(QString::fromStdString("配置文件不完整\n缺少:") + f.c_str() + "文件");
+			msgbox::ShowError(QString::fromStdString("配置文件不完整\n缺少:") + f.c_str() + "文件");
 			return 1;
 		}
 	}
 	catch (const std::exception& e) {
-		messageBox::ShowError(e.what());
+		msgbox::ShowError(e.what());
 	}
 
 	//检测文件版本
 	switch (checkConfigVersion()) {
 	case 1:
-		messageBox::ShowError("配置文件版本过低,请检查");
+		msgbox::ShowError("配置文件版本过低,请检查");
 		return 1;
 	case 2:
-		messageBox::ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
+		msgbox::ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
 		return 1;
 	default:
 		break;
@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
 
 	//未安装字体提示
 	if (!hasFont) {
-		QMessageBox::information(g_main_window, "提示", "缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体", QMessageBox::Yes, QMessageBox::Yes);
+		msgbox::ShowHint("缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体");
 	}
 	return a.exec();
 }

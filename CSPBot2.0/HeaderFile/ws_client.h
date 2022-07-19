@@ -31,8 +31,6 @@ public:
 	int getStatus();
 };
 
-std::string getConfig(std::string key);
-
 typedef std::string groupNum;
 typedef std::string qqNum;
 

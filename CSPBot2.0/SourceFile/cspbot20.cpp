@@ -3,13 +3,13 @@
 #include <helper.h>
 #include <global.h>
 #include <logger.h>
-#include <websocketClient.h>
-#include <regularEdit.h>
+#include <ws_client.h>
+#include <regular_edit.h>
 #include <plugins.h>
 #include <QInputDialog>
 #include <Event.h>
 #include <dialog.h>
-#include <messageBox.h>
+#include <message_box.h>
 
 using namespace std;
 
@@ -41,8 +41,8 @@ void CSPBot::startLogger() {
 //保存控制台日志
 void CSPBot::slotSaveConsole() {
 	if (ui.botconsole->toPlainText() == "") {
-		messageBox::ShowHint("控制台日志为空");
-		//QMessageBox::information(this, "提示", "控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
+		msgbox::ShowHint("控制台日志为空");
+		// QMessageBox::information(this, "提示", "控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
 		return;
 	}
 	QString fileName = QFileDialog::getSaveFileName(this, tr("保存当前日志"), "", tr("日志文件(*.txt)"));
@@ -52,8 +52,8 @@ void CSPBot::slotSaveConsole() {
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-		messageBox::ShowError("日志文件保存失败!");
-		//QMessageBox::critical(this, "严重错误", "文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
+		msgbox::ShowError("日志文件保存失败!");
+		// QMessageBox::critical(this, "严重错误", "文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
 	}
 	else {
 		QTextStream stream(&file);
@@ -109,11 +109,10 @@ void CSPBot::slotDisConnectMirai() {
 	}
 }
 
-string getConfig(string key);
 void CSPBot::slotMiraiMessageBox() {
 	if (getConfig("connectUrl") != "!failed!") {
-		messageBox::ShowError("无法连接到Mirai");
-		//QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
+		msgbox::ShowError("无法连接到Mirai");
+		// QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
 	}
 }
 
@@ -863,14 +862,14 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	};
 
 	Regular regular = {QString::fromStdString(regularData[0]), QString::fromStdString(regularData[2]), regular_action, regular_from, Permission};
-	regularEdit* regEdit = new regularEdit(regular, false, this);
+	RegularEdit* regEdit = new RegularEdit(regular, false, this);
 	regEdit->show();
 }
 
 //新建正则
 void CSPBot::newRegular() {
 	Regular regular = {"", "", Console, console, false};
-	regularEdit* regEdit = new regularEdit(regular, true, this);
+	RegularEdit* regEdit = new RegularEdit(regular, true, this);
 	regEdit->show();
 }
 

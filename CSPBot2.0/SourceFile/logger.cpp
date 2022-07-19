@@ -15,8 +15,6 @@ using json = nlohmann::json;
 
 inline MySysInfo* mysysinfo = new MySysInfo();
 
-string getConfig(string key);
-
 string fmtMotdBE(string msgJson, string returnMsg) {
 	string tempReturnMsg = returnMsg;
 	tempReturnMsg = helper::replace(tempReturnMsg, "%s", " ");

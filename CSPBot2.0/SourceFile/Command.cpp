@@ -1,13 +1,11 @@
 ﻿#pragma once
-#include <string>
-#include <vector>
 #include <ctime>
 #include <optional>
 #include <sstream>
 
 #include <cspbot20.h>
 #include <helper.h>
-#include <websocketClient.h>
+#include <ws_client.h>
 #include <plugins.h>
 #include <helper.h>
 #include <server.h>

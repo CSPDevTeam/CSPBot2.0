@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="SourceFile\websocketClient.cpp">
+    <ClCompile Include="SourceFile\ws_client.cpp">
       <Filter>Source File\Websocket</Filter>
     </ClCompile>
     <ClCompile Include="SourceFile\cspbot20.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\regularEdit.cpp">
+    <ClCompile Include="SourceFile\regular_edit.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
     <ClCompile Include="SourceFile\main.cpp">
@@ -19,7 +19,7 @@
     <ClCompile Include="..\Include\mysysinfo\mysysinfo.cpp">
       <Filter>Source File\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\Command.cpp">
+    <ClCompile Include="SourceFile\command.cpp">
       <Filter>Source File\Tools</Filter>
     </ClCompile>
     <ClCompile Include="SourceFile\logger.cpp">
@@ -223,7 +223,7 @@
     <ClCompile Include="SourceFile\dialog.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\messageBox.cpp">
+    <ClCompile Include="SourceFile\message_box.cpp">
       <Filter>Source File\Tools</Filter>
     </ClCompile>
   </ItemGroup>
@@ -284,13 +284,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="HeaderFile\websocketClient.h">
+    <QtMoc Include="HeaderFile\ws_client.h">
       <Filter>Header File\Websocket</Filter>
     </QtMoc>
     <QtMoc Include="HeaderFile\cspbot20.h">
       <Filter>Header File\UI</Filter>
     </QtMoc>
-    <QtMoc Include="HeaderFile\regularEdit.h">
+    <QtMoc Include="HeaderFile\regular_edit.h">
       <Filter>Header File\UI</Filter>
     </QtMoc>
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h">
@@ -484,7 +484,7 @@
     <ClInclude Include="HeaderFile\yaml2json.hpp">
       <Filter>Header File\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFile\messageBox.h">
+    <ClInclude Include="HeaderFile\message_box.h">
       <Filter>Header File\Tools</Filter>
     </ClInclude>
   </ItemGroup>

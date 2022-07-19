@@ -6,11 +6,11 @@
 #include <ui_regularEdit.h>
 #include <QButtonGroup>
 
-class regularEdit : public QWidget {
+class RegularEdit : public QWidget {
 	Q_OBJECT
 
 public:
-	regularEdit(Regular regular, bool newRegular, QWidget* parent = Q_NULLPTR);
+	RegularEdit(Regular regular, bool newRegular, QWidget* parent = Q_NULLPTR);
 
 private slots:
 	void on_actionClose_triggered(); //关闭窗口
