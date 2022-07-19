@@ -123,7 +123,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <QtMoc>
       <PrependInclude>stdafx.h;%(PrependInclude)</PrependInclude>
@@ -169,7 +169,6 @@
     <ClCompile Include="SourceFile\debug.cpp" />
     <ClCompile Include="SourceFile\logger.cpp" />
     <ClCompile Include="SourceFile\main.cpp" />
-    <ClCompile Include="SourceFile\plugin_manager.cpp" />
     <ClCompile Include="SourceFile\regularEdit.cpp" />
     <ClCompile Include="SourceFile\server.cpp" />
     <ClCompile Include="SourceFile\websocketClient.cpp" />
@@ -213,7 +212,7 @@
     <ClInclude Include="HeaderFile\helper.h" />
     <ClInclude Include="HeaderFile\stdafx.h" />
     <ClInclude Include="HeaderFile\yaml2json.hpp" />
-    <ClInclude Include="HeaderFile\Version.h" />
+    <ClInclude Include="HeaderFile\version.h" />
     <ClInclude Include="lua\lapi.h" />
     <ClInclude Include="lua\lauxlib.h" />
     <ClInclude Include="lua\lcode.h" />

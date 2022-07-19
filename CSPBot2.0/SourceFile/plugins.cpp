@@ -5,10 +5,15 @@
 #include <qmessagebox.h>
 #include <yaml2json.hpp>
 #include <helper.h>
+#include <filesystem>
+
+#define PLUGIN_PATH "plugins\\"
 
 using namespace std;
-int versionPacket = 1; // api版本
 
+namespace fs = filesystem;
+
+int versionPacket = 1; // api版本
 // Buttons
 enum SelfStandardButton {
 	NoButton = 0,
@@ -34,12 +39,8 @@ enum SelfStandardButton {
 
 //######################### Server #########################
 
-bool runcmd(const string& cmd, lua_State* L) {
+bool RunCommand(const string& cmd, lua_State* L) {
 	return server->sendCmd(cmd + '\n');
-}
-
-bool queryServerStarted(lua_State* L) {
-	return server->getStarted();
 }
 
 //######################### Mirai #########################
@@ -71,33 +72,33 @@ bool ThreadMirai(string cbe, StringMap qm) {
 	return true;
 }
 // Mirai API
-void sendGroup(const string& group, const string& msg, lua_State* L) {
+void SendGroupMsg(const string& group, const string& msg, lua_State* L) {
 	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("msg", msg);
 	ThreadMirai("sendGroup", data);
 }
 
-void sendAllGroup(const string& msg, lua_State* L) {
+void SendAllGroupMsg(const string& msg, lua_State* L) {
 	std::unordered_map<string, string> data;
 	data.emplace("msg", msg);
 	ThreadMirai("sendAllGroup", data);
 }
 
-void recallMsg(const string& target, lua_State* L) {
+void RecallMsg(const string& target, lua_State* L) {
 	std::unordered_map<string, string> data;
 	data.emplace("target", target);
 	ThreadMirai("recallMsg", data);
 }
 
-void sendApp(const string& group, const string& code, lua_State* L) {
+void SendApp(const string& group, const string& code, lua_State* L) {
 	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("code", code);
 	ThreadMirai("App", data);
 }
 
-void sendPacket(const string& packet, lua_State* L) {
+void SendPacket(const string& packet, lua_State* L) {
 	std::unordered_map<string, string> data;
 	data.emplace("packet", packet);
 	ThreadMirai("sendPacket", data);
@@ -105,7 +106,7 @@ void sendPacket(const string& packet, lua_State* L) {
 
 //######################### Listener #########################
 
-bool setListener(const string& eventName, const luabridge::LuaRef& func, lua_State* L) {
+bool SetListener(const string& eventName, const luabridge::LuaRef& func, lua_State* L) {
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code)
 		throw std::invalid_argument("Invalid event name " + eventName);
@@ -119,7 +120,7 @@ bool setListener(const string& eventName, const luabridge::LuaRef& func, lua_Sta
 
 string MotdJE(const string& host, lua_State* L) {
 	QRegExp r("(\\w.+):(\\w+)");
-	int r_pos = r.indexIn(Helper::stdString2QString(host));
+	int r_pos = r.indexIn(helper::stdString2QString(host));
 	if (r_pos > -1) {
 		return Motd::motdje(host);
 	}
@@ -129,7 +130,7 @@ string MotdJE(const string& host, lua_State* L) {
 }
 string MotdBE(const string& host, lua_State* L) {
 	QRegExp r("(\\w.+):(\\w+)");
-	int r_pos = r.indexIn(Helper::stdString2QString(host));
+	int r_pos = r.indexIn(helper::stdString2QString(host));
 	if (r_pos > -1) {
 		return Motd::motdbe(host);
 	}
@@ -267,12 +268,7 @@ QMessageBox::StandardButton StringToQButton(string c) {
 }
 
 //构造弹窗
-string ShowTipWindow(
-	const string& type,
-	const string& title,
-	const string& content,
-	const luabridge::LuaRef& buttonType,
-	lua_State* L) {
+string ShowTipWindow(const string& type, const string& title, const string& content, const luabridge::LuaRef& buttonType, lua_State* L) {
 	QFlags<QMessageBox::StandardButton> btn;
 	for (int i = 0; i < buttonType.length(); ++i) {
 		string Btype = buttonType[i];
@@ -289,32 +285,32 @@ string ShowTipWindow(
 	if (type == "information") {
 		Choosedbtn = QMessageBox::information(
 			window,
-			Helper::stdString2QString(title),
-			Helper::stdString2QString(content),
+			helper::stdString2QString(title),
+			helper::stdString2QString(content),
 			btn);
 	}
 	//询问
 	else if (type == "question") {
 		Choosedbtn = QMessageBox::question(
 			window,
-			Helper::stdString2QString(title),
-			Helper::stdString2QString(content),
+			helper::stdString2QString(title),
+			helper::stdString2QString(content),
 			btn);
 	}
 	//警告
 	else if (type == "warning") {
 		Choosedbtn = QMessageBox::warning(
 			window,
-			Helper::stdString2QString(title),
-			Helper::stdString2QString(content),
+			helper::stdString2QString(title),
+			helper::stdString2QString(content),
 			btn);
 	}
 	//错误
 	else if (type == "critical") {
 		Choosedbtn = QMessageBox::critical(
 			window,
-			Helper::stdString2QString(title),
-			Helper::stdString2QString(content),
+			helper::stdString2QString(title),
+			helper::stdString2QString(content),
 			btn);
 	}
 	//未知
@@ -329,7 +325,7 @@ string ShowTipWindow(
 
 //######################### Command #########################
 
-bool registerCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State* L) {
+bool RegisterCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State* L) {
 	if (command.find(cmd) != command.end() &&
 		cmd != "bind" &&
 		cmd != "unbind" &&
@@ -345,7 +341,7 @@ bool registerCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State*
 }
 
 //######################### Player #########################
-luabridge::LuaRef queryInfo(const string& type, const string& arg, lua_State* L) {
+luabridge::LuaRef QueryInfo(const string& type, const string& arg, lua_State* L) {
 	if (type != "qq" && type != "xuid" && type != "player") {
 		throw std::invalid_argument("Invalid type:" + type);
 	}
@@ -355,16 +351,16 @@ luabridge::LuaRef queryInfo(const string& type, const string& arg, lua_State* L)
 	return {L, j};
 }
 
-bool unbindXbox(string qq, lua_State* L) {
+bool UnbindXbox(string qq, lua_State* L) {
 	return Bind::unbind(qq);
 }
 
-bool bindXbox(string name, string qq, lua_State* L) {
+bool BindXbox(string name, string qq, lua_State* L) {
 	return Bind::bind(qq, name);
 }
 
 //######################### Info #########################
-luabridge::LuaRef getGroup(lua_State* L) {
+luabridge::LuaRef GetGroup(lua_State* L) {
 	luabridge::LuaRef groupList = luabridge::newTable(L);
 	std::ifstream fin("config/config.yml");
 	YAML::Node config = YAML::Load(fin);
@@ -375,7 +371,7 @@ luabridge::LuaRef getGroup(lua_State* L) {
 	return groupList;
 }
 
-luabridge::LuaRef getAdmin(lua_State* L) {
+luabridge::LuaRef GetAdmin(lua_State* L) {
 	luabridge::LuaRef groupList = luabridge::newTable(L);
 	std::ifstream fin("config/config.yml");
 	YAML::Node config = YAML::Load(fin);
@@ -390,6 +386,64 @@ void EnableListener(EventCode evc) {
 	enableEvent.emplace(evc, true);
 }
 
+Plugin* GetPlugin(const string& name) {
+	Plugin* res = nullptr;
+	for (auto& value : g_plugins) {
+		if (value.name == name) {
+			res = &value;
+		}
+	}
+	return res;
+}
+
+bool HasPlugin(const string& name) {
+	return GetPlugin(name) != nullptr;
+}
+
+bool RegisterPlugin(const string& name, const string& description, const string& author, const string& version, lua_State* L) {
+	if (HasPlugin(name))
+		return false;
+	g_plugins.push_back({name, description, author, version});
+	return true;
+}
+
+bool LoadPlugin() {
+	//加载文件
+	try {
+		logger.info("Start Loading Plugins...");
+		for (auto& info : fs::directory_iterator(PLUGIN_PATH)) {
+			string filename = info.path().filename().u8string();
+			if (info.path().extension() == ".lua") {
+				string name(info.path().stem().u8string());
+
+				//忽略以'_'开头的文件
+				if (name.front() == '_') {
+					logger.warn("Ignoring {}", name);
+					continue;
+				}
+				else {
+					logger.info("Loading Plugin {}", name);
+					auto m = luaL_dofile(g_lua_State, name.c_str());
+					if (m) {
+					}
+					else {
+						logger.error("Fail to load the plugin {}!", name);
+					}
+					Callbacker cbe(EventCode::onImport);
+					cbe.insert("name", name);
+					cbe.callback();
+					logger.info("Plugin {} Loaded.", name);
+				}
+			}
+		}
+		logger.info("All Plugins Loaded.");
+	}
+	catch (const exception& e) {
+		logger.error(e.what());
+	}
+	return true;
+}
+
 lua_State* InitLua() {
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
@@ -401,28 +455,30 @@ lua_State* InitLua() {
 		.addFunction("error", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->error(msg); }))
 		.addFunction("error", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->warn(msg); }))
 		.endClass()
-		.addFunction("getVersion", std::function([](lua_State* L) { return version; }))
-		.addFunction("sendGroupMsg", &sendGroup)
-		.addFunction("sendAllGroupMsg", &sendAllGroup)
-		.addFunction("recallMsg", &recallMsg)
-		.addFunction("sendApp", &sendApp)
-		.addFunction("sendPacket", &sendPacket)
-		.addFunction("setListener", &setListener)
+		.addFunction("GetVersion", std::function([](lua_State* L) { return version; }))
+		.addFunction("SendGroupMsg", &SendGroupMsg)
+		.addFunction("SendAllGroupMsg", &SendAllGroupMsg)
+		.addFunction("RecallMsg", &RecallMsg)
+		.addFunction("SendApp", &SendApp)
+		.addFunction("SendPacket", &SendPacket)
+		.addFunction("SetListener", &SetListener)
 		.addFunction("MotdBE", &MotdBE)
 		.addFunction("MotdJE", &MotdJE)
-		.addFunction("tip", &ShowTipWindow)
-		.addFunction("getAPIVersion", std::function([](lua_State* L) { return versionPacket; }))
-		.addFunction("registerCommand", &registerCommand)
+		.addFunction("Tip", &ShowTipWindow)
+		.addFunction("GetAPIVersion", std::function([](lua_State* L) { return versionPacket; }))
+		.addFunction("RegisterCommand", &RegisterCommand)
 
-		.addFunction("runCommand", &runcmd)
-		.addFunction("getServerStatus", &queryServerStarted)
+		.addFunction("RunCommand", &RunCommand)
+		.addFunction("GetServerStatus", std::function([](lua_State* L) { return server->getStarted(); }))
 
-		.addFunction("queryData", &queryInfo)
-		.addFunction("unbind", &unbindXbox)
-		.addFunction("bind", &bindXbox)
+		.addFunction("QueryInfo", &QueryInfo)
+		.addFunction("Unbind", &UnbindXbox)
+		.addFunction("Bind", &BindXbox)
 
-		.addFunction("getAdmin", &getAdmin)
-		.addFunction("getGroup", &getGroup);
+		.addFunction("GetAdmin", &GetAdmin)
+		.addFunction("GetGroup", &GetGroup)
+
+		.addFunction("RegisterPlugin", &RegisterPlugin);
 
 	return L;
 }

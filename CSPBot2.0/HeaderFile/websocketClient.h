@@ -1,9 +1,8 @@
 ﻿#pragma once
-//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//Self
-#include <helper.h>
-#include <cspbot20.h>
-//third-party
+// self
+#include "helper.h"
+#include "cspbot20.h"
+// third-party
 #include <QObject>
 #include <QtWebSockets>
 #include <QDebug>
@@ -32,8 +31,6 @@ public:
 	int getStatus();
 };
 
-
-
 std::string getConfig(std::string key);
 
 typedef std::string groupNum;
@@ -57,17 +54,17 @@ struct messagePacket {
 
 //消息类型
 inline std::unordered_map<std::string, std::string> messageType = {
-	{"Image",		  " [图片]"		 },
+	{"Image",		  " [图片]"		   },
 	{"Quote",		  " [回复的消息]"},
-	{"AtAll",		  " [@全体成员]"  },
-	{"Face",			 " [QQ表情]"		  },
-	{"FlashImage",	   " [闪照]"		  },
-	{"Voice",		  " [语音]"		 },
-	{"Xml",			" [XML消息]"	  },
-	{"Json",			 " [JSON消息]"		},
-	{"App",			" [小程序]"		 },
-	{"Poke",			 " [戳一戳]"	  },
-	{"Dice",			 " [未知消息]"	},
+	{"AtAll",		  " [@全体成员]"	},
+	{"Face",			 " [QQ表情]"		},
+	{"FlashImage",	   " [闪照]"			},
+	{"Voice",		  " [语音]"		   },
+	{"Xml",			" [XML消息]"		},
+	{"Json",			 " [JSON消息]"	  },
+	{"App",			" [小程序]"	   },
+	{"Poke",			 " [戳一戳]"		},
+	{"Dice",			 " [未知消息]"	  },
 	{"ForwardMessage", " [转发的消息]"}
 };
 
@@ -120,7 +117,6 @@ inline messagePacket transMessagePacket(json j) {
 		permission.value()};
 	return msgPacket;
 }
-
 
 class Mirai : public QThread {
 	Q_OBJECT

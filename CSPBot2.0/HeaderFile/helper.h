@@ -1,20 +1,16 @@
 ﻿#pragma once
-//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//third-party
+// self
+#include "framework.h"
+// third-party
 #include <qstring.h>
 #include <yaml-cpp/yaml.h>
 #include <Nlohmann/json.hpp>
-//system
-#include <string>
-#include <stdlib.h>
-#include <windows.h>
+// system
 #include <fstream>
-
-
 
 using json = nlohmann::json;
 
-namespace Helper {
+namespace helper {
 
 //将std::string转换为QString
 inline QString stdString2QString(const std::string& str) {
@@ -24,7 +20,7 @@ inline QString stdString2QString(const std::string& str) {
 //将QString转换为std::string
 inline std::string QString2stdString(QString str) {
 	auto&& bytes = str.toUtf8();
-	return std::string(bytes.data(),bytes.size());
+	return std::string(bytes.data(), bytes.size());
 }
 
 //字符串替换
@@ -114,11 +110,11 @@ inline bool is_str_utf8(const char* str) {
 inline std::string GbkToUtf8(const char* src_str) {
 	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[len + 1];
-	memset(wstr, 0, len + 1);
+	memset(wstr, 0, static_cast<size_t>(len) + 1);
 	MultiByteToWideChar(CP_ACP, 0, src_str, -1, wstr, len);
 	len = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
 	char* str = new char[len + 1];
-	memset(str, 0, len + 1);
+	memset(str, 0, static_cast<size_t>(len) + 1);
 	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL);
 	std::string strTemp = str;
 	if (wstr)
@@ -131,11 +127,11 @@ inline std::string GbkToUtf8(const char* src_str) {
 inline std::string Utf8ToGbk(const char* src_str) {
 	int len = MultiByteToWideChar(CP_UTF8, 0, src_str, -1, NULL, 0);
 	wchar_t* wszGBK = new wchar_t[len + 1];
-	memset(wszGBK, 0, len * 2 + 2);
+	memset(wszGBK, 0, static_cast<size_t>(len) * 2 + 2);
 	MultiByteToWideChar(CP_UTF8, 0, src_str, -1, wszGBK, len);
 	len = WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, NULL, 0, NULL, NULL);
 	char* szGBK = new char[len + 1];
-	memset(szGBK, 0, len + 1);
+	memset(szGBK, 0, static_cast<size_t>(len) + 1);
 	WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, szGBK, len, NULL, NULL);
 	std::string strTemp(szGBK);
 	if (wszGBK)
@@ -144,8 +140,7 @@ inline std::string Utf8ToGbk(const char* src_str) {
 		delete[] szGBK;
 	return strTemp;
 }
-} // namespace Helper
-
+} // namespace helper
 
 namespace Motd {
 inline HMODULE h = LoadLibraryA("dllLibs/Motd.dll");

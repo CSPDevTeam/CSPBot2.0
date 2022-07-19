@@ -1,10 +1,9 @@
 ﻿#pragma once
-//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//Self
+// self
 #include "helper.h"
-//third-party
+// third-party
 #include <QtWidgets/QMainWindow>
-#include "ui_regularEdit.h"
+#include <ui_regularEdit.h>
 #include <QButtonGroup>
 
 class regularEdit : public QWidget {
@@ -35,11 +34,8 @@ private:
 	//////// Style /////////
 	void setGraphics(QWidget* bt);
 
-
 	//////// Setting ////////
 	void setRegular();
-
-
 
 	//存储
 	Regular mRegular;

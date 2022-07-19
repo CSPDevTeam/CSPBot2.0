@@ -5,7 +5,7 @@
 #include <QtWidgets/QApplication>
 #include <websocketClient.h>
 #include <QQueue>
-#include <Version.h>
+#include <version.h>
 #include <framework.h>
 #include <logger.h>
 #include <plugins.h>
@@ -104,11 +104,15 @@ int main(int argc, char* argv[]) {
 	window->show();
 	window->publicStartLogger();
 
-	//检测文件完整性
-	string f = checkConfigfull();
-	if (f != "success.") {
-		QMessageBox::critical(window, "严重错误", "配置文件不完整\n缺少:" + Helper::stdString2QString(f) + "文件", QMessageBox::Yes, QMessageBox::Yes);
-		return 1;
+	try {
+		//检测文件完整性
+		string f = checkConfigfull();
+		if (f != "success.") {
+			QMessageBox::critical(window, "严重错误", "配置文件不完整\n缺少:" + helper::stdString2QString(f) + "文件", QMessageBox::Yes, QMessageBox::Yes);
+			return 1;
+		}
+	}
+	catch (const std::exception&) {
 	}
 
 	//检测文件版本
@@ -123,8 +127,7 @@ int main(int argc, char* argv[]) {
 		break;
 	}
 
-	PluginManager::LoadPlugin();
-
+	LoadPlugin();
 
 	//未安装字体提示
 	if (!hasFont) {

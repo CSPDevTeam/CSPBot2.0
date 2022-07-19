@@ -64,8 +64,8 @@ void regularEdit::saveRegular() {
 
 	if (mNewRegular == false) {
 		//转换成存储的Regular
-		string fmRegular = Helper::QString2stdString(mRegular.regular);
-		string fmAction = Helper::QString2stdString(mRegular.action);
+		string fmRegular = helper::QString2stdString(mRegular.regular);
+		string fmAction = helper::QString2stdString(mRegular.action);
 		string fmFrom;
 		bool fmPermission = mRegular.permission;
 
@@ -103,8 +103,8 @@ void regularEdit::saveRegular() {
 
 	//写入新对象
 	//转换成存储的Regular
-	string tmRegular = Helper::QString2stdString(regular_ui.regularEdit->text());
-	string tmAction = Helper::QString2stdString(regular_ui.actionEdit->text());
+	string tmRegular = helper::QString2stdString(regular_ui.regularEdit->text());
+	string tmAction = helper::QString2stdString(regular_ui.actionEdit->text());
 	string tmFrom;
 	bool tmPermission = regular_ui.checkBox->checkState();
 
@@ -136,8 +136,8 @@ void regularEdit::deleteRegular() {
 	//读取Yaml
 	YAML::Node regular = YAML::LoadFile("data/regular.yml");
 	//转换成存储的Regular
-	string fmRegular = Helper::QString2stdString(mRegular.regular);
-	string fmAction = Helper::QString2stdString(mRegular.action);
+	string fmRegular = helper::QString2stdString(mRegular.regular);
+	string fmAction = helper::QString2stdString(mRegular.action);
 	string fmFrom;
 	bool fmPermission = mRegular.permission;
 

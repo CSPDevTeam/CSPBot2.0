@@ -1,1 +1,2 @@
-﻿#include <QtWidgets>
+﻿#pragma once
+#include <QtWidgets>

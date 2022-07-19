@@ -53,7 +53,7 @@ vector<string> CommandAPI::SplitCommand(const std::string& paras) {
 			res.push_back(now);
 	}
 	for (int i = 0; i < res.size(); i++) {
-		res[i] = Helper::replace(res[i], "\"", "");
+		res[i] = helper::replace(res[i], "\"", "");
 	}
 	return res;
 }
@@ -86,7 +86,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	else if (Action_Type == "motdbe") {
 		if (sp.size() > 2) {
 			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(Helper::stdString2QString(sp[1]));
+			int r_pos = r.indexIn(helper::stdString2QString(sp[1]));
 			if (r_pos > -1) {
 				string motd_respone = Motd::motdbe(sp[1]);
 				string fmt_respone;
@@ -104,7 +104,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	else if (Action_Type == "motdje") {
 		if (sp.size() > 2) {
 			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(Helper::stdString2QString(sp[1]));
+			int r_pos = r.indexIn(helper::stdString2QString(sp[1]));
 			if (r_pos > -1) {
 				string motd_respone = Motd::motdje(sp[1]);
 				string fmt_respone;
@@ -140,6 +140,6 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			}
 			num++;
 		}
-		emit signalCommandCallback(Helper::stdString2QString(Action_Type), args);
+		emit signalCommandCallback(helper::stdString2QString(Action_Type), args);
 	}
 }

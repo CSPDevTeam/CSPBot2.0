@@ -1,7 +1,6 @@
 ﻿#pragma once
 #pragma execution_character_set("utf-8")
-//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//third-party
+// third-party
 #include <qstring.h>
 #include <QQueue>
 
