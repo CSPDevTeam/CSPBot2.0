@@ -5,7 +5,6 @@
 #include <QtWidgets/QApplication>
 #include <websocketClient.h>
 #include <QQueue>
-#include <version.h>
 #include <framework.h>
 #include <logger.h>
 #include <plugins.h>
@@ -15,15 +14,6 @@
 
 using namespace std;
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
-std::string version = TO_VERSION_STRING(PLUGIN_VERSION_MAJOR.PLUGIN_VERSION_MINOR.PLUGIN_VERSION_REVISION);
-CSPBot* window;
-Server* server;
-Mirai* mirai;
-WsClient* wsc;
-CommandAPI* commandApi;
-MySysInfo* mysysinfo = new MySysInfo();
-int configVersion = 4;
-QQueue<QString> q;
 Logger logger("CSPBot");
 
 string getConfig(string key) {
@@ -41,7 +31,7 @@ int checkConfigVersion() {
 		return 2;
 	}
 	auto config = YAML::Load(fin);
-	if (config["Version"].as<int>() < configVersion) {
+	if (config["Version"].as<int>() < g_config_version) {
 		return 1;
 	}
 	return 0;

@@ -1,11 +1,11 @@
 ﻿#pragma once
-//self
+// self
 #include "cspbot20.h"
 #include "server.h"
 #include "global.h"
 #include "helper.h"
 #include "websocketClient.h"
-//third-party
+// third-party
 #include <FMT/chrono.h>
 
 std::string getConfig(std::string key);
@@ -83,7 +83,7 @@ public:
 
 	//获取格式化时间
 	inline static std::string getTime() {
-		time_t tt	 = time(NULL);
+		time_t tt = time(NULL);
 		struct tm* t = localtime(&tt);
 		std::ostringstream buffer;
 		std::string s = std::to_string(t->tm_sec);
@@ -115,7 +115,7 @@ private:
 	};
 
 	inline void pushToQueue(std::string log) {
-		q.enqueue(helper::stdString2QString(log));
+		g_queue.enqueue(helper::stdString2QString(log));
 	};
 
 	std::string Module = "";
@@ -124,9 +124,7 @@ private:
 namespace fmtConsole {
 std::string getCPUUsed();
 std::string FmtConsoleRegular(std::string cmd);
-std::string FmtGroupRegular(
-	messagePacket message,
-	std::string cmd);
+std::string FmtGroupRegular(messagePacket message, std::string cmd);
 QString getColoredLine(std::string line);
 } // namespace fmtConsole
 

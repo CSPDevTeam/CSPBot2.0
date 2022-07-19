@@ -67,7 +67,6 @@ bool Server::createServer() {
 		serverLogger.error("服务器启动失败,原因:{}", helper::QString2stdString(myChildProcess->errorString()));
 	}
 
-
 	return true;
 }
 
@@ -108,7 +107,7 @@ bool Server::stopServer() {
 	if (stopCmd == "!failed!") {
 		stopCmd = "stop";
 	}
-	Server::sendCmd( + "\n");
+	Server::sendCmd(+"\n");
 	normalStop = true;
 	return true;
 }
@@ -164,7 +163,6 @@ void Server::receiver() {
 	// formatBDSLog(output);
 }
 
-
 //获取NormalStop变量
 bool Server::getNormalStop() {
 	return normalStop;
@@ -176,25 +174,24 @@ bool Server::getStarted() {
 };
 
 void Server::progressFinished(int exitCode) {
-	server->started = false;
+	g_server->started = false;
 	emit insertBDSLog(
 		"[CSPBot] 进程已终止. 结束代码:" + helper::stdString2QString(to_string(exitCode)));
 	emit OtherCallback("onServerStop");
 	emit changeStatus(false);
 	emit chenableForce(false);
 	emit chLabel("world", "Unkown");
-	emit chLabel("version", "Unkown");
+	emit chLabel("g_VERSION", "Unkown");
 	emit chLabel("difficult", "Unkown");
 
 	// Callback
-	if (server->getNormalStop()) {
-		server->TypeOfStop = normal;
+	if (g_server->getNormalStop()) {
+		g_server->TypeOfStop = normal;
 	}
 	else {
-		server->TypeOfStop = accident;
+		g_server->TypeOfStop = accident;
 	}
 }
-
 
 void Server::catchInfo(QString line) {
 	QRegExp world("worlds\\/(.+)\\/db");
@@ -220,7 +217,7 @@ void Server::catchInfo(QString line) {
 			}
 		}
 		string version_string = version_raw;
-		emit chLabel("version", helper::stdString2QString(version_string));
+		emit chLabel("g_VERSION", helper::stdString2QString(version_string));
 	}
 	else if (pid_pos > -1) {
 		QString msg = helper::stdString2QString("[CSPBot] 提示:已有一个PID为") + PID.cap(1) + helper::stdString2QString("的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
@@ -264,16 +261,16 @@ void Server::selfCatchLine(QString line) {
 			if (Action_type == "<<") {
 				string cmd = Action.erase(0, 2);
 				cmd = fmtConsole::FmtConsoleRegular(cmd);
-				server->sendCmd(cmd + "\n");
+				g_server->sendCmd(cmd + "\n");
 			}
 			else if (Action_type == ">>") {
 				string cmd = Action.erase(0, 2);
 				cmd = fmtConsole::FmtConsoleRegular(cmd);
-				mirai->sendAllGroupMsg(cmd);
+				g_mirai->sendAllGroupMsg(cmd);
 			}
 			else {
 				string ac = fmtConsole::FmtConsoleRegular(Action);
-				commandApi->CustomCmd(ac, "");
+				g_cmd_api->CustomCmd(ac, "");
 			}
 		}
 	}

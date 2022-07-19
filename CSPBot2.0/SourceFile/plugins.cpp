@@ -40,7 +40,7 @@ enum SelfStandardButton {
 //######################### Server #########################
 
 bool RunCommand(const string& cmd, lua_State* L) {
-	return server->sendCmd(cmd + '\n');
+	return g_server->sendCmd(cmd + '\n');
 }
 
 //######################### Mirai #########################
@@ -50,24 +50,24 @@ bool ThreadMirai(string cbe, StringMap qm) {
 	if (type == "sendGroup") {
 		string group = qm.at("group");
 		string msg = qm.at("msg");
-		mirai->sendGroupMsg(group, msg, false);
+		g_mirai->sendGroupMsg(group, msg, false);
 	}
 	else if (type == "sendAllGroup") {
 		string msg = qm.at("msg");
-		mirai->sendAllGroupMsg(msg, false);
+		g_mirai->sendAllGroupMsg(msg, false);
 	}
 	else if (type == "recallMsg") {
 		string target = qm.at("target");
-		mirai->recallMsg(target, false);
+		g_mirai->recallMsg(target, false);
 	}
 	else if (type == "App") {
 		string group = qm.at("group");
 		string code = qm.at("code");
-		mirai->send_app(group, code);
+		g_mirai->send_app(group, code);
 	}
 	else if (type == "sendPacket") {
 		string code = qm.at("packet");
-		mirai->SendPacket(code);
+		g_mirai->SendPacket(code);
 	}
 	return true;
 }
@@ -284,7 +284,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 	QMessageBox::StandardButton Choosedbtn;
 	if (type == "information") {
 		Choosedbtn = QMessageBox::information(
-			window,
+			g_main_window,
 			helper::stdString2QString(title),
 			helper::stdString2QString(content),
 			btn);
@@ -292,7 +292,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 	//询问
 	else if (type == "question") {
 		Choosedbtn = QMessageBox::question(
-			window,
+			g_main_window,
 			helper::stdString2QString(title),
 			helper::stdString2QString(content),
 			btn);
@@ -300,7 +300,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 	//警告
 	else if (type == "warning") {
 		Choosedbtn = QMessageBox::warning(
-			window,
+			g_main_window,
 			helper::stdString2QString(title),
 			helper::stdString2QString(content),
 			btn);
@@ -308,7 +308,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 	//错误
 	else if (type == "critical") {
 		Choosedbtn = QMessageBox::critical(
-			window,
+			g_main_window,
 			helper::stdString2QString(title),
 			helper::stdString2QString(content),
 			btn);
@@ -455,7 +455,7 @@ lua_State* InitLua() {
 		.addFunction("error", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->error(msg); }))
 		.addFunction("error", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->warn(msg); }))
 		.endClass()
-		.addFunction("GetVersion", std::function([](lua_State* L) { return version; }))
+		.addFunction("GetVersion", std::function([](lua_State* L) { return g_VERSION; }))
 		.addFunction("SendGroupMsg", &SendGroupMsg)
 		.addFunction("SendAllGroupMsg", &SendAllGroupMsg)
 		.addFunction("RecallMsg", &RecallMsg)
@@ -469,7 +469,7 @@ lua_State* InitLua() {
 		.addFunction("RegisterCommand", &RegisterCommand)
 
 		.addFunction("RunCommand", &RunCommand)
-		.addFunction("GetServerStatus", std::function([](lua_State* L) { return server->getStarted(); }))
+		.addFunction("GetServerStatus", std::function([](lua_State* L) { return g_server->getStarted(); }))
 
 		.addFunction("QueryInfo", &QueryInfo)
 		.addFunction("Unbind", &UnbindXbox)

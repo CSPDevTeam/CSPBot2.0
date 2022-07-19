@@ -81,10 +81,10 @@ void CSPBot::slotConnected(mTime getTime) { mGetTime = getTime; }
 
 //手动连接Mirai
 void CSPBot::slotConnectMirai() {
-	if (mirai->logined == false) {
+	if (g_mirai->logined == false) {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在连接Mirai...");
 		insertLog(helper::stdString2QString(formatLog));
-		mirai->connectMirai();
+		g_mirai->connectMirai();
 	}
 	else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在已处于已连接状态.");
@@ -94,14 +94,14 @@ void CSPBot::slotConnectMirai() {
 
 //手动断开Mirai
 void CSPBot::slotDisConnectMirai() {
-	if (mirai->logined == false) {
+	if (g_mirai->logined == false) {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在未处于已连接状态.");
 		insertLog(helper::stdString2QString(formatLog));
 	}
 	else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在断开Mirai...");
 		insertLog(helper::stdString2QString(formatLog));
-		wsc->shutdown();
+		g_wsc->shutdown();
 	}
 }
 
@@ -138,7 +138,7 @@ void CSPBot::slotTimerFunc() {
 	ui.websocketConnectedTime->setText(helper::stdString2QString(minFormat));
 
 	//////// Mirai ////////
-	if (mirai->logined) {
+	if (g_mirai->logined) {
 		ui.websocketStatus->setText("状态: 已连接");
 	}
 	else {
@@ -161,7 +161,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	//设置无边框
 	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 	this->setAttribute(Qt::WA_TranslucentBackground);
-	this->setWindowTitle("CSPBot v" + helper::stdString2QString(version));
+	this->setWindowTitle("CSPBot v" + helper::stdString2QString(g_VERSION));
 	//设置窗口阴影
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
 	shadow_effect->setOffset(0, 0);
@@ -199,7 +199,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 
 	//////// Basic ////////
 	//绑定版本号到标签
-	ui.version->setText("V" + helper::stdString2QString(version));
+	ui.version->setText("V" + helper::stdString2QString(g_VERSION));
 
 	//////// Bind ////////
 	//注册并绑定
@@ -251,15 +251,15 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	connect(this, SIGNAL(signalDebug()), this, SLOT(slotDebug()));
 
 	//////// Mirai ////////
-	mirai = new Mirai();
-	mirai->start();
-	connect(mirai, SIGNAL(setUserImages(QString, QString)), this, SLOT(setUserImage(QString, QString)));
-	connect(mirai, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
-	connect(mirai, SIGNAL(signalConnect(mTime)), this, SLOT(slotConnected(mTime)));
-	connect(mirai, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
-	connect(mirai, SIGNAL(signalMiraiMessageBox()), this, SLOT(slotMiraiMessageBox()));
-	connect(mirai, SIGNAL(sendServerCommand(QString)), this, SLOT(slotSendCommand(QString)));
-	connect(mirai, SIGNAL(packetCallback(QString)), this, SLOT(slotPacketCallback(QString)));
+	g_mirai = new Mirai();
+	g_mirai->start();
+	connect(g_mirai, SIGNAL(setUserImages(QString, QString)), this, SLOT(setUserImage(QString, QString)));
+	connect(g_mirai, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
+	connect(g_mirai, SIGNAL(signalConnect(mTime)), this, SLOT(slotConnected(mTime)));
+	connect(g_mirai, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
+	connect(g_mirai, SIGNAL(signalMiraiMessageBox()), this, SLOT(slotMiraiMessageBox()));
+	connect(g_mirai, SIGNAL(sendServerCommand(QString)), this, SLOT(slotSendCommand(QString)));
+	connect(g_mirai, SIGNAL(packetCallback(QString)), this, SLOT(slotPacketCallback(QString)));
 
 	/////// Other /////////
 	ui.inputCmd->setEnabled(false);
@@ -268,10 +268,10 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	ui.forceStop->setEnabled(false);
 	ui.ServerLog->setReadOnly(true);
 	ui.botconsole->setReadOnly(true);
-	commandApi = new CommandAPI();
-	connect(commandApi, SIGNAL(signalStartServer()), this, SLOT(startServer()));
-	connect(commandApi, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
-	connect(commandApi, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
+	g_cmd_api = new CommandAPI();
+	connect(g_cmd_api, SIGNAL(signalStartServer()), this, SLOT(startServer()));
+	connect(g_cmd_api, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
+	connect(g_cmd_api, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
 	/////// timer /////////
 	QTimer* timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc()));
@@ -479,10 +479,10 @@ void CSPBot::on_actionClose_triggered() {
 }
 
 bool CSPBot::checkClose() {
-	if (server != nullptr && server->getStarted()) {
+	if (g_server != nullptr && g_server->getStarted()) {
 		auto temp = QMessageBox::warning(this, "警告", "服务器还在运行，你是否要关闭?", QMessageBox::Yes | QMessageBox::No);
 		if (temp == QMessageBox::Yes) {
-			server->forceStopServer();
+			g_server->forceStopServer();
 			Callbacker cbe(EventCode::onStop);
 			if (cbe.callback()) {
 				return true;
@@ -501,15 +501,15 @@ bool CSPBot::checkClose() {
 ///////////////////////////////////////////// Server /////////////////////////////////////////////
 //构造Server
 void CSPBot::buildServer(int mode) {
-	server = new Server(mode, this);
+	g_server = new Server(mode, this);
 	//绑定检测器
-	connect(server, SIGNAL(insertBDSLog(QString)), this, SLOT(slotInsertBDSLog(QString)));
-	connect(server, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
-	connect(server, SIGNAL(chenableForce(bool)), this, SLOT(slotChenableForce(bool)));
-	connect(server, SIGNAL(chLabel(QString, QString)), this, SLOT(slotChLabel(QString, QString)));
-	connect(server, SIGNAL(changeStatus(bool)), this, SLOT(slotChangeStatus(bool)));
+	connect(g_server, SIGNAL(insertBDSLog(QString)), this, SLOT(slotInsertBDSLog(QString)));
+	connect(g_server, SIGNAL(OtherCallback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
+	connect(g_server, SIGNAL(chenableForce(bool)), this, SLOT(slotChenableForce(bool)));
+	connect(g_server, SIGNAL(chLabel(QString, QString)), this, SLOT(slotChLabel(QString, QString)));
+	connect(g_server, SIGNAL(changeStatus(bool)), this, SLOT(slotChangeStatus(bool)));
 	//启动Server
-	server->run();
+	g_server->run();
 }
 
 //插入BDS日志
@@ -586,7 +586,7 @@ void CSPBot::slotChLabel(QString title, QString content) {
 	if (title == "world") {
 		ui.ServerWorld->setText("世界:" + content);
 	}
-	else if (title == "version") {
+	else if (title == "g_VERSION") {
 		ui.ServerVersion->setText("版本:" + content);
 	}
 	else if (title == "difficult") {
@@ -632,7 +632,7 @@ void CSPBot::startCmd() {
 
 //关闭服务器
 void CSPBot::stopServer() {
-	server->stopServer();
+	g_server->stopServer();
 	slotInsertBDSLog("[CSPBot] 已向进程发出终止命令");
 	// ui.stop->setEnabled(false);
 	// ui.start->setEnabled(true);
@@ -642,7 +642,7 @@ void CSPBot::stopServer() {
 void CSPBot::forceStopServer() {
 	auto temp = QMessageBox::warning(this, "警告", "服务器还在运行，你是否要强制停止?", QMessageBox::Yes | QMessageBox::No);
 	if (temp == QMessageBox::Yes) {
-		server->forceStopServer();
+		g_server->forceStopServer();
 		ui.ServerLog->append("[CSPBot] 已向进程发出强制终止命令");
 	}
 }
@@ -656,14 +656,14 @@ void CSPBot::insertCmd() {
 		string cmd = helper::QString2stdString(ui.inputCmd->text());
 		if (cmd != "") {
 			ui.inputCmd->setText("");
-			server->sendCmd(cmd + "\n");
+			g_server->sendCmd(cmd + "\n");
 		}
 	}
 	catch (...) {
 	}
 }
 
-void CSPBot::slotSendCommand(QString cmd) { server->sendCmd(helper::QString2stdString(cmd)); }
+void CSPBot::slotSendCommand(QString cmd) { g_server->sendCmd(helper::QString2stdString(cmd)); }
 
 ///////////////////////////////////////////// Debug /////////////////////////////////////////////
 void CSPBot::slotDebug() {
@@ -916,6 +916,6 @@ void CSPBot::InitPluginTableView() {
 
 void CSPBot::showAbout() {
 	string text = "CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
-	text = fmt::format(text, version);
+	text = fmt::format(text, g_VERSION);
 	QMessageBox::about(this, "关于CSPBot", helper::stdString2QString(text));
 }
