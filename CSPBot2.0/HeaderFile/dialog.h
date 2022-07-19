@@ -28,6 +28,8 @@ private:
 	void mouseReleaseEvent(QMouseEvent*);
 	QPoint mousePosition;
 	bool isMousePressed;
+
+	void CDialog::setGraphics(QWidget* bt); //阴影设置
 	
 	void changeIconStatus(); //设置图标状态
 	diaLogStatus sStatus; //图标状态

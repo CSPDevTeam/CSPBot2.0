@@ -156,7 +156,7 @@ padding-right:10px;
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:0;
-background-color:#fff</string>
+background-color: transparent;</string>
     </property>
     <property name="text">
      <string/>
@@ -179,7 +179,7 @@ background-color:#fff</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:0;
-background-color:#fff</string>
+background-color: transparent;</string>
     </property>
     <property name="text">
      <string/>
@@ -202,7 +202,7 @@ background-color:#fff</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:0;
-background-color:#fff</string>
+background-color: transparent;</string>
     </property>
     <property name="text">
      <string/>

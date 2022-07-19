@@ -5,6 +5,8 @@
 #include <QGraphicsDropShadowEffect>
 #include <qevent.h>
 
+using namespace std;
+
 CDialog::CDialog(diaLogStatus status, QWidget* parent){
 	dialogUi.setupUi(this);
 	sStatus = status; //存储状态
@@ -22,12 +24,28 @@ CDialog::CDialog(diaLogStatus status, QWidget* parent){
 	dialogUi.background->setGraphicsEffect(shadow_effect);
 	changeIconStatus(); //改变图标
 	QApplication::beep();
+	//阴影设置
+	vector<QWidget*> buttons = {
+		dialogUi.pushButton,
+		dialogUi.content,
+	};
+	for (auto bt : buttons) {
+		setGraphics(bt);
+	}
 	//绑定事件
 	connect(dialogUi.pushButton, &QPushButton::clicked, this, &QDialog::close);
 }
 
 CDialog::~CDialog() {
 	
+}
+
+void CDialog::setGraphics(QWidget* bt) {
+	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
+	shadow_effect->setOffset(0, 0);
+	shadow_effect->setColor(Qt::gray);
+	shadow_effect->setBlurRadius(8);
+	bt->setGraphicsEffect(shadow_effect);
 }
 
 //设置标题
@@ -49,12 +67,15 @@ void CDialog::changeIconStatus() {
 	switch (sStatus) {
 	case info:
 		dialogUi.infoStatus->setHidden(false);
+		setGraphics(dialogUi.infoStatus);
 		break;
 	case warn:
 		dialogUi.warnStatus->setHidden(false);
+		setGraphics(dialogUi.warnStatus);
 		break;
 	case error:
 		dialogUi.errorStatus->setHidden(false);
+		setGraphics(dialogUi.errorStatus);
 		break;
 	default:
 		dialogUi.content->setGeometry(QRect(10, 40, 361, 121));
