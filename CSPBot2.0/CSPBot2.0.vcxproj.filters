@@ -406,9 +406,6 @@
     <ClInclude Include="lua\lzio.h">
       <Filter>Header File\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFile\lua_api.h">
-      <Filter>Header File\Plugins</Filter>
-    </ClInclude>
     <ClInclude Include="Yaml\collectionstack.h">
       <Filter>Header File\Yaml</Filter>
     </ClInclude>

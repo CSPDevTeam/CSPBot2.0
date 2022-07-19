@@ -568,7 +568,7 @@ string fmtConsole::FmtGroupRegular(
 }
 
 QString fmtConsole::getColoredLine(string line) {
-	QString qline = helper::stdString2QString(line);
+	QString qline = QString::fromStdString(line);
 	try {
 		if (YAML::LoadFile("config/config.yml")["ConsoleColor"].as<bool>()) {
 			qline = qline.replace("<", "&lt;");
@@ -581,7 +581,7 @@ QString fmtConsole::getColoredLine(string line) {
 				QString rgbcolor = color.cap(0);
 				//提取color
 				rgbcolor = rgbcolor.replace("\033[38;2;", "").replace("m", "").replace(";", ",");
-				QString hexColor = helper::stdString2QString(RGBToHex::rgb(helper::QString2stdString(rgbcolor)));
+				QString hexColor = QString::fromStdString(RGBToHex::rgb(rgbcolor.toStdString()));
 				qline = qline.replace(color.cap(0), "<font color=\"" + hexColor + "\" style=\"white-space: pre-wrap\">");
 			}
 
@@ -626,12 +626,12 @@ QString fmtConsole::getColoredLine(string line) {
 		}
 		else {
 			regex pattern("\033\\[(.+?)m");
-			qline = helper::stdString2QString(regex_replace(line, pattern, ""));
+			qline = QString::fromStdString(regex_replace(line, pattern, ""));
 		}
 	}
 	catch (...) {
 		regex pattern("\033\\[(.+?)m");
-		qline = helper::stdString2QString(regex_replace(line, pattern, ""));
+		qline = QString::fromStdString(regex_replace(line, pattern, ""));
 	}
 	return qline;
 }
@@ -641,7 +641,8 @@ void LoggerReader::run() {
 	while (true) {
 		if (!g_queue.empty()) {
 			try {
-				QString mLog = g_queue.dequeue();
+				QString mLog = QString::fromStdString(g_queue.front());
+				g_queue.pop();
 				emit updateLog(mLog);
 			}
 			catch (...) {

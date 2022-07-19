@@ -9,12 +9,15 @@
 #include <logger.h>
 #include <plugins.h>
 #include <fstream>
+#include <global.h>
 
 #pragma comment(lib, "dbghelp.lib")
 
 using namespace std;
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
 Logger logger("CSPBot");
+Logger serverLogger("Server");
+Logger mirai_logger("Mirai");
 
 string getConfig(string key) {
 	std::ifstream fin("config/config.yml", ios::in);
@@ -59,6 +62,13 @@ string checkConfigfull() {
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
+void ShowError(const QString& msg) {
+	QMessageBox::critical(g_main_window, "严重错误", msg, QMessageBox::Yes, QMessageBox::Yes);
+}
+
+void ShowError(const char* msg) {
+	QMessageBox::critical(g_main_window, "严重错误", msg, QMessageBox::Yes, QMessageBox::Yes);
+}
 
 int main(int argc, char* argv[]) {
 	QApplication a(argc, argv);
@@ -89,39 +99,41 @@ int main(int argc, char* argv[]) {
 		hasFont = true;
 	};
 
-	CSPBot* window = new CSPBot;
+	g_main_window = new CSPBot;
 	//展示窗口
-	window->show();
-	window->publicStartLogger();
+	g_main_window->show();
+	g_main_window->publicStartLogger();
 
 	try {
 		//检测文件完整性
 		string f = checkConfigfull();
 		if (f != "success.") {
-			QMessageBox::critical(window, "严重错误", "配置文件不完整\n缺少:" + helper::stdString2QString(f) + "文件", QMessageBox::Yes, QMessageBox::Yes);
+			ShowError(QString::fromStdString("配置文件不完整\n缺少:") + f.c_str() + "文件");
 			return 1;
 		}
 	}
-	catch (const std::exception&) {
+	catch (const std::exception& e) {
+		ShowError(e.what());
 	}
 
 	//检测文件版本
 	switch (checkConfigVersion()) {
 	case 1:
-		QMessageBox::critical(window, "严重错误", "配置文件版本过低,请检查", QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::critical(g_main_window, "严重错误", "配置文件版本过低,请检查", QMessageBox::Yes, QMessageBox::Yes);
 		return 1;
 	case 2:
-		QMessageBox::critical(window, "严重错误", "无法初始化配置，请检查config/config.yml文件是否正常", QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::critical(g_main_window, "严重错误", "无法初始化配置，请检查config/config.yml文件是否正常", QMessageBox::Yes, QMessageBox::Yes);
 		return 1;
 	default:
 		break;
 	}
 
+	g_lua_State = InitLua();
 	LoadPlugin();
 
 	//未安装字体提示
 	if (!hasFont) {
-		QMessageBox::information(window, "提示", "缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体", QMessageBox::Yes, QMessageBox::Yes);
+		QMessageBox::information(g_main_window, "提示", "缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体", QMessageBox::Yes, QMessageBox::Yes);
 	}
 	return a.exec();
 }

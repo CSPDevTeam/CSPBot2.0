@@ -58,7 +58,7 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 	string text = "CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
 	text = fmt::format(text, fileName);
 	msgBox.setWindowTitle("严重错误");
-	msgBox.setText(helper::stdString2QString(text));
+	msgBox.setText(QString::fromStdString(text));
 	msgBox.exec();
 
 	return EXCEPTION_EXECUTE_HANDLER;

@@ -120,7 +120,7 @@ bool SetListener(const string& eventName, const luabridge::LuaRef& func, lua_Sta
 
 string MotdJE(const string& host, lua_State* L) {
 	QRegExp r("(\\w.+):(\\w+)");
-	int r_pos = r.indexIn(helper::stdString2QString(host));
+	int r_pos = r.indexIn(QString::fromStdString(host));
 	if (r_pos > -1) {
 		return Motd::motdje(host);
 	}
@@ -130,7 +130,7 @@ string MotdJE(const string& host, lua_State* L) {
 }
 string MotdBE(const string& host, lua_State* L) {
 	QRegExp r("(\\w.+):(\\w+)");
-	int r_pos = r.indexIn(helper::stdString2QString(host));
+	int r_pos = r.indexIn(QString::fromStdString(host));
 	if (r_pos > -1) {
 		return Motd::motdbe(host);
 	}
@@ -285,32 +285,32 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 	if (type == "information") {
 		Choosedbtn = QMessageBox::information(
 			g_main_window,
-			helper::stdString2QString(title),
-			helper::stdString2QString(content),
+			QString::fromStdString(title),
+			QString::fromStdString(content),
 			btn);
 	}
 	//询问
 	else if (type == "question") {
 		Choosedbtn = QMessageBox::question(
 			g_main_window,
-			helper::stdString2QString(title),
-			helper::stdString2QString(content),
+			QString::fromStdString(title),
+			QString::fromStdString(content),
 			btn);
 	}
 	//警告
 	else if (type == "warning") {
 		Choosedbtn = QMessageBox::warning(
 			g_main_window,
-			helper::stdString2QString(title),
-			helper::stdString2QString(content),
+			QString::fromStdString(title),
+			QString::fromStdString(content),
 			btn);
 	}
 	//错误
 	else if (type == "critical") {
 		Choosedbtn = QMessageBox::critical(
 			g_main_window,
-			helper::stdString2QString(title),
-			helper::stdString2QString(content),
+			QString::fromStdString(title),
+			QString::fromStdString(content),
 			btn);
 	}
 	//未知
@@ -411,8 +411,9 @@ bool LoadPlugin() {
 	//加载文件
 	try {
 		logger.info("Start Loading Plugins...");
+		if (!fs::exists(PLUGIN_PATH))
+			fs::create_directories(PLUGIN_PATH);
 		for (auto& info : fs::directory_iterator(PLUGIN_PATH)) {
-			string filename = info.path().filename().u8string();
 			if (info.path().extension() == ".lua") {
 				string name(info.path().stem().u8string());
 
@@ -429,9 +430,9 @@ bool LoadPlugin() {
 					else {
 						logger.error("Fail to load the plugin {}!", name);
 					}
-					Callbacker cbe(EventCode::onImport);
-					cbe.insert("name", name);
-					cbe.callback();
+					// Callbacker cbe(EventCode::onImport);
+					// cbe.insert("name", name);
+					// cbe.callback();
 					logger.info("Plugin {} Loaded.", name);
 				}
 			}

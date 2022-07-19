@@ -242,7 +242,6 @@
     <ClInclude Include="lua\lvm.h" />
     <ClInclude Include="lua\lzio.h" />
     <ClInclude Include="ResourceFile\resource.h" />
-    <ClInclude Include="HeaderFile\lua_api.h" />
     <ClInclude Include="Yaml\collectionstack.h" />
     <ClInclude Include="Yaml\contrib\graphbuilderadapter.h" />
     <ClInclude Include="Yaml\directives.h" />

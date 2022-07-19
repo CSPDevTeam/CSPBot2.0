@@ -8,18 +8,18 @@
 // third-party
 #include <FMT/chrono.h>
 
-std::string getConfig(std::string key);
+string getConfig(string key);
 
 class Logger {
 public:
-	inline Logger(std::string moduleName) {
+	inline Logger(string moduleName) {
 		Module = moduleName;
 	}
 
 	template <typename... Args>
-	inline void info(std::string msg, const Args&... args) {
+	inline void info(string msg, const Args&... args) {
 		try {
-			std::string str = fmt::format(msg, args...);
+			string str = fmt::format(msg, args...);
 			if (getLevel() <= 2) {
 				pushToQueue(
 					"<font color = \"#008000\">" + getTime() + " I/" + Module + ": " + str + "\n</font>");
@@ -33,9 +33,9 @@ public:
 		}
 	};
 	template <typename... Args>
-	inline void error(std::string msg, const Args&... args) {
+	inline void error(string msg, const Args&... args) {
 		try {
-			std::string str = fmt::format(msg, args...);
+			string str = fmt::format(msg, args...);
 			if (getLevel() <= 4) {
 				pushToQueue(
 					"<font color = \"#FF0000\">" + getTime() + " E/" + Module + ": " + str + "\n</font>");
@@ -49,9 +49,9 @@ public:
 		}
 	};
 	template <typename... Args>
-	inline void warn(std::string msg, const Args&... args) {
+	inline void warn(string msg, const Args&... args) {
 		try {
-			std::string str = fmt::format(msg, args...);
+			string str = fmt::format(msg, args...);
 			if (getLevel() <= 3) {
 				pushToQueue(
 					"<font color = \"#FFCC66\">" + getTime() + " W/" + Module + ": " + str + "\n</font>");
@@ -65,9 +65,9 @@ public:
 		}
 	};
 	template <typename... Args>
-	inline void debug(std::string msg, const Args&... args) {
+	inline void debug(string msg, const Args&... args) {
 		try {
-			std::string str = fmt::format(msg, args...);
+			string str = fmt::format(msg, args...);
 			if (getLevel() <= 1) {
 				pushToQueue(
 					"<font color = \"#6699FF\">" + getTime() + " D/" + Module + ": " + str + "\n</font>");
@@ -82,21 +82,21 @@ public:
 	};
 
 	//获取格式化时间
-	inline static std::string getTime() {
+	inline static string getTime() {
 		time_t tt = time(NULL);
 		struct tm* t = localtime(&tt);
 		std::ostringstream buffer;
-		std::string s = std::to_string(t->tm_sec);
+		string s = std::to_string(t->tm_sec);
 		if (s.length() == 1) {
 			s = "0" + s;
 		}
-		std::string timeString = fmt::format("{}-{}-{} {}:{}:{}", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, s);
+		string timeString = fmt::format("{}-{}-{} {}:{}:{}", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, s);
 		return timeString;
 	};
 
 private:
 	inline int getLevel() {
-		std::string level = getConfig("LoggerLevel");
+		string level = getConfig("LoggerLevel");
 		if (level == "!failed!") {
 			level = "debug";
 		}
@@ -114,18 +114,18 @@ private:
 		}
 	};
 
-	inline void pushToQueue(std::string log) {
-		g_queue.enqueue(helper::stdString2QString(log));
+	inline void pushToQueue(const string& log) {
+		g_queue.push(log);
 	};
 
-	std::string Module = "";
+	string Module = "";
 };
 
 namespace fmtConsole {
-std::string getCPUUsed();
-std::string FmtConsoleRegular(std::string cmd);
-std::string FmtGroupRegular(messagePacket message, std::string cmd);
-QString getColoredLine(std::string line);
+string getCPUUsed();
+string FmtConsoleRegular(string cmd);
+string FmtGroupRegular(messagePacket message, string cmd);
+QString getColoredLine(string line);
 } // namespace fmtConsole
 
 class LoggerReader : public QThread {

@@ -13,8 +13,6 @@
 using namespace std;
 
 string getConfig(string key);
-//构建Client
-Logger mirai_logger("Mirai");
 int sendMsg = 0, reciveMsg = 0; //收发消息
 
 // API
@@ -155,14 +153,14 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 		else {
 			regular_from = regularFrom::console;
 		};
-		Regular regular = {helper::stdString2QString(mRegular), helper::stdString2QString(Action), regular_action, regular_from, Permissions};
+		Regular regular = {QString::fromStdString(mRegular), QString::fromStdString(Action), regular_action, regular_from, Permissions};
 		//推入vector
 		regularList.push_back(regular);
 	}
 	//使用正则组
 	for (Regular i : regularList) {
 		QRegExp r(i.regular);
-		int r_pos = r.indexIn(helper::stdString2QString(message.message));
+		int r_pos = r.indexIn(QString::fromStdString(message.message));
 		// bool qqAdmin = std::find(config["admin"].begin(), config["admin"].end(), message.qqNum) != config["admin"].end();
 		bool qqAdmin = false;
 		for (auto j : config["admin"]) {
@@ -176,17 +174,14 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 		if (r_pos > -1 && i.from == regularFrom::group && (i.permission == false || (i.permission == true && qqAdmin))) {
 			int num = 0;
 			for (auto& replace : r.capturedTexts()) {
-				i.action = helper::stdString2QString(
-					helper::replace(helper::QString2stdString(i.action),
-						"$" + std::to_string(num),
-						helper::QString2stdString(replace)));
+				i.action = QString::fromStdString(helper::replace(i.action.toStdString(), "$" + std::to_string(num), replace.toStdString()));
 				num++;
 			}
 			//执行操作
-			string cmd = fmtConsole::FmtGroupRegular(message, helper::QString2stdString(i.action));
+			string cmd = fmtConsole::FmtGroupRegular(message, i.action.toStdString());
 			if (i.type == regularAction::Console) {
 				string fCmd = cmd + "\n";
-				emit sendServerCommand(helper::stdString2QString(fCmd));
+				emit sendServerCommand(QString::fromStdString(fCmd));
 			}
 			else if (i.type == regularAction::Group) {
 				g_mirai->sendAllGroupMsg(cmd);
@@ -204,7 +199,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 	string syncId = msg_json["syncId"].get<string>();
 	emit updateSendRecive(sendMsg, reciveMsg); //更新
 	mirai_logger.debug(msg_json.dump());
-	emit packetCallback(helper::stdString2QString(msg));
+	emit packetCallback(QString::fromStdString(msg));
 	//登录包
 	if (syncId == "1") {
 		//设置UserImage
@@ -216,7 +211,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 		if (qqNum == "!failed!") {
 			qqNum = "0";
 		}
-		emit setUserImages(helper::stdString2QString(qqNum), helper::stdString2QString(qqNick));
+		emit setUserImages(QString::fromStdString(qqNum), QString::fromStdString(qqNick));
 	}
 	//发消息包
 	else if (syncId == "2") {

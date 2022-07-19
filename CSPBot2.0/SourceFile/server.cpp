@@ -17,7 +17,6 @@
 #include <qprocess.h>
 
 using namespace std;
-Logger serverLogger("Server");
 
 enum stopType : int {
 	normal,
@@ -56,7 +55,7 @@ bool Server::createServer() {
 		runProgress = "cmd.exe";
 	}
 
-	myChildProcess->start(helper::stdString2QString(runProgress));
+	myChildProcess->start(QString::fromStdString(runProgress));
 	if (myChildProcess->waitForStarted()) {
 		serverLogger.info("服务器启动成功,PID为:{}", myChildProcess->processId());
 		emit changeStatus(true);
@@ -64,7 +63,7 @@ bool Server::createServer() {
 		started = true;
 	}
 	else {
-		serverLogger.error("服务器启动失败,原因:{}", helper::QString2stdString(myChildProcess->errorString()));
+		serverLogger.error("服务器启动失败,原因:{}", myChildProcess->errorString().toStdString());
 	}
 
 	return true;
@@ -86,7 +85,7 @@ bool Server::forceStopServer() {
 
 //发送命令
 bool Server::sendCmd(string cmd) {
-	qDebug() << helper::stdString2QString(cmd);
+	qDebug() << QString::fromStdString(cmd);
 
 	//检测停止
 	if (cmd == getConfig("stopCmd") + "\n") {
@@ -107,7 +106,7 @@ bool Server::stopServer() {
 	if (stopCmd == "!failed!") {
 		stopCmd = "stop";
 	}
-	Server::sendCmd(+"\n");
+	Server::sendCmd(stopCmd + "\n");
 	normalStop = true;
 	return true;
 }
@@ -127,7 +126,7 @@ void Server::formatBDSLog(string line) {
 		string _line = helper::replace(i, "\n", "");
 		_line = helper::replace(_line, "\r", "");
 		if (_line != "") {
-			QString qline = helper::stdString2QString(_line);
+			QString qline = QString::fromStdString(_line);
 			QString coloredLine = fmtConsole::getColoredLine(_line);
 			if (coloredLine != "") {
 				emit insertBDSLog(coloredLine);
@@ -140,7 +139,7 @@ void Server::formatBDSLog(string line) {
 		string _line = helper::replace(i, "\n", "");
 		_line = helper::replace(_line, "\r", "");
 		if (_line != "") {
-			QString qline = helper::stdString2QString(_line);
+			QString qline = QString::fromStdString(_line);
 			catchInfo(qline);
 			selfCatchLine(qline);
 
@@ -159,7 +158,7 @@ void Server::receiver() {
 		string line = output;
 		formatBDSLog(line);
 	}
-	// emit insertBDSLog(helper::stdString2QString(output));
+	// emit insertBDSLog(output).c_str();
 	// formatBDSLog(output);
 }
 
@@ -175,8 +174,7 @@ bool Server::getStarted() {
 
 void Server::progressFinished(int exitCode) {
 	g_server->started = false;
-	emit insertBDSLog(
-		"[CSPBot] 进程已终止. 结束代码:" + helper::stdString2QString(to_string(exitCode)));
+	emit insertBDSLog("[CSPBot] 进程已终止. 结束代码:" + QString::number(exitCode));
 	emit OtherCallback("onServerStop");
 	emit changeStatus(false);
 	emit chenableForce(false);
@@ -208,26 +206,26 @@ void Server::catchInfo(QString line) {
 		emit chLabel("world", world.cap(1));
 	}
 	else if (version_pos > -1) {
-		string version_raw = helper::QString2stdString(version.cap(1));
+		string version_raw = version.cap(1).toStdString();
 		if (version_raw.find('(') != string::npos) {
 			QRegExp version_R("(.+)\\(");
-			int version_R_pos = version_R.indexIn(helper::stdString2QString(version_raw));
+			int version_R_pos = version_R.indexIn(QString::fromStdString(version_raw));
 			if (version_R_pos > -1) {
-				version_raw = helper::QString2stdString(version_R.cap(1));
+				version_raw = version_R.cap(1).toStdString();
 			}
 		}
 		string version_string = version_raw;
-		emit chLabel("g_VERSION", helper::stdString2QString(version_string));
+		emit chLabel("g_VERSION", QString::fromStdString(version_string));
 	}
 	else if (pid_pos > -1) {
-		QString msg = helper::stdString2QString("[CSPBot] 提示:已有一个PID为") + PID.cap(1) + helper::stdString2QString("的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
+		QString msg = "[CSPBot] 提示:已有一个PID为" + PID.cap(1) + "的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)";
 		emit insertBDSLog(msg);
 	}
 	else if (difficult_pos > -1) {
 		emit chLabel("difficult", Difficult.cap(2));
 	}
 	else if (join_pos > -1) {
-		Bind::bindXuid(helper::QString2stdString(Join.cap(1)), helper::QString2stdString(Join.cap(2)));
+		Bind::bindXuid(Join.cap(1).toStdString(), Join.cap(2).toStdString());
 	}
 }
 
@@ -247,7 +245,7 @@ void Server::selfCatchLine(QString line) {
 		string From = i["From"].as<string>();
 		bool Permissions = i["Permissions"].as<bool>();
 
-		QRegExp r(helper::stdString2QString(Regular));
+		QRegExp r(QString::fromStdString(Regular));
 		int r_pos = r.indexIn(line);
 		// qDebug() << line << r << r_pos;
 		//执行操作
@@ -255,7 +253,7 @@ void Server::selfCatchLine(QString line) {
 			string Action_type = Action.substr(0, 2);
 			int num = 0;
 			for (auto& replace : r.capturedTexts()) {
-				Action = helper::replace(Action, "$" + std::to_string(num), helper::QString2stdString(replace));
+				Action = helper::replace(Action, "$" + std::to_string(num), replace.toStdString());
 				num++;
 			}
 			if (Action_type == "<<") {

@@ -73,7 +73,7 @@ void CSPBot::slotUpdateSendRecive(int send, int recive) {
 		reciveString = "99+";
 	}
 	string reFormat = fmt::format("消息:{}发;{}收", sendString, reciveString);
-	ui.websocketMsg->setText(helper::stdString2QString(reFormat));
+	ui.websocketMsg->setText(QString::fromStdString(reFormat));
 }
 
 //更新连接时间
@@ -83,12 +83,12 @@ void CSPBot::slotConnected(mTime getTime) { mGetTime = getTime; }
 void CSPBot::slotConnectMirai() {
 	if (g_mirai->logined == false) {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在连接Mirai...");
-		insertLog(helper::stdString2QString(formatLog));
+		insertLog(QString::fromStdString(formatLog));
 		g_mirai->connectMirai();
 	}
 	else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在已处于已连接状态.");
-		insertLog(helper::stdString2QString(formatLog));
+		insertLog(QString::fromStdString(formatLog));
 	}
 }
 
@@ -96,11 +96,11 @@ void CSPBot::slotConnectMirai() {
 void CSPBot::slotDisConnectMirai() {
 	if (g_mirai->logined == false) {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在未处于已连接状态.");
-		insertLog(helper::stdString2QString(formatLog));
+		insertLog(QString::fromStdString(formatLog));
 	}
 	else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在断开Mirai...");
-		insertLog(helper::stdString2QString(formatLog));
+		insertLog(QString::fromStdString(formatLog));
 		g_wsc->shutdown();
 	}
 }
@@ -135,7 +135,7 @@ void CSPBot::slotTimerFunc() {
 		minString = "99+";
 	}
 	string minFormat = fmt::format("连接时间:{}m", minString);
-	ui.websocketConnectedTime->setText(helper::stdString2QString(minFormat));
+	ui.websocketConnectedTime->setText(QString::fromStdString(minFormat));
 
 	//////// Mirai ////////
 	if (g_mirai->logined) {
@@ -161,7 +161,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	//设置无边框
 	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 	this->setAttribute(Qt::WA_TranslucentBackground);
-	this->setWindowTitle("CSPBot v" + helper::stdString2QString(g_VERSION));
+	this->setWindowTitle(QString("CSPBot v") + g_VERSION);
 	//设置窗口阴影
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
 	shadow_effect->setOffset(0, 0);
@@ -199,7 +199,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 
 	//////// Basic ////////
 	//绑定版本号到标签
-	ui.version->setText("V" + helper::stdString2QString(g_VERSION));
+	ui.version->setText(QString("V") + g_VERSION);
 
 	//////// Bind ////////
 	//注册并绑定
@@ -208,47 +208,47 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	qRegisterMetaType<StringVector>("StringVector");
 
 	//翻页按钮
-	connect(ui.mainPage, SIGNAL(clicked()), this, SLOT(switchPage()));
-	connect(ui.playerPage, SIGNAL(clicked()), this, SLOT(switchPage()));
-	connect(ui.regularPage, SIGNAL(clicked()), this, SLOT(switchPage()));
-	connect(ui.pluginPage, SIGNAL(clicked()), this, SLOT(switchPage()));
-	connect(ui.logPage, SIGNAL(clicked()), this, SLOT(switchPage()));
+	connect(ui.mainPage, &QPushButton::clicked, this, &CSPBot::switchPage);
+	connect(ui.playerPage, &QPushButton::clicked, this, &CSPBot::switchPage);
+	connect(ui.regularPage, &QPushButton::clicked, this, &CSPBot::switchPage);
+	connect(ui.pluginPage, &QPushButton::clicked, this, &CSPBot::switchPage);
+	connect(ui.logPage, &QPushButton::clicked, this, &CSPBot::switchPage);
 
 	//功能性按钮
-	connect(ui.close, SIGNAL(clicked()), this, SLOT(on_actionClose_triggered()));
-	connect(ui.min, SIGNAL(clicked()), this, SLOT(on_actionMinimize_triggered()));
-	connect(ui.about, SIGNAL(clicked()), this, SLOT(showAbout()));
+	connect(ui.close, &QPushButton::clicked, this, &CSPBot::on_actionClose_triggered);
+	connect(ui.min, &QPushButton::clicked, this, &CSPBot::on_actionMinimize_triggered);
+	connect(ui.about, &QPushButton::clicked, this, &CSPBot::showAbout);
 
 	//绑定事件
 	connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
-	connect(this, SIGNAL(signalStartServer()), this, SLOT(startServer()));
+	connect(this, SIGNAL(signalStartServer()), this, SLOT(startServer));
 
 	// Server类按钮
-	connect(ui.start, SIGNAL(clicked()), this, SLOT(startServer()));
-	connect(ui.stop, SIGNAL(clicked()), this, SLOT(stopServer()));
-	connect(ui.forceStop, SIGNAL(clicked()), this, SLOT(forceStopServer()));
-	connect(ui.clear, SIGNAL(clicked()), this, SLOT(clear_console()));
-	connect(ui.ServerCmd, SIGNAL(clicked()), this, SLOT(startCmd()));	   //绑定启动cmd
-	connect(ui.runCmd, SIGNAL(clicked()), this, SLOT(insertCmd()));		   //绑定运行命令
-	connect(this, SIGNAL(signalStartLogger()), this, SLOT(startLogger())); //开启Logger服务
+	connect(ui.start, &QPushButton::clicked, this, &CSPBot::startServer);
+	connect(ui.stop, &QPushButton::clicked, this, &CSPBot::stopServer);
+	connect(ui.forceStop, &QPushButton::clicked, this, &CSPBot::forceStopServer);
+	connect(ui.clear, &QPushButton::clicked, this, &CSPBot::clear_console);
+	connect(ui.ServerCmd, &QPushButton::clicked, this, &CSPBot::startCmd); //绑定启动cmd
+	connect(ui.runCmd, &QPushButton::clicked, this, &CSPBot::insertCmd);   //绑定运行命令
+	connect(this, &CSPBot::signalStartLogger, this, &CSPBot::startLogger); //开启Logger服务
 
 	//绑定快捷键
-	connect(this, SIGNAL(runCommand()), this, SLOT(insertCmd())); //绑定回车输入命令
-	connect(this, SIGNAL(runCmd()), ui.ServerCmd, SLOT(click())); //绑定启动cmd
+	connect(this, &CSPBot::runCommand, this, &CSPBot::insertCmd);	   //绑定回车输入命令
+	connect(this, &CSPBot::runCmd, ui.ServerCmd, &QPushButton::click); //绑定启动cmd
 
 	//机器人Console
-	connect(ui.consoleSave, SIGNAL(clicked()), this, SLOT(slotSaveConsole()));	  //保存日志
-	connect(ui.consoleClear, SIGNAL(clicked()), this, SLOT(slotClearConsole()));  //清空控制台
-	connect(ui.connect, SIGNAL(clicked()), this, SLOT(slotConnectMirai()));		  //连接Mirai
-	connect(ui.disConnect, SIGNAL(clicked()), this, SLOT(slotDisConnectMirai())); //断开连接
+	connect(ui.consoleSave, &QPushButton::clicked, this, &CSPBot::slotSaveConsole);	   //保存日志
+	connect(ui.consoleClear, &QPushButton::clicked, this, &CSPBot::slotClearConsole);  //清空控制台
+	connect(ui.connect, &QPushButton::clicked, this, &CSPBot::slotConnectMirai);	   //连接Mirai
+	connect(ui.disConnect, &QPushButton::clicked, this, &CSPBot::slotDisConnectMirai); //断开连接
 
 	//表格
 	connect(ui.regularAdmin, SIGNAL(pressed(QModelIndex)), this, SLOT(clickRegularTable(QModelIndex)));
 	connect(ui.regularAdmin, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickedRegularTable(QModelIndex)));
-	connect(ui.regularNew, SIGNAL(clicked()), this, SLOT(newRegular())); //新建正则按钮
+	connect(ui.regularNew, &QPushButton::clicked, this, &CSPBot::newRegular); //新建正则按钮
 
 	//////// Debug ////////
-	connect(this, SIGNAL(signalDebug()), this, SLOT(slotDebug()));
+	connect(this, &CSPBot::signalDebug, this, &CSPBot::slotDebug);
 
 	//////// Mirai ////////
 	g_mirai = new Mirai();
@@ -269,12 +269,12 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	ui.ServerLog->setReadOnly(true);
 	ui.botconsole->setReadOnly(true);
 	g_cmd_api = new CommandAPI();
-	connect(g_cmd_api, SIGNAL(signalStartServer()), this, SLOT(startServer()));
+	connect(g_cmd_api, SIGNAL(signalStartServer()), this, SLOT(startServer));
 	connect(g_cmd_api, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
 	connect(g_cmd_api, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
 	/////// timer /////////
 	QTimer* timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc()));
+	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc));
 	timer->start(1 * 1000);
 
 	/////// Table /////////
@@ -350,8 +350,7 @@ QPixmap PixmapToRound(QPixmap& src, int radius);
 
 void CSPBot::setUserImageError(QNetworkReply::NetworkError e) {
 	auto error = magic_enum::enum_name<QNetworkReply::NetworkError>(e);
-	Logger lo("Mirai");
-	lo.error("{}", error);
+	Logger("Mirai").error("{}", error);
 }
 
 void CSPBot::setUserImage(QString qqNum, QString qqNick) {
@@ -483,13 +482,13 @@ bool CSPBot::checkClose() {
 		auto temp = QMessageBox::warning(this, "警告", "服务器还在运行，你是否要关闭?", QMessageBox::Yes | QMessageBox::No);
 		if (temp == QMessageBox::Yes) {
 			g_server->forceStopServer();
-			Callbacker cbe(EventCode::onStop);
-			if (cbe.callback()) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			// Callbacker cbe(EventCode::onStop);
+			// if (cbe.callback()) {
+			//	return true;
+			// }
+			// else {
+			//	return false;
+			// }
 		}
 		else {
 			return false;
@@ -524,23 +523,23 @@ void CSPBot::slotInsertBDSLog(QString log) {
 bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 	// Python Callbacker
 	qDebug() << "CallBack:" << listener;
-	string eventName = helper::QString2stdString(listener);
-	auto event_code = magic_enum::enum_cast<EventCode>(eventName.c_str());
+	string eventName = listener.toStdString();
+	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code) {
 		return false;
 	}
 	EventCode ct = event_code.value();
-	Callbacker cb(ct);
-	for (auto& i : args) {
-		string key = i.first;
-		string value = i.second;
-		if (!helper::is_str_utf8(value.c_str())) {
-			return false;
-		}
-		cb.insert(key.c_str(), value);
-	}
-	bool ret = cb.callback();
-
+	// Callbacker cb(ct);
+	// for (auto& i : args) {
+	//	string key = i.first;
+	//	string value = i.second;
+	//	if (!helper::is_str_utf8(value.c_str())) {
+	//		return false;
+	//	}
+	//	cb.insert(key.c_str(), value);
+	// }
+	// bool ret = cb.callback();
+	bool ret = 0;
 	// Event Callbacker
 	EventCallbacker ecb(ct);
 	std::vector<string> args_;
@@ -552,23 +551,23 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 };
 
 void CSPBot::slotCommandCallback(QString cmd, StringVector fArgs) {
-	string type = helper::QString2stdString(cmd);
+	string type = cmd.toStdString();
 	if (command.find(type) != command.end()) {
 		luabridge::LuaRef args = luabridge::newTable(g_lua_State);
 		for (auto& i : fArgs) {
 			args.append(i.c_str());
 		}
-		command[type](args);
+		// command[type](args);
 	}
 }
 
 void CSPBot::slotPacketCallback(QString msg) {
-	string msgJson = helper::QString2stdString(msg);
+	string msgJson = msg.toStdString();
 	//转换为dict
-	Callbacker packetcbe(EventCode::onReceivePacket);
-	// TODO: convert to table
-	packetcbe.insert("msg", msgJson);
-	bool pakctecb = packetcbe.callback();
+	// Callbacker packetcbe(EventCode::onReceivePacket);
+	//// TODO: convert to table
+	// packetcbe.insert("msg", msgJson);
+	// bool pakctecb = packetcbe.callback();
 }
 
 //更改状态
@@ -653,7 +652,7 @@ void CSPBot::clear_console() { ui.ServerLog->setText(""); }
 //插入命令
 void CSPBot::insertCmd() {
 	try {
-		string cmd = helper::QString2stdString(ui.inputCmd->text());
+		string cmd = ui.inputCmd->text().toStdString();
 		if (cmd != "") {
 			ui.inputCmd->setText("");
 			g_server->sendCmd(cmd + "\n");
@@ -663,7 +662,7 @@ void CSPBot::insertCmd() {
 	}
 }
 
-void CSPBot::slotSendCommand(QString cmd) { g_server->sendCmd(helper::QString2stdString(cmd)); }
+void CSPBot::slotSendCommand(QString cmd) { g_server->sendCmd(cmd.toStdString()); }
 
 ///////////////////////////////////////////// Debug /////////////////////////////////////////////
 void CSPBot::slotDebug() {
@@ -720,11 +719,11 @@ void CSPBot::InitPlayerTableView() {
 			string playerName = i["playerName"].as<string>();
 			string xuid = i["xuid"].as<string>();
 			string qq = i["qq"].as<string>();
-			QStandardItem* item1 = new QStandardItem(helper::stdString2QString(playerName));
+			QStandardItem* item1 = new QStandardItem(QString::fromStdString(playerName));
 			item1->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item2 = new QStandardItem(helper::stdString2QString(xuid));
+			QStandardItem* item2 = new QStandardItem(QString::fromStdString(xuid));
 			item2->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item3 = new QStandardItem(helper::stdString2QString(qq));
+			QStandardItem* item3 = new QStandardItem(QString::fromStdString(qq));
 			item3->setTextAlignment(Qt::AlignCenter);
 			m_model->setItem(in, 0, item1);
 			m_model->setItem(in, 1, item2);
@@ -778,13 +777,13 @@ void CSPBot::InitRegularTableView() {
 			else if (!i["Permissions"].as<bool>()) {
 				Permissions = "否";
 			}
-			QStandardItem* item1 = new QStandardItem(helper::stdString2QString(Regular));
+			QStandardItem* item1 = new QStandardItem(QString::fromStdString(Regular));
 			item1->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item2 = new QStandardItem(helper::stdString2QString(From));
+			QStandardItem* item2 = new QStandardItem(QString::fromStdString(From));
 			item2->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item3 = new QStandardItem(helper::stdString2QString(Action));
+			QStandardItem* item3 = new QStandardItem(QString::fromStdString(Action));
 			item3->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item4 = new QStandardItem(helper::stdString2QString(Permissions));
+			QStandardItem* item4 = new QStandardItem(QString::fromStdString(Permissions));
 			item4->setTextAlignment(Qt::AlignCenter);
 			m_model->setItem(in, 0, item1);
 			m_model->setItem(in, 1, item2);
@@ -825,7 +824,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	for (int i = 0; i < 5; i++) {
 		QModelIndex index = modelViewOneUp->index(row, i);
 		QString name = modelViewOneUp->data(index).toString();
-		regularData.push_back(helper::QString2stdString(name));
+		regularData.push_back(name.toStdString());
 	}
 	string mRegular = regularData[0];
 	string mFrom = regularData[1];
@@ -858,7 +857,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 		regular_from = regularFrom::console;
 	};
 
-	Regular regular = {helper::stdString2QString(regularData[0]), helper::stdString2QString(regularData[2]), regular_action, regular_from, Permission};
+	Regular regular = {QString::fromStdString(regularData[0]), QString::fromStdString(regularData[2]), regular_action, regular_from, Permission};
 	regularEdit* regEdit = new regularEdit(regular, false, this);
 	regEdit->show();
 }
@@ -887,10 +886,10 @@ void CSPBot::InitPluginTableView() {
 		ui.pluginAdmin->setModel(m_model);
 		int in = 0;
 		for (auto& x : g_plugins) {
-			QStandardItem* item1 = new QStandardItem(helper::stdString2QString(x.name));
-			QStandardItem* item2 = new QStandardItem(helper::stdString2QString(x.description));
-			QStandardItem* item3 = new QStandardItem(helper::stdString2QString(x.version));
-			QStandardItem* item4 = new QStandardItem(helper::stdString2QString(x.author));
+			QStandardItem* item1 = new QStandardItem(QString::fromStdString(x.name));
+			QStandardItem* item2 = new QStandardItem(QString::fromStdString(x.description));
+			QStandardItem* item3 = new QStandardItem(QString::fromStdString(x.version));
+			QStandardItem* item4 = new QStandardItem(QString::fromStdString(x.author));
 
 			//居中文本
 			item1->setTextAlignment(Qt::AlignCenter);
@@ -917,5 +916,5 @@ void CSPBot::InitPluginTableView() {
 void CSPBot::showAbout() {
 	string text = "CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
 	text = fmt::format(text, g_VERSION);
-	QMessageBox::about(this, "关于CSPBot", helper::stdString2QString(text));
+	QMessageBox::about(this, "关于CSPBot", QString::fromStdString(text));
 }

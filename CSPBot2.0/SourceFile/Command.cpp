@@ -86,7 +86,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	else if (Action_Type == "motdbe") {
 		if (sp.size() > 2) {
 			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(helper::stdString2QString(sp[1]));
+			int r_pos = r.indexIn(QString::fromStdString(sp[1]));
 			if (r_pos > -1) {
 				string motd_respone = Motd::motdbe(sp[1]);
 				string fmt_respone;
@@ -104,7 +104,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	else if (Action_Type == "motdje") {
 		if (sp.size() > 2) {
 			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(helper::stdString2QString(sp[1]));
+			int r_pos = r.indexIn(QString::fromStdString(sp[1]));
 			if (r_pos > -1) {
 				string motd_respone = Motd::motdje(sp[1]);
 				string fmt_respone;
@@ -140,6 +140,6 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			}
 			num++;
 		}
-		emit signalCommandCallback(helper::stdString2QString(Action_Type), args);
+		emit signalCommandCallback(QString::fromStdString(Action_Type), args);
 	}
 }
