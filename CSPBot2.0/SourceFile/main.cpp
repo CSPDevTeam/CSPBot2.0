@@ -4,12 +4,12 @@
 #include <mysysinfo/mysysinfo.h>
 #include <QtWidgets/QApplication>
 #include <websocketClient.h>
-#include <QQueue>
 #include <framework.h>
 #include <logger.h>
 #include <plugins.h>
 #include <fstream>
 #include <global.h>
+#include <error.h>
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -62,18 +62,10 @@ string checkConfigfull() {
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
-void ShowError(const QString& msg) {
-	QMessageBox::critical(g_main_window, "严重错误", msg, QMessageBox::Yes, QMessageBox::Yes);
-}
-
-void ShowError(const char* msg) {
-	QMessageBox::critical(g_main_window, "严重错误", msg, QMessageBox::Yes, QMessageBox::Yes);
-}
-
 int main(int argc, char* argv[]) {
 	QApplication a(argc, argv);
 	QTextCodec* codec = QTextCodec::codecForName("UTF-8"); // GB2312也可以
-	QTextCodec::setCodecForLocale(codec);				   // 2
+	QTextCodec::setCodecForLocale(codec);
 	//展示ssl版本
 	qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
@@ -90,14 +82,8 @@ int main(int argc, char* argv[]) {
 
 	//加载字体
 	QFontDatabase database;
-	bool hasFont = false;
 	auto fontFamily = database.families();
-	if (std::find(
-			fontFamily.begin(),
-			fontFamily.end(),
-			"HarmonyOS Sans SC") != fontFamily.end()) {
-		hasFont = true;
-	};
+	bool hasFont = fontFamily.contains("HarmonyOS Sans SC");
 
 	g_main_window = new CSPBot;
 	//展示窗口
@@ -119,10 +105,10 @@ int main(int argc, char* argv[]) {
 	//检测文件版本
 	switch (checkConfigVersion()) {
 	case 1:
-		QMessageBox::critical(g_main_window, "严重错误", "配置文件版本过低,请检查", QMessageBox::Yes, QMessageBox::Yes);
+		ShowError("配置文件版本过低,请检查");
 		return 1;
 	case 2:
-		QMessageBox::critical(g_main_window, "严重错误", "无法初始化配置，请检查config/config.yml文件是否正常", QMessageBox::Yes, QMessageBox::Yes);
+		ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
 		return 1;
 	default:
 		break;
