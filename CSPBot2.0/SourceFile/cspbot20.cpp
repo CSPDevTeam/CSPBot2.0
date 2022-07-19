@@ -122,23 +122,34 @@ void CSPBot::slotTimerFunc() {
 	mTime nowTime = time(NULL);
 	int min;
 	string minString;
+	bool flag = true;
 	if (mGetTime == 0) {
 		min = 0;
 	}
 	else {
 		int f = nowTime - mGetTime;
 		if (f < 60) {
-			min = 0;
+			min = f%60;
+			flag = false;
 		}
 		else {
 			min = f / 60;
 		}
 	}
 	minString = to_string(min);
-	if (min > 99) {
-		minString = "99+";
+	if (flag) {
+		if (min > 99) {
+			minString = "99+m";
+		}
+		else {
+			minString = minString + "m";
+		}
 	}
-	string minFormat = fmt::format("连接时间:{}m", minString);
+	else {
+		minString = minString + "s";
+	}
+	//qDebug() << QString::fromStdString(minString);
+	string minFormat = fmt::format("连接时间:{}", minString);
 	ui.websocketConnectedTime->setText(QString::fromStdString(minFormat));
 
 	//////// Mirai ////////
@@ -225,7 +236,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 
 	//绑定事件
 	connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
-	connect(this, SIGNAL(signalStartServer()), this, SLOT(startServer));
+	connect(this, SIGNAL(signalStartServer()), this, SLOT(startServer()));
 
 	// Server类按钮
 	connect(ui.start, &QPushButton::clicked, this, &CSPBot::startServer);
@@ -273,12 +284,12 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	ui.ServerLog->setReadOnly(true);
 	ui.botconsole->setReadOnly(true);
 	g_cmd_api = new CommandAPI();
-	connect(g_cmd_api, SIGNAL(signalStartServer()), this, SLOT(startServer));
+	connect(g_cmd_api, SIGNAL(signalStartServer()), this, SLOT(startServer()));
 	connect(g_cmd_api, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
 	connect(g_cmd_api, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
 	/////// timer /////////
 	QTimer* timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc));
+	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc()));
 	timer->start(1 * 1000);
 
 	/////// Table /////////

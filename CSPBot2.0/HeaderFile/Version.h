@@ -6,12 +6,12 @@
 
 // Plugin Information, used in dllmain.cpp for register plugin
 #define PLUGIN_NAME                 "CSPBot v2"
-#define PLUGIN_INTRODUCTION         "A robot designed for BDS server owners"
+#define PLUGIN_INTRODUCTION         "CSPBot v2"
 #define PLUGIN_AUTHOR               "CSPBot-Developer-Team"
 #define PLUGIN_VERSION_MAJOR        2
 #define PLUGIN_VERSION_MINOR        0
 #define PLUGIN_VERSION_REVISION     3
-#define PLUGIN_VERSION_BUILD        0
+#define PLUGIN_VERSION_BUILD        1
 #define PLUGIN_VERSION_STATUS       PLUGIN_VERSION_BETA
 
 // File Version Information, used in Resource.rc
