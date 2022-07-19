@@ -103,7 +103,7 @@ bool WsClient::shutdown() {
 Mirai::Mirai() {
 	g_wsc = new WsClient();
 	connect(g_wsc, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
-	connect(g_wsc, SIGNAL(sigConnected(time_t)), this, SLOT(slotConnected(time_t)));
+	connect(g_wsc, SIGNAL(sigConnected(mTime)), this, SLOT(slotConnected(mTime)));
 	connect(g_wsc, SIGNAL(setUserImages(QString, QString)), this, SLOT(slotSetUserImages(QString, QString)));
 }
 
