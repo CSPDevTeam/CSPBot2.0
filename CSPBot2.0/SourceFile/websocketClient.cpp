@@ -1,19 +1,16 @@
-﻿//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//Self
+﻿// self
 #include <websocketClient.h>
 #include <global.h>
 #include <logger.h>
 #include <helper.h>
 #include <server.h>
-//third-party
+// third-party
 #include <qmessagebox.h>
 #include <qdebug.h>
-//system
+// system
 #include <string>
 
-
 using namespace std;
-
 
 string getConfig(string key);
 //构建Client
@@ -22,7 +19,7 @@ int sendMsg = 0, reciveMsg = 0; //收发消息
 
 // API
 bool Mirai::connectMirai() {
-	bool connected = mirai->login();
+	bool connected = g_mirai->login();
 	if (connected) {
 		mirai_logger.info("连接到Mirai成功");
 	}
@@ -31,18 +28,17 @@ bool Mirai::connectMirai() {
 		mirai_logger.error("无法连接到 Mirai");
 	}
 
-	mirai->botProfile();
+	g_mirai->botProfile();
 	return connected;
 }
-
 
 WsClient::WsClient() {
 	ws.OnTextReceived([](WebSocketClient& client, string msg) {
 		reciveMsg += 1;
-		mirai->onText(client, msg);
+		g_mirai->onText(client, msg);
 	});
-	ws.OnError([](WebSocketClient& client, string msg) { mirai->onError(client, msg); });
-	ws.OnLostConnection([](WebSocketClient& client, int code) { mirai->onLost(client, code); });
+	ws.OnError([](WebSocketClient& client, string msg) { g_mirai->onError(client, msg); });
+	ws.OnLostConnection([](WebSocketClient& client, int code) { g_mirai->onLost(client, code); });
 }
 
 int WsClient::getStatus() {
@@ -92,7 +88,7 @@ bool WsClient::shutdown() {
 	if (connected) {
 		try {
 			ws.Shutdown();
-			mirai->logined = false;
+			g_mirai->logined = false;
 			mirai_logger.warn("Mirai已断开连接");
 			reciveMsg = 0;
 			sendMsg = 0;
@@ -108,10 +104,10 @@ bool WsClient::shutdown() {
 }
 
 Mirai::Mirai() {
-	wsc = new WsClient();
-	connect(wsc, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
-	connect(wsc, SIGNAL(sigConnected(mTime)), this, SLOT(slotConnected(mTime)));
-	connect(wsc, SIGNAL(setUserImages(QString, QString)), this, SLOT(slotSetUserImages(QString, QString)));
+	g_wsc = new WsClient();
+	connect(g_wsc, SIGNAL(updateSendRecive(int, int)), this, SLOT(slotUpdateSendRecive(int, int)));
+	connect(g_wsc, SIGNAL(sigConnected(mTime)), this, SLOT(slotConnected(mTime)));
+	connect(g_wsc, SIGNAL(setUserImages(QString, QString)), this, SLOT(slotSetUserImages(QString, QString)));
 }
 
 void Mirai::run() {
@@ -193,10 +189,10 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 				emit sendServerCommand(helper::stdString2QString(fCmd));
 			}
 			else if (i.type == regularAction::Group) {
-				mirai->sendAllGroupMsg(cmd);
+				g_mirai->sendAllGroupMsg(cmd);
 			}
 			else {
-				commandApi->CustomCmd(cmd, message.group);
+				g_cmd_api->CustomCmd(cmd, message.group);
 			}
 		}
 	}
@@ -261,7 +257,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 		}
 		//事件处理(群成员改名)
 		else if (msg_json["data"].find("type") != msg_json["data"].end() &&
-				 msg_json["data"]["type"] == "MemberCardChangeEvent") {
+			msg_json["data"]["type"] == "MemberCardChangeEvent") {
 		}
 	}
 }
@@ -318,7 +314,7 @@ bool Mirai::login() {
 
 		//拼接URL
 		string url = wsUrl + "/all?verifyKey=" + key + "&qq=" + qq;
-		return wsc->connect(url);
+		return g_wsc->connect(url);
 	}
 	catch (...) {
 		return false;
@@ -327,19 +323,19 @@ bool Mirai::login() {
 
 void Mirai::botProfile() {
 	string mj = "{\"syncId\": 1,\"command\" : \"botProfile\",\"subCommand\":null,\"content\":{}}";
-	wsc->sendTextMsg(mj);
+	g_wsc->sendTextMsg(mj);
 }
 
 void Mirai::sendGroupMsg(string group, string msg, bool callback) {
 	if (logined) {
 		string mj = "{\"syncId\": 2, \"command\":\"sendGroupMessage\", \"subCommand\" : null,\
 					\"content\": {\"target\":" +
-					group + ", \"messageChain\": [{ \"type\":\"Plain\", \"text\" : \"" + msg + "\"}]}}";
+			group + ", \"messageChain\": [{ \"type\":\"Plain\", \"text\" : \"" + msg + "\"}]}}";
 		std::unordered_map<string, string> args;
 		args.emplace("group", group);
 		args.emplace("msg", msg);
 		emit OtherCallback("onSendMsg", args);
-		wsc->sendTextMsg(mj);
+		g_wsc->sendTextMsg(mj);
 	}
 }
 
@@ -350,7 +346,7 @@ void Mirai::recallMsg(string target, bool callback) {
 		std::unordered_map<string, string> args;
 		args.emplace("target", target);
 		emit OtherCallback("onRecall", args);
-		wsc->sendTextMsg(mj);
+		g_wsc->sendTextMsg(mj);
 	}
 }
 
@@ -367,17 +363,17 @@ void Mirai::sendAllGroupMsg(string msg, bool callback) {
 void Mirai::changeName(string qq, string group, string name) {
 	string packet_Json = "{\"syncId\": 4,\"command\" : \"memberInfo\",\"subCommand\":\"update\",\"content\":{\"target\":" + group + ",\"memberId\":" + qq + ",\"info\" : {\"name\":" + name + "}}}";
 	if (logined) {
-		wsc->sendTextMsg(packet_Json);
+		g_wsc->sendTextMsg(packet_Json);
 	}
 }
 
 void Mirai::send_app(string group, string code) {
 	string packet_Json = "{\"syncId\": 5,\"command\" : \"sendGroupMessage\",\"subCommand\" : null,\"content\" : {\"target\":" + group + ",\"messageChain\" : [{\"type\": \"App\",\"content\" :" + code + "}]}}";
 	if (logined) {
-		wsc->sendTextMsg(packet_Json);
+		g_wsc->sendTextMsg(packet_Json);
 	}
 }
 
 void Mirai::SendPacket(string packet) {
-	wsc->sendTextMsg(packet);
+	g_wsc->sendTextMsg(packet);
 }

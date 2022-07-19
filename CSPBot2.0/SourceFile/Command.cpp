@@ -69,7 +69,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, "参数错误!");
+			g_mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "unbind") {
@@ -80,7 +80,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, "参数错误!");
+			g_mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "motdbe") {
@@ -91,14 +91,14 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 				string motd_respone = Motd::motdbe(sp[1]);
 				string fmt_respone;
 				fmt_respone = fmtMotdBE(motd_respone, sp[2]);
-				mirai->sendGroupMsg(group, fmt_respone);
+				g_mirai->sendGroupMsg(group, fmt_respone);
 			}
 			else {
-				mirai->sendGroupMsg(group, "Motd地址错误!");
+				g_mirai->sendGroupMsg(group, "Motd地址错误!");
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, "参数错误!");
+			g_mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "motdje") {
@@ -109,26 +109,26 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 				string motd_respone = Motd::motdje(sp[1]);
 				string fmt_respone;
 				fmt_respone = fmtMotdJE(motd_respone, sp[2]);
-				mirai->sendGroupMsg(group, fmt_respone);
+				g_mirai->sendGroupMsg(group, fmt_respone);
 			}
 			else {
-				mirai->sendGroupMsg(group, "Motd地址错误!");
+				g_mirai->sendGroupMsg(group, "Motd地址错误!");
 			}
 		}
 		else {
-			mirai->sendGroupMsg(group, "参数错误!");
+			g_mirai->sendGroupMsg(group, "参数错误!");
 		}
 	}
 	else if (Action_Type == "start") {
-		mirai->sendGroupMsg(group, "正在开启服务器...");
+		g_mirai->sendGroupMsg(group, "正在开启服务器...");
 		emit signalStartServer();
 	}
 	else if (Action_Type == "stop") {
-		if (server->getStarted()) {
-			server->stopServer();
+		if (g_server->getStarted()) {
+			g_server->stopServer();
 		}
-		else if (server->getStarted() != false && group != "0") {
-			mirai->sendGroupMsg(group, "服务器不在运行中");
+		else if (g_server->getStarted() != false && group != "0") {
+			g_mirai->sendGroupMsg(group, "服务器不在运行中");
 		}
 	}
 	else if (command.find(Action_Type) != command.end()) {

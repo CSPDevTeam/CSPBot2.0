@@ -9,18 +9,17 @@
 
 using namespace std;
 namespace fs = filesystem;
-string versionString = to_string(PLUGIN_VERSION_MAJOR) + to_string(PLUGIN_VERSION_MINOR) + to_string(PLUGIN_VERSION_REVISION);
 
 //获取格式化时间
-std::string getTime() {
+string getTime() {
 	time_t tt = time(NULL);
 	struct tm* t = localtime(&tt);
-	std::ostringstream buffer;
-	std::string s = std::to_string(t->tm_sec);
+	ostringstream buffer;
+	string s = to_string(t->tm_sec);
 	if (s.length() == 1) {
 		s = "0" + s;
 	}
-	std::string timeString = fmt::format("{}-{}-{}_{}-{}-{}", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, s);
+	string timeString = fmt::format("{}-{}-{}_{}-{}-{}", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, s);
 	return timeString;
 };
 
@@ -39,8 +38,8 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 	if (!fs::exists("logs\\"))
 		fs::create_directory("logs\\");
 	//创建 Dump 文件
-	std::string fileName = "logs/{}_CrashDump_{}.dmp";
-	fileName = fmt::format(fileName, versionString, getTime());
+	string fileName = "logs/{}_CrashDump_{}.dmp";
+	fileName = fmt::format(fileName, g_VERSION, getTime());
 	wchar_t* wc = multiByteToWideChar(fileName);
 	HANDLE hDumpFile = CreateFile(wc, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hDumpFile != INVALID_HANDLE_VALUE) {
@@ -56,7 +55,7 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 
 	//弹出一个错误对话框
 	QMessageBox msgBox;
-	std::string text = "CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
+	string text = "CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
 	text = fmt::format(text, fileName);
 	msgBox.setWindowTitle("严重错误");
 	msgBox.setText(helper::stdString2QString(text));

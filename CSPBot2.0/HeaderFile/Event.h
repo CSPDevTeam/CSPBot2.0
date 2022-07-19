@@ -24,14 +24,14 @@ public:
 			}
 			if (Action_type == "<<") {
 				string cmd = i.erase(0, 2);
-				server->sendCmd(cmd + "\n");
+				g_server->sendCmd(cmd + "\n");
 			}
 			else if (Action_type == ">>") {
 				string cmd = i.erase(0, 2);
-				mirai->sendAllGroupMsg(cmd);
+				g_mirai->sendAllGroupMsg(cmd);
 			}
 			else {
-				commandApi->CustomCmd(i, "");
+				g_cmd_api->CustomCmd(i, "");
 			}
 		}
 	}
