@@ -1,10 +1,10 @@
-﻿#include <Windows.h>
+﻿#include <framework.h>
 #include <DbgHelp.h>
 #include <QApplication>
 #include <QtWidgets/qmessagebox.h>
 #include <FMT/chrono.h>
 #include <logger.h>
-#include <Version.h>
+#include <version.h>
 #include <filesystem>
 
 using namespace std;
@@ -27,10 +27,10 @@ std::string getTime() {
 wchar_t* multiByteToWideChar(const string& pKey) {
 	auto pCStrKey = pKey.c_str();
 	//第一次调用返回转换后的字符串长度，用于确认为wchar_t*开辟多大的内存空间
-	int pSize = MultiByteToWideChar(CP_OEMCP, 0, pCStrKey, strlen(pCStrKey) + 1, NULL, 0);
+	int pSize = MultiByteToWideChar(CP_OEMCP, 0, pCStrKey, static_cast<int>(strlen(pCStrKey)) + 1, NULL, 0);
 	wchar_t* pWCStrKey = new wchar_t[pSize];
 	//第二次调用将单字节字符串转换成双字节字符串
-	MultiByteToWideChar(CP_OEMCP, 0, pCStrKey, strlen(pCStrKey) + 1, pWCStrKey, pSize);
+	MultiByteToWideChar(CP_OEMCP, 0, pCStrKey, static_cast<int>(strlen(pCStrKey)) + 1, pWCStrKey, pSize);
 	return pWCStrKey;
 }
 
@@ -45,7 +45,7 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 	HANDLE hDumpFile = CreateFile(wc, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hDumpFile != INVALID_HANDLE_VALUE) {
 		// Dump 信息
-		MINIDUMP_EXCEPTION_INFORMATION dumpInfo;
+		MINIDUMP_EXCEPTION_INFORMATION dumpInfo{};
 		dumpInfo.ExceptionPointers = pException;
 		dumpInfo.ThreadId = GetCurrentThreadId();
 		dumpInfo.ClientPointers = TRUE;
@@ -59,7 +59,7 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 	std::string text = "CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
 	text = fmt::format(text, fileName);
 	msgBox.setWindowTitle("严重错误");
-	msgBox.setText(Helper::stdString2QString(text));
+	msgBox.setText(helper::stdString2QString(text));
 	msgBox.exec();
 
 	return EXCEPTION_EXECUTE_HANDLER;

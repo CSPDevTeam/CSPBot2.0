@@ -1,19 +1,15 @@
 ﻿#pragma once
-//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//Self
-#include <cspbot20.h>
-#include <server.h>
-#include <global.h>
-#include <helper.h>
-#include <websocketClient.h>
+//self
+#include "cspbot20.h"
+#include "server.h"
+#include "global.h"
+#include "helper.h"
+#include "websocketClient.h"
 //third-party
 #include <FMT/chrono.h>
-//system
-#include <string>
-
-
 
 std::string getConfig(std::string key);
+
 class Logger {
 public:
 	inline Logger(std::string moduleName) {
@@ -119,7 +115,7 @@ private:
 	};
 
 	inline void pushToQueue(std::string log) {
-		q.enqueue(Helper::stdString2QString(log));
+		q.enqueue(helper::stdString2QString(log));
 	};
 
 	std::string Module = "";

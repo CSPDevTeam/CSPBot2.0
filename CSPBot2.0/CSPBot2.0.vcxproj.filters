@@ -10,9 +10,6 @@
     <ClCompile Include="SourceFile\regularEdit.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFile\plugin_manager.cpp">
-      <Filter>Source File\Plugins</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFile\main.cpp">
       <Filter>Source File\System</Filter>
     </ClCompile>
@@ -307,7 +304,7 @@
     <ClInclude Include="HeaderFile\framework.h">
       <Filter>Header File\System</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFile\Version.h">
+    <ClInclude Include="HeaderFile\version.h">
       <Filter>Header File\System</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFile\helper.h">
@@ -479,7 +476,7 @@
       <Filter>Header File\Yaml</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFile\yaml2json.hpp">
-      <Filter>Header File</Filter>
+      <Filter>Header File\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

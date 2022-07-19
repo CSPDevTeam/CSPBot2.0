@@ -1,18 +1,11 @@
 ﻿#pragma once
-//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//Self
+// self
 #include <helper.h>
 #include <logger.h>
 #include <plugins.h>
-//third-party
+// third-party
 #include <yaml-cpp/yaml.h>
 #include <magic_enum.hpp>
-//system
-#include <string>
-#include <vector>
-#include <unordered_map>
-
-
 
 class EventCallbacker {
 public:
@@ -26,7 +19,7 @@ public:
 			i = fmtConsole::FmtConsoleRegular(i);
 			string Action_type = i.substr(0, 2);
 			for (string j : arg_) {
-				i = Helper::replace(i, "$" + std::to_string(num), j);
+				i = helper::replace(i, "$" + std::to_string(num), j);
 				num++;
 			}
 			if (Action_type == "<<") {
@@ -45,10 +38,10 @@ public:
 
 	//获取事件
 	inline std::vector<std::string> getEvent(EventCode ec) {
-		auto yf							   = YAML::LoadFile("data/event.yml");
+		auto yf = YAML::LoadFile("data/event.yml");
 		std::vector<std::string> eventList = {};
 		auto event_code = magic_enum::enum_name<EventCode>(ec);
-		std::string code				   = std::string(event_code);
+		std::string code = std::string(event_code);
 		for (auto i : yf[code]) {
 			eventList.push_back(i.as<std::string>());
 		}

@@ -5,9 +5,9 @@ AccessModifierOffset: -4
 AlignAfterOpenBracket: DontAlign
 AlignArrayOfStructures: Left
 AlignConsecutiveAssignments: None
-AlignConsecutiveBitFields: Consecutive
+AlignConsecutiveBitFields: None
 AlignConsecutiveDeclarations: None
-AlignConsecutiveMacros: Consecutive
+AlignConsecutiveMacros: None
 AlignEscapedNewlines: Left
 AlignOperands: DontAlign
 AlignTrailingComments: true
@@ -52,7 +52,7 @@ IndentPPDirectives: None
 IndentWidth: 4
 KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp
-MaxEmptyLinesToKeep: 10
+MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
 PointerAlignment: Left
 SortIncludes: false

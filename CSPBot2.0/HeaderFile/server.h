@@ -1,20 +1,14 @@
 ﻿#pragma once
-//////////////////////////////////////////// HeadFile ////////////////////////////////////////////
-//Self
-#include <global.h>
-#include <cspbot20.h>
-#include <logger.h>
-#include <websocketClient.h>
-//third-party
+// self
+#include "global.h"
+#include "cspbot20.h"
+#include "logger.h"
+#include "websocketClient.h"
+// third-party
 #include <qthread.h>
 #include <yaml-cpp/yaml.h>
-//system
-#include <string>
-#include <windows.h>
-#include <tchar.h>
-#include <stdio.h>
+// system
 #include <regex>
-
 
 enum stopType;
 
@@ -50,7 +44,7 @@ private:
 	void formatBDSLog(string line);	  //处理BDS发来的信息
 	int startMode = 0;				  //开启模式
 	QProcess* myChildProcess;		  //子进程指针
-	bool started	= false;		  //是否开启
+	bool started = false;			  //是否开启
 	bool normalStop = false;		  //正常停止
 	stopType TypeOfStop;			  //停止状态
 
