@@ -220,6 +220,9 @@
     <ClCompile Include="Yaml\tag.cpp">
       <Filter>Source File\Yaml</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFile\dialog.cpp">
+      <Filter>Source File\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source File">
@@ -295,6 +298,9 @@
     </QtMoc>
     <QtMoc Include="HeaderFile\server.h">
       <Filter>Header File\Tools</Filter>
+    </QtMoc>
+    <QtMoc Include="HeaderFile\dialog.h">
+      <Filter>Header File\UI</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +508,9 @@
       <Filter>Resource File</Filter>
     </QtUic>
     <QtUic Include="ResourceFile\regularEdit.ui">
+      <Filter>Resource File</Filter>
+    </QtUic>
+    <QtUic Include="ResourceFile\dialog.ui">
       <Filter>Resource File</Filter>
     </QtUic>
   </ItemGroup>

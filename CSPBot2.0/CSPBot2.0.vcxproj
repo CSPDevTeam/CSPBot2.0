@@ -163,6 +163,7 @@
     <ClCompile Include="lua\lutf8lib.c" />
     <ClCompile Include="lua\lvm.c" />
     <ClCompile Include="lua\lzio.c" />
+    <ClCompile Include="SourceFile\dialog.cpp" />
     <ClCompile Include="SourceFile\plugins.cpp" />
     <ClCompile Include="SourceFile\Command.cpp" />
     <ClCompile Include="SourceFile\cspbot20.cpp" />
@@ -206,6 +207,7 @@
     <QtMoc Include="..\Include\mysysinfo\mysysinfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="HeaderFile\dialog.h" />
     <ClInclude Include="HeaderFile\Event.h" />
     <ClInclude Include="HeaderFile\framework.h" />
     <ClInclude Include="HeaderFile\global.h" />
@@ -284,6 +286,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ResourceFile\cspbot20.ui" />
+    <QtUic Include="ResourceFile\dialog.ui" />
     <QtUic Include="ResourceFile\regularEdit.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

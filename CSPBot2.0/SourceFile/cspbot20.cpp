@@ -8,6 +8,7 @@
 #include <plugins.h>
 #include <QInputDialog>
 #include <Event.h>
+#include <dialog.h>
 
 using namespace std;
 
@@ -916,5 +917,8 @@ void CSPBot::InitPluginTableView() {
 void CSPBot::showAbout() {
 	string text = "CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
 	text = fmt::format(text, g_VERSION);
-	QMessageBox::about(this, "关于CSPBot", QString::fromStdString(text));
+	CDialog* aboutWin = new CDialog(diaLogStatus::null);
+	aboutWin->setTitle("关于CSPBot");
+	aboutWin->setContent(QString::fromStdString(text));
+	aboutWin->show();
 }

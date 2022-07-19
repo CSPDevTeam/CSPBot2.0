@@ -7,6 +7,11 @@
     <file>../Images/文本.svg</file>
     <file>../Images/正则式.svg</file>
   </qresource>
+  <qresource prefix="/dialog">
+    <file>../Images/error.svg</file>
+    <file>../Images/info.svg</file>
+    <file>../Images/warn.svg</file>
+  </qresource>
   <qresource prefix="/a">
     <file>../Images/a/1.png</file>
     <file>../Images/a/2.png</file>
