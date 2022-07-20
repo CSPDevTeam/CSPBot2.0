@@ -32,34 +32,24 @@ string GetConfig(const string& key) {
 	return g_config[key].as<string>();
 };
 
-int checkConfigVersion() {
-	if (g_config["Version"].as<int>() < g_config_version) {
-		return 1;
-	}
-	return 0;
+void CheckConfigVersion() {
+	if (g_config["Version"].as<int>() < g_config_version)
+		msgbox::ShowError("配置文件版本过低,请检查");
 }
 
-bool InitConfig() {
-	if (!fs::exists("config/config.yml"))
-		msgbox::ShowError("config/config.yml not found");
-	if (!fs::exists("data/player.yml"))
-		msgbox::ShowError("data/player.yml not found");
-	if (!fs::exists("data/event.yml"))
-		msgbox::ShowError("data/event.yml not found");
-	if (!fs::exists("data/regular.yml"))
-		msgbox::ShowError("data/regular.yml not found");
-	
-	try {
-		g_config.readFile("config/config.yml");
-		g_player.readFile("data/player.yml");
-		g_event.readFile("data/event.yml");
-		g_regular.readFile("data/regular.yml");
-	}
-	catch (...) {
-		//msgbox::ShowError(e.what());
-		return false;
-	}
-	return true;
+void InitConfig() {
+	// if (!fs::exists("config/config.yml"))
+	//	msgbox::ShowError("config/config.yml not found");
+	// if (!fs::exists("data/player.yml"))
+	//	msgbox::ShowError("data/player.yml not found");
+	// if (!fs::exists("data/event.yml"))
+	//	msgbox::ShowError("data/event.yml not found");
+	// if (!fs::exists("data/regular.yml"))
+	//	msgbox::ShowError("data/regular.yml not found");
+	g_config.readFile("config/config.yml");
+	g_player.readFile("data/player.yml");
+	g_event.readFile("data/event.yml");
+	g_regular.readFile("data/regular.yml");
 }
 
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
@@ -97,16 +87,7 @@ int main(int argc, char* argv[]) {
 	g_main_window->publicStartLogger();
 
 	//检测文件版本
-	switch (checkConfigVersion()) {
-		case 1:
-			msgbox::ShowError("配置文件版本过低,请检查");
-			return 1;
-		case 2:
-			msgbox::ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
-			return 1;
-		default:
-			break;
-	}
+	CheckConfigVersion();
 
 	g_lua_State = InitLua();
 	LoadPlugin();
