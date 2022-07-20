@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.2.32526.322
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSPBot2.0", "CSPBot2.0\CSPBot2.0.vcxproj", "{361B900A-BB5E-451A-B4A2-D2E9C5916177}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSPBot2.0", "CSPBot2.0.vcxproj", "{D7E3F10D-BE8B-48F5-B5D3-9DC7CDD08036}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{361B900A-BB5E-451A-B4A2-D2E9C5916177}.Debug|x64.ActiveCfg = Debug|x64
-		{361B900A-BB5E-451A-B4A2-D2E9C5916177}.Debug|x64.Build.0 = Debug|x64
-		{361B900A-BB5E-451A-B4A2-D2E9C5916177}.Release|x64.ActiveCfg = Release|x64
-		{361B900A-BB5E-451A-B4A2-D2E9C5916177}.Release|x64.Build.0 = Release|x64
+		{D7E3F10D-BE8B-48F5-B5D3-9DC7CDD08036}.Debug|x64.ActiveCfg = Debug|x64
+		{D7E3F10D-BE8B-48F5-B5D3-9DC7CDD08036}.Debug|x64.Build.0 = Debug|x64
+		{D7E3F10D-BE8B-48F5-B5D3-9DC7CDD08036}.Release|x64.ActiveCfg = Release|x64
+		{D7E3F10D-BE8B-48F5-B5D3-9DC7CDD08036}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7A3B7848-7BF1-422A-A744-743E72512076}
+		SolutionGuid = {11534D2B-26A4-44BE-A4EF-348D653567D1}
 	EndGlobalSection
 EndGlobal

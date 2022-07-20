@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source File">
+      <UniqueIdentifier>{52713ed6-0cf2-4a45-8f24-52af2711f022}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource File">
+      <UniqueIdentifier>{984474c1-aa25-4e49-a98c-021c6b05b584}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header File">
+      <UniqueIdentifier>{78c035b9-2802-4686-8ba6-582ea4e44a38}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Header File\UI">
+      <UniqueIdentifier>{7bf7f0b6-6323-48ea-8293-a2e86df3246f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\System">
+      <UniqueIdentifier>{f3821ec7-c4d8-45b1-b5e4-8048e8f411f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\Plugins">
+      <UniqueIdentifier>{9275ef2c-0dea-42de-a90c-d3ab00c9bb22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\Tools">
+      <UniqueIdentifier>{35112154-7f36-4702-a764-306cfa4ec559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\UI">
+      <UniqueIdentifier>{ce692b45-049f-4248-a368-34b762674c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Tools">
+      <UniqueIdentifier>{8529c0ab-e9af-4555-b8e5-eaca22afbac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\System">
+      <UniqueIdentifier>{12a807a3-e469-4d96-a977-b7c8269cf55d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\Plugins">
+      <UniqueIdentifier>{f1fc009d-d740-48de-85b3-223baccae0e0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\cspbot20.cpp">
+      <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dialog.cpp">
+      <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message_box.cpp">
+      <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\regular_edit.cpp">
+      <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\server.cpp">
+      <Filter>Source File\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ws_client.cpp">
+      <Filter>Source File\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\logger.cpp">
+      <Filter>Source File\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source File\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\plugins.cpp">
+      <Filter>Source File\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command.cpp">
+      <Filter>Source File\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debug.cpp">
+      <Filter>Source File\System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\CSPBot2.0.rc">
+      <Filter>Resource File</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="res\cspbot20.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="ui\cspbot20.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ui\dialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ui\regularEdit.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\CSPBot2.0.ico">
+      <Filter>Resource File</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\message_box.h">
+      <Filter>Header File\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework.h">
+      <Filter>Header File\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\global.h">
+      <Filter>Header File\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stdafx.h">
+      <Filter>Header File\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\version.h">
+      <Filter>Header File\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml2json.hpp">
+      <Filter>Header File\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\helper.h">
+      <Filter>Header File\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event.h">
+      <Filter>Header File\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plugins.h">
+      <Filter>Header File\Plugins</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\cspbot20.h">
+      <Filter>Header File\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="src\dialog.h">
+      <Filter>Header File\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="src\regular_edit.h">
+      <Filter>Header File\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="src\server.h">
+      <Filter>Header File\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="src\logger.h">
+      <Filter>Header File\Tools</Filter>
+    </QtMoc>
+    <QtMoc Include="src\ws_client.h">
+      <Filter>Header File\Tools</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>
