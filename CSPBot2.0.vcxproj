@@ -66,6 +66,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -181,13 +182,11 @@
     <ClCompile Include="src\command.cpp" />
     <ClCompile Include="src\cspbot20.cpp" />
     <ClCompile Include="src\debug.cpp" />
-    <ClCompile Include="src\dialog.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <None Include=".clang-format" />
     <None Include=".gitignore" />
     <None Include="res\CSPBot2.0.ico" />
-    <QtUic Include="ui\dialog.ui" />
     <QtUic Include="ui\regularEdit.ui" />
     <ResourceCompile Include="res\CSPBot2.0.rc" />
   </ItemGroup>
@@ -256,7 +255,6 @@
     <QtMoc Include="src\server.h" />
     <QtMoc Include="src\regular_edit.h" />
     <QtMoc Include="src\logger.h" />
-    <QtMoc Include="src\dialog.h" />
     <QtMoc Include="src\cspbot20.h" />
   </ItemGroup>
   <ItemGroup>

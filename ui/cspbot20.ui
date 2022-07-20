@@ -113,8 +113,8 @@ qproperty-iconSize: 32px 32px;
       <string>  控制终端</string>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/icon/Images/主页.svg</normaloff>:/icon/Images/主页.svg</iconset>
+      <iconset resource="../res/cspbot20.qrc">
+       <normaloff>:/icon/image/主页.svg</normaloff>:/icon/image/主页.svg</iconset>
      </property>
     </widget>
     <widget class="QLabel" name="user">
@@ -179,8 +179,8 @@ QPushButton:hover{
       <string>  玩家管理</string>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/icon/Images/用户管理.svg</normaloff>:/icon/Images/用户管理.svg</iconset>
+      <iconset resource="../res/cspbot20.qrc">
+       <normaloff>:/icon/image/用户管理.svg</normaloff>:/icon/image/用户管理.svg</iconset>
      </property>
     </widget>
     <widget class="QPushButton" name="regularPage">
@@ -218,8 +218,8 @@ QPushButton:hover{
       <string>  正则管理</string>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/icon/Images/正则式.svg</normaloff>:/icon/Images/正则式.svg</iconset>
+      <iconset resource="../res/cspbot20.qrc">
+       <normaloff>:/icon/image/正则式.svg</normaloff>:/icon/image/正则式.svg</iconset>
      </property>
     </widget>
     <widget class="QPushButton" name="pluginPage">
@@ -257,8 +257,8 @@ QPushButton:hover{
       <string>  插件管理</string>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/icon/Images/插件.svg</normaloff>:/icon/Images/插件.svg</iconset>
+      <iconset resource="../res/cspbot20.qrc">
+       <normaloff>:/icon/image/插件.svg</normaloff>:/icon/image/插件.svg</iconset>
      </property>
     </widget>
     <widget class="QPushButton" name="logPage">
@@ -296,8 +296,8 @@ QPushButton:hover{
       <string>  日志输出</string>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff>:/icon/Images/文本.svg</normaloff>:/icon/Images/文本.svg</iconset>
+      <iconset resource="../res/cspbot20.qrc">
+       <normaloff>:/icon/image/文本.svg</normaloff>:/icon/image/文本.svg</iconset>
      </property>
     </widget>
     <widget class="QPushButton" name="Icon">

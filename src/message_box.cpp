@@ -1,38 +1,37 @@
 #include "global.h"
 #include <qstring.h>
 #include "cspbot20.h"
-#include "dialog.h"
 #include "message_box.h"
 
+//显示Error信息
 void msgbox::ShowError(const QString& msg) {
-	//CDialog* s_dialogWindow = new CDialog(diaLogStatus::error, g_main_window);
-	//s_dialogWindow->setTitle("严重错误");
-	//s_dialogWindow->setContent(msg);
-	//s_dialogWindow->exec();
 	QMessageBox msgBox;
+	msgBox.setIcon(QMessageBox::Icon::Critical);
 	msgBox.setText(msg);
 	msgBox.exec();
-	//QMessageBox::critical(g_main_window, "严重错误", msg, QMessageBox::Yes);
 }
 
+//显示Information信息
 void msgbox::ShowHint(const QString& msg) {
-	//CDialog* s_dialogWindow = new CDialog(diaLogStatus::info, g_main_window);
-	//s_dialogWindow->setTitle("提示");
-	//s_dialogWindow->setContent(msg);
-	//s_dialogWindow->exec();
 	QMessageBox msgBox;
+	msgBox.setIcon(QMessageBox::Icon::Information);
 	msgBox.setText(msg);
 	msgBox.exec();
-	//QMessageBox::information(g_main_window, "提示", msg, QMessageBox::Yes);
+	
 }
 
+//显示Warning信息
 void msgbox::ShowWarn(const QString& msg) {
-	//CDialog* s_dialogWindow = new CDialog(diaLogStatus::warn, g_main_window);
-	//s_dialogWindow->setTitle("警告");
-	//s_dialogWindow->setContent(msg);
-	//s_dialogWindow->exec();
 	QMessageBox msgBox;
+	msgBox.setIcon(QMessageBox::Icon::Warning);
 	msgBox.setText(msg);
 	msgBox.exec();
-	//QMessageBox::warning(g_main_window, "警告", msg, QMessageBox::Yes);
+}
+
+//显示Question信息
+void msgbox::ShowQuestion(const QString& msg) {
+	QMessageBox msgBox;
+	msgBox.setIcon(QMessageBox::Icon::Question);
+	msgBox.setText(msg);
+	msgBox.exec();
 }

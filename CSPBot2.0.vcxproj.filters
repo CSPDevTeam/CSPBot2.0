@@ -65,9 +65,6 @@
     <ClCompile Include="src\cspbot20.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\dialog.cpp">
-      <Filter>Source File\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\regular_edit.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
@@ -312,9 +309,6 @@
     <QtUic Include="ui\cspbot20.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="ui\dialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="ui\regularEdit.ui">
       <Filter>Form Files</Filter>
     </QtUic>
@@ -507,9 +501,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\cspbot20.h">
-      <Filter>Header File\UI</Filter>
-    </QtMoc>
-    <QtMoc Include="src\dialog.h">
       <Filter>Header File\UI</Filter>
     </QtMoc>
     <QtMoc Include="src\regular_edit.h">

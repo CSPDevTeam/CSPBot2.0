@@ -1,9 +1,6 @@
 .vs
 .vscode
 x64
-data
-plugins
-config
-logs
 *.user
 *.aps
+test

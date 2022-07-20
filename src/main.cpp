@@ -39,7 +39,7 @@ int checkConfigVersion() {
 	return 0;
 }
 
-void InitConfig() {
+bool InitConfig() {
 	if (!fs::exists("config/config.yml"))
 		msgbox::ShowError("config/config.yml not found");
 	if (!fs::exists("data/player.yml"))
@@ -48,11 +48,18 @@ void InitConfig() {
 		msgbox::ShowError("data/event.yml not found");
 	if (!fs::exists("data/regular.yml"))
 		msgbox::ShowError("data/regular.yml not found");
-
-	g_config.readFile("config/config.yml");
-	g_player.readFile("data/player.yml");
-	g_event.readFile("data/event.yml");
-	g_regular.readFile("data/regular.yml");
+	
+	try {
+		g_config.readFile("config/config.yml");
+		g_player.readFile("data/player.yml");
+		g_event.readFile("data/event.yml");
+		g_regular.readFile("data/regular.yml");
+	}
+	catch (...) {
+		//msgbox::ShowError(e.what());
+		return false;
+	}
+	return true;
 }
 
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
@@ -91,14 +98,14 @@ int main(int argc, char* argv[]) {
 
 	//检测文件版本
 	switch (checkConfigVersion()) {
-	case 1:
-		msgbox::ShowError("配置文件版本过低,请检查");
-		return 1;
-	case 2:
-		msgbox::ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
-		return 1;
-	default:
-		break;
+		case 1:
+			msgbox::ShowError("配置文件版本过低,请检查");
+			return 1;
+		case 2:
+			msgbox::ShowError("无法初始化配置，请检查config/config.yml文件是否正常");
+			return 1;
+		default:
+			break;
 	}
 
 	g_lua_State = InitLua();

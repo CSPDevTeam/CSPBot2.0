@@ -8,7 +8,6 @@
 #include "plugins.h"
 #include <QInputDialog>
 #include "Event.h"
-#include "dialog.h"
 #include "message_box.h"
 #include "server.h"
 #include "config_reader.h"
@@ -172,7 +171,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	//窗口样式
 	this->setAttribute(Qt::WA_TranslucentBackground, true);
 	//设置无边框
-	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);;
 	this->setAttribute(Qt::WA_TranslucentBackground);
 	this->setWindowTitle(QString("CSPBot v") + g_VERSION);
 	//设置窗口阴影
@@ -337,19 +336,19 @@ void CSPBot::setAllScrollbar(QScrollBar* bar) {
 					   "QScrollBar::sub-line:vertical"
 					   "{"
 					   "height:9px;width:8px;"
-					   "border-image:url(:/a/Images/a/1.png);"
+					   "border-image:url(:/a/image/a/1.png);"
 					   "subcontrol-position:top;"
 					   "}"
 					   "QScrollBar::add-line:vertical:hover"
 					   "{"
 					   "height:9px;width:8px;"
-					   "border-image:url(:/a/Images/a/4.png);"
+					   "border-image:url(:/a/image/a/4.png);"
 					   "subcontrol-position:bottom;"
 					   "}"
 					   "QScrollBar::sub-line:vertical:hover"
 					   "{"
 					   "height:9px;width:8px;"
-					   "border-image:url(:/a/Images/a/2.png);"
+					   "border-image:url(:/a/image/a/2.png);"
 					   "subcontrol-position:top;"
 					   "}"
 					   "QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical"
@@ -927,8 +926,6 @@ void CSPBot::InitPluginTableView() {
 void CSPBot::showAbout() {
 	string text = "CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
 	text = fmt::format(text, g_VERSION);
-	CDialog* aboutWin = new CDialog(diaLogStatus::null);
-	aboutWin->setTitle("关于CSPBot");
-	aboutWin->setContent(QString::fromStdString(text));
-	aboutWin->show();
+	QApplication::beep();
+	QMessageBox::about(this, "关于CSPbot v2", QString::fromStdString(text));
 }

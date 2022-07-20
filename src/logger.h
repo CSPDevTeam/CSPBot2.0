@@ -99,7 +99,7 @@ private:
 	};
 
 	void pushToQueue(const string& log) {
-		g_queue.push(log);
+		g_queue.push(log); //推送到Queue
 	};
 
 	string title_ = "";
