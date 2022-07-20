@@ -45,15 +45,27 @@
     <Filter Include="Source File\Plugins">
       <UniqueIdentifier>{f1fc009d-d740-48de-85b3-223baccae0e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source File\fmt">
+      <UniqueIdentifier>{a15b70c3-57aa-48b8-8589-9b754a7f092e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\lua">
+      <UniqueIdentifier>{e87b3d61-643c-4106-92e1-e814e58d1c7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\lua">
+      <UniqueIdentifier>{f2fe801f-79cf-49b1-9565-adb19529ed07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\yaml-cpp">
+      <UniqueIdentifier>{cc6fb4cc-99c0-4b9a-93de-d2b7e7fda3c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File\yaml-cpp">
+      <UniqueIdentifier>{26a89a47-3266-442e-bb62-7a05685af102}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\cspbot20.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\dialog.cpp">
-      <Filter>Source File\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\message_box.cpp">
       <Filter>Source File\UI</Filter>
     </ClCompile>
     <ClCompile Include="src\regular_edit.cpp">
@@ -80,6 +92,216 @@
     <ClCompile Include="src\debug.cpp">
       <Filter>Source File\System</Filter>
     </ClCompile>
+    <ClCompile Include="src\fmt\format.cc">
+      <Filter>Source File\fmt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fmt\os.cc">
+      <Filter>Source File\fmt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lapi.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lauxlib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lbaselib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lcode.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lcorolib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lctype.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\ldblib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\ldebug.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\ldo.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\ldump.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lfunc.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lgc.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\linit.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\liolib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\llex.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lmathlib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lmem.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\loadlib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lobject.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lopcodes.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\loslib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lparser.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lstate.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lstring.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lstrlib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\ltable.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\ltablib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\ltm.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lundump.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lutf8lib.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lvm.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\lua\lzio.c">
+      <Filter>Source File\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\binary.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\convert.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\depthguard.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\directives.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\emit.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\emitfromevents.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\emitter.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\emitterstate.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\emitterutils.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\exceptions.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\exp.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\contrib\graphbuilder.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\contrib\graphbuilderadapter.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\memory.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\node.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\node_data.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\nodebuilder.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\nodeevents.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\null.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\ostream_wrapper.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\parse.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\parser.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\regex_yaml.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\scanner.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\scanscalar.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\scantag.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\scantoken.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\simplekey.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\singledocparser.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\stream.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\yaml-cpp\tag.cpp">
+      <Filter>Source File\yaml-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event.cpp">
+      <Filter>Source File\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helper.cpp">
+      <Filter>Source File\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config_reader.cpp">
+      <Filter>Source File\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mysysinfo.cpp">
+      <Filter>Source File\System</Filter>
+    </ClCompile>
+    <ClCompile Include="src\message_box.cpp">
+      <Filter>Source File\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\CSPBot2.0.rc">
@@ -104,11 +326,10 @@
     <None Include="res\CSPBot2.0.ico">
       <Filter>Resource File</Filter>
     </None>
+    <None Include=".clang-format" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\message_box.h">
-      <Filter>Header File\UI</Filter>
-    </ClInclude>
     <ClInclude Include="src\framework.h">
       <Filter>Header File\System</Filter>
     </ClInclude>
@@ -121,7 +342,7 @@
     <ClInclude Include="src\version.h">
       <Filter>Header File\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\yaml2json.hpp">
+    <ClInclude Include="src\config_reader.h">
       <Filter>Header File\Tools</Filter>
     </ClInclude>
     <ClInclude Include="src\helper.h">
@@ -132,6 +353,159 @@
     </ClInclude>
     <ClInclude Include="src\plugins.h">
       <Filter>Header File\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lapi.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lauxlib.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lcode.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lctype.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\ldebug.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\ldo.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lfunc.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lgc.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\ljumptab.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\llex.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\llimits.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lmem.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lobject.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lopcodes.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lopnames.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lparser.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lprefix.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lstate.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lstring.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\ltable.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\ltm.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lua.hpp">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\luaconf.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lualib.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lundump.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lvm.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lua\lzio.h">
+      <Filter>Header File\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\collectionstack.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\directives.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\emitterstate.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\emitterutils.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\exp.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\contrib\graphbuilderadapter.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\indentation.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\nodebuilder.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\nodeevents.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\ptr_vector.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\regex_yaml.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\regeximpl.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\scanner.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\scanscalar.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\scantag.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\setting.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\singledocparser.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\stream.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\streamcharsource.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\stringsource.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\tag.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\yaml-cpp\token.h">
+      <Filter>Header File\yaml-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\message_box.h">
+      <Filter>Header File\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +526,9 @@
     </QtMoc>
     <QtMoc Include="src\ws_client.h">
       <Filter>Header File\Tools</Filter>
+    </QtMoc>
+    <QtMoc Include="src\mysysinfo.h">
+      <Filter>Header File\System</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

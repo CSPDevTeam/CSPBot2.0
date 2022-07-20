@@ -1,17 +1,8 @@
-﻿#include <mysysinfo/mysysinfo.h>
-#include <logger.h>
-#include <helper.h>
-#include <Nlohmann/json.hpp>
-#include <yaml-cpp/yaml.h>
-#include <windows.h>
-#include <time.h>
-#include <string>
-#include <sstream>
+﻿#include "logger.h"
+#include "mysysinfo.h"
+#include "helper.h"
+#include "config_reader.h"
 #include <regex>
-#include <cctype>
-
-using namespace std;
-using json = nlohmann::json;
 
 inline MySysInfo* mysysinfo = new MySysInfo();
 
@@ -392,8 +383,8 @@ std::unordered_map<QString, QString> Xtermcolor = {
 
 class RGBToHex {
 public:
-	static std::string rgb(string color = "0,0,0") {
-		stringstream ss;
+	static string rgb(string color = "0,0,0") {
+		std::stringstream ss; // TODO: use fmt
 		int r = 0, g = 0, b = 0;
 		vector<string> splitColor = helper::split(color, ",");
 		r = std::stoi(splitColor[0]);
@@ -485,9 +476,7 @@ string fmtConsole::FmtConsoleRegular(string cmd) {
 	return second_;
 }
 
-string fmtConsole::FmtGroupRegular(
-	messagePacket message,
-	string cmd) {
+string fmtConsole::FmtGroupRegular(messagePacket message, string cmd) {
 	/*
 	//QQ
 	{qqid} QQ号
@@ -524,8 +513,8 @@ string fmtConsole::FmtGroupRegular(
 	fmter["{message}"] = message.message;
 	fmter["{permission}"] = message.perm;
 	string xboxid_ = message.memberName;
-	YAML::Node player = YAML::LoadFile("data/player.yml");
-	for (YAML::Node i : player) {
+	ConfigReader player("data/player.yml");
+	for (auto i : player.raw()) {
 		if (i["qq"].as<string>() == message.qq) {
 			xboxid_ = i["playerName"].as<string>();
 		}
@@ -568,7 +557,7 @@ string fmtConsole::FmtGroupRegular(
 QString fmtConsole::getColoredLine(string line) {
 	QString qline = QString::fromStdString(line);
 	try {
-		if (YAML::LoadFile("config/config.yml")["ConsoleColor"].as<bool>()) {
+		if (ConfigReader("config/config.yml")["ConsoleColor"].as<bool>()) {
 			qline = qline.replace("<", "&lt;");
 			qline = qline.replace(">", "&gt;");
 			qline = qline.replace("\033[0m", "</font>");
@@ -623,12 +612,12 @@ QString fmtConsole::getColoredLine(string line) {
 			}
 		}
 		else {
-			regex pattern("\033\\[(.+?)m");
+			std::regex pattern("\033\\[(.+?)m");
 			qline = QString::fromStdString(regex_replace(line, pattern, ""));
 		}
 	}
 	catch (...) {
-		regex pattern("\033\\[(.+?)m");
+		std::regex pattern("\033\\[(.+?)m");
 		qline = QString::fromStdString(regex_replace(line, pattern, ""));
 	}
 	return qline;

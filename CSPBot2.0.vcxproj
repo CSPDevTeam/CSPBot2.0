@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -97,11 +97,80 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\config_reader.cpp" />
+    <ClCompile Include="src\helper.cpp" />
+    <ClCompile Include="src\event.cpp" />
+    <ClCompile Include="src\fmt\format.cc" />
+    <ClCompile Include="src\fmt\os.cc" />
+    <ClCompile Include="src\lua\lapi.c" />
+    <ClCompile Include="src\lua\lauxlib.c" />
+    <ClCompile Include="src\lua\lbaselib.c" />
+    <ClCompile Include="src\lua\lcode.c" />
+    <ClCompile Include="src\lua\lcorolib.c" />
+    <ClCompile Include="src\lua\lctype.c" />
+    <ClCompile Include="src\lua\ldblib.c" />
+    <ClCompile Include="src\lua\ldebug.c" />
+    <ClCompile Include="src\lua\ldo.c" />
+    <ClCompile Include="src\lua\ldump.c" />
+    <ClCompile Include="src\lua\lfunc.c" />
+    <ClCompile Include="src\lua\lgc.c" />
+    <ClCompile Include="src\lua\linit.c" />
+    <ClCompile Include="src\lua\liolib.c" />
+    <ClCompile Include="src\lua\llex.c" />
+    <ClCompile Include="src\lua\lmathlib.c" />
+    <ClCompile Include="src\lua\lmem.c" />
+    <ClCompile Include="src\lua\loadlib.c" />
+    <ClCompile Include="src\lua\lobject.c" />
+    <ClCompile Include="src\lua\lopcodes.c" />
+    <ClCompile Include="src\lua\loslib.c" />
+    <ClCompile Include="src\lua\lparser.c" />
+    <ClCompile Include="src\lua\lstate.c" />
+    <ClCompile Include="src\lua\lstring.c" />
+    <ClCompile Include="src\lua\lstrlib.c" />
+    <ClCompile Include="src\lua\ltable.c" />
+    <ClCompile Include="src\lua\ltablib.c" />
+    <ClCompile Include="src\lua\ltm.c" />
+    <ClCompile Include="src\lua\lundump.c" />
+    <ClCompile Include="src\lua\lutf8lib.c" />
+    <ClCompile Include="src\lua\lvm.c" />
+    <ClCompile Include="src\lua\lzio.c" />
     <ClCompile Include="src\message_box.cpp" />
+    <ClCompile Include="src\mysysinfo.cpp" />
     <ClCompile Include="src\plugins.cpp" />
     <ClCompile Include="src\regular_edit.cpp" />
     <ClCompile Include="src\server.cpp" />
     <ClCompile Include="src\ws_client.cpp" />
+    <ClCompile Include="src\yaml-cpp\binary.cpp" />
+    <ClCompile Include="src\yaml-cpp\contrib\graphbuilder.cpp" />
+    <ClCompile Include="src\yaml-cpp\contrib\graphbuilderadapter.cpp" />
+    <ClCompile Include="src\yaml-cpp\convert.cpp" />
+    <ClCompile Include="src\yaml-cpp\depthguard.cpp" />
+    <ClCompile Include="src\yaml-cpp\directives.cpp" />
+    <ClCompile Include="src\yaml-cpp\emit.cpp" />
+    <ClCompile Include="src\yaml-cpp\emitfromevents.cpp" />
+    <ClCompile Include="src\yaml-cpp\emitter.cpp" />
+    <ClCompile Include="src\yaml-cpp\emitterstate.cpp" />
+    <ClCompile Include="src\yaml-cpp\emitterutils.cpp" />
+    <ClCompile Include="src\yaml-cpp\exceptions.cpp" />
+    <ClCompile Include="src\yaml-cpp\exp.cpp" />
+    <ClCompile Include="src\yaml-cpp\memory.cpp" />
+    <ClCompile Include="src\yaml-cpp\node.cpp" />
+    <ClCompile Include="src\yaml-cpp\nodebuilder.cpp" />
+    <ClCompile Include="src\yaml-cpp\nodeevents.cpp" />
+    <ClCompile Include="src\yaml-cpp\node_data.cpp" />
+    <ClCompile Include="src\yaml-cpp\null.cpp" />
+    <ClCompile Include="src\yaml-cpp\ostream_wrapper.cpp" />
+    <ClCompile Include="src\yaml-cpp\parse.cpp" />
+    <ClCompile Include="src\yaml-cpp\parser.cpp" />
+    <ClCompile Include="src\yaml-cpp\regex_yaml.cpp" />
+    <ClCompile Include="src\yaml-cpp\scanner.cpp" />
+    <ClCompile Include="src\yaml-cpp\scanscalar.cpp" />
+    <ClCompile Include="src\yaml-cpp\scantag.cpp" />
+    <ClCompile Include="src\yaml-cpp\scantoken.cpp" />
+    <ClCompile Include="src\yaml-cpp\simplekey.cpp" />
+    <ClCompile Include="src\yaml-cpp\singledocparser.cpp" />
+    <ClCompile Include="src\yaml-cpp\stream.cpp" />
+    <ClCompile Include="src\yaml-cpp\tag.cpp" />
     <QtRcc Include="res\cspbot20.qrc" />
     <QtUic Include="ui\cspbot20.ui" />
     <ClCompile Include="src\command.cpp" />
@@ -110,6 +179,8 @@
     <ClCompile Include="src\dialog.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <None Include=".clang-format" />
+    <None Include=".gitignore" />
     <None Include="res\CSPBot2.0.ico" />
     <QtUic Include="ui\dialog.ui" />
     <QtUic Include="ui\regularEdit.ui" />
@@ -120,11 +191,62 @@
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\global.h" />
     <ClInclude Include="src\helper.h" />
+    <ClInclude Include="src\lua\lapi.h" />
+    <ClInclude Include="src\lua\lauxlib.h" />
+    <ClInclude Include="src\lua\lcode.h" />
+    <ClInclude Include="src\lua\lctype.h" />
+    <ClInclude Include="src\lua\ldebug.h" />
+    <ClInclude Include="src\lua\ldo.h" />
+    <ClInclude Include="src\lua\lfunc.h" />
+    <ClInclude Include="src\lua\lgc.h" />
+    <ClInclude Include="src\lua\ljumptab.h" />
+    <ClInclude Include="src\lua\llex.h" />
+    <ClInclude Include="src\lua\llimits.h" />
+    <ClInclude Include="src\lua\lmem.h" />
+    <ClInclude Include="src\lua\lobject.h" />
+    <ClInclude Include="src\lua\lopcodes.h" />
+    <ClInclude Include="src\lua\lopnames.h" />
+    <ClInclude Include="src\lua\lparser.h" />
+    <ClInclude Include="src\lua\lprefix.h" />
+    <ClInclude Include="src\lua\lstate.h" />
+    <ClInclude Include="src\lua\lstring.h" />
+    <ClInclude Include="src\lua\ltable.h" />
+    <ClInclude Include="src\lua\ltm.h" />
+    <ClInclude Include="src\lua\lua.h" />
+    <ClInclude Include="src\lua\lua.hpp" />
+    <ClInclude Include="src\lua\luaconf.h" />
+    <ClInclude Include="src\lua\lualib.h" />
+    <ClInclude Include="src\lua\lundump.h" />
+    <ClInclude Include="src\lua\lvm.h" />
+    <ClInclude Include="src\lua\lzio.h" />
     <ClInclude Include="src\message_box.h" />
+    <QtMoc Include="src\mysysinfo.h" />
     <ClInclude Include="src\plugins.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\version.h" />
-    <ClInclude Include="src\yaml2json.hpp" />
+    <ClInclude Include="src\yaml-cpp\collectionstack.h" />
+    <ClInclude Include="src\yaml-cpp\contrib\graphbuilderadapter.h" />
+    <ClInclude Include="src\yaml-cpp\directives.h" />
+    <ClInclude Include="src\yaml-cpp\emitterstate.h" />
+    <ClInclude Include="src\yaml-cpp\emitterutils.h" />
+    <ClInclude Include="src\yaml-cpp\exp.h" />
+    <ClInclude Include="src\yaml-cpp\indentation.h" />
+    <ClInclude Include="src\yaml-cpp\nodebuilder.h" />
+    <ClInclude Include="src\yaml-cpp\nodeevents.h" />
+    <ClInclude Include="src\yaml-cpp\ptr_vector.h" />
+    <ClInclude Include="src\yaml-cpp\regeximpl.h" />
+    <ClInclude Include="src\yaml-cpp\regex_yaml.h" />
+    <ClInclude Include="src\yaml-cpp\scanner.h" />
+    <ClInclude Include="src\yaml-cpp\scanscalar.h" />
+    <ClInclude Include="src\yaml-cpp\scantag.h" />
+    <ClInclude Include="src\yaml-cpp\setting.h" />
+    <ClInclude Include="src\yaml-cpp\singledocparser.h" />
+    <ClInclude Include="src\yaml-cpp\stream.h" />
+    <ClInclude Include="src\yaml-cpp\streamcharsource.h" />
+    <ClInclude Include="src\yaml-cpp\stringsource.h" />
+    <ClInclude Include="src\yaml-cpp\tag.h" />
+    <ClInclude Include="src\yaml-cpp\token.h" />
+    <ClInclude Include="src\config_reader.h" />
     <QtMoc Include="src\ws_client.h" />
     <QtMoc Include="src\server.h" />
     <QtMoc Include="src\regular_edit.h" />

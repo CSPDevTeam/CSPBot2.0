@@ -1,18 +1,62 @@
-﻿// self
-#include <ws_client.h>
-#include <global.h>
-#include <logger.h>
-#include <helper.h>
-#include <server.h>
-// third-party
+﻿#include "ws_client.h"
+#include "global.h"
+#include "logger.h"
+#include "helper.h"
+#include "server.h"
+#include "config_reader.h"
 #include <qmessagebox.h>
 #include <qdebug.h>
-// system
-#include <string>
-
-using namespace std;
 
 int sendMsg = 0, reciveMsg = 0; //收发消息
+
+string transMessage(json j) {
+	string msg = "";
+	for (auto& i : j["data"]["messageChain"]) {
+		//分析消息
+		if (i["type"] == "Plain") {
+			msg += " " + i["text"].get<string>();
+		}
+		else if (i["type"] == "At") {
+			msg += " " + i["display"].get<string>();
+		}
+		else if (i["type"] == "File") {
+			msg += " [文件]" + i["name"].get<string>();
+		}
+		else if (i["type"] == "MusicShare") {
+			msg += " [音乐分享]" + i["musicUrl"];
+		}
+		else if (i["type"] == "Source") {
+		}
+		else {
+			if (std::find(messageType.begin(), messageType.end(), i["type"]) != messageType.end()) {
+				msg += messageType[i["type"]];
+			}
+			else {
+				msg += " [未知消息]";
+			}
+		}
+	}
+	return msg;
+}
+messagePacket transMessagePacket(json j) {
+	qqNum qq = std::to_string(j["data"]["sender"]["id"].get<long long>());
+	string qqnick = j["data"]["sender"]["memberName"].get<string>();
+	groupNum group = std::to_string(j["data"]["sender"]["group"]["id"].get<long long>());
+	string message = transMessage(j);
+	string syncId = j["syncId"].get<string>();
+	string groupName = j["data"]["sender"]["group"]["name"].get<string>();
+	string permissionString = j["data"]["sender"]["permission"].get<string>();
+	auto permission = magic_enum::enum_cast<Permission>(permissionString);
+	messagePacket msgPacket = {
+		message,
+		group,
+		groupName,
+		qq,
+		qqnick,
+		syncId,
+		permission.value()};
+	return msgPacket;
+}
 
 // API
 bool Mirai::connectMirai() {
@@ -116,13 +160,13 @@ void Mirai::run() {
 void otherSendCmd(string cmd);
 
 void Mirai::selfGroupCatchLine(messagePacket message) {
-	YAML::Node regular = YAML::LoadFile("data/regular.yml");
-	YAML::Node config = YAML::LoadFile("config/config.yml");
+	ConfigReader regular("data/regular.yml");
+	ConfigReader config("config/config.yml");
 
 	vector<Regular> regularList;
 
 	//读取正则组
-	for (YAML::Node i : regular) {
+	for (auto i : regular.raw()) {
 		string mRegular = i["Regular"].as<string>();
 		string Action = i["Action"].as<string>();
 		string From = i["From"].as<string>();
@@ -206,7 +250,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 		mirai_logger.info("{}登录 Mirai 成功", qqNick);
 		logined = true;
 		emit OtherCallback("onLogin");
-		string qqNum = getConfig("qq");
+		string qqNum = GetConfig("qq");
 		if (qqNum == "!failed!") {
 			qqNum = "0";
 		}
@@ -225,8 +269,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 			messagePacket msgPacket = transMessagePacket(msg_json);
 
 			// vector<string> allowGroup;
-			std::ifstream fin("config/config.yml");
-			YAML::Node config = YAML::Load(fin);
+			ConfigReader config("config/config.yml");
 			bool inGroup = false;
 			for (auto i : config["group"]) {
 				if (i.as<string>() == msgPacket.group) {
@@ -293,9 +336,9 @@ void Mirai::slotSetUserImages(QString qqNum, QString qqNick) {
 
 bool Mirai::login() {
 	try {
-		string qq = getConfig("qq");
-		string key = getConfig("key");
-		string wsUrl = getConfig("connectUrl");
+		string qq = GetConfig("qq");
+		string key = GetConfig("key");
+		string wsUrl = GetConfig("connectUrl");
 		if (qq == "!failed!") {
 			qq = "0";
 		}
@@ -345,8 +388,8 @@ void Mirai::recallMsg(string target, bool callback) {
 }
 
 void Mirai::sendAllGroupMsg(string msg, bool callback) {
-	YAML::Node config = YAML::LoadFile("config/config.yml")["group"];
-	for (auto igroup : config) {
+	ConfigReader config("config/config.yml");
+	for (auto igroup : config["group"]) {
 		string group = std::to_string(igroup.as<long long>());
 		if (logined) {
 			sendGroupMsg(group, msg, callback);

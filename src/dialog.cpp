@@ -1,13 +1,10 @@
-﻿// self
-#include <helper.h>
-#include <dialog.h>
-//third-party
+﻿#include "helper.h"
+#include "dialog.h"
+#include "ui_dialog.h"
 #include <QGraphicsDropShadowEffect>
 #include <qevent.h>
 
-using namespace std;
-
-CDialog::CDialog(diaLogStatus status, QWidget* parent){
+CDialog::CDialog(diaLogStatus status, QWidget* parent) {
 	dialogUi.setupUi(this);
 	sStatus = status; //存储状态
 	//////// Style ////////
@@ -36,9 +33,7 @@ CDialog::CDialog(diaLogStatus status, QWidget* parent){
 	connect(dialogUi.pushButton, &QPushButton::clicked, this, &QDialog::close);
 }
 
-CDialog::~CDialog() {
-	
-}
+CDialog::~CDialog() {}
 
 void CDialog::setGraphics(QWidget* bt) {
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);

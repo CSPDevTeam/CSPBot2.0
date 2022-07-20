@@ -1,16 +1,12 @@
-﻿#include <plugins.h>
-#include <global.h>
-#include <server.h>
-#include <qmessagebox.h>
-#include <yaml2json.hpp>
-#include <helper.h>
-#include <filesystem>
+﻿#include "plugins.h"
+#include "global.h"
+#include "server.h"
+#include "config_reader.h"
+#include "helper.h"
+#include "logger.h"
 
 #define PLUGIN_PATH "plugins\\"
 
-using namespace std;
-
-namespace fs = filesystem;
 
 int versionPacket = 1; // api版本
 // Buttons
@@ -274,7 +270,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 		auto event_code = StringToQButton(Btype);
 
 		if (event_code == QMessageBox::FlagMask) {
-			throw invalid_argument("Invalid StandardButton name " + Btype);
+			throw std::invalid_argument("Invalid StandardButton name " + Btype);
 		}
 
 		btn = btn | event_code;
@@ -314,7 +310,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 	}
 	//未知
 	else {
-		throw invalid_argument("Invalid TipWindowType name " + type);
+		throw std::invalid_argument("Invalid TipWindowType name " + type);
 		return "";
 	}
 
@@ -333,7 +329,7 @@ bool RegisterCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State*
 		cmd != "start" &&
 		cmd != "stop") {
 		return false;
-		throw invalid_argument("Invalid command:" + cmd);
+		throw std::invalid_argument("Invalid command:" + cmd);
 	}
 	command.emplace(cmd, cbf);
 	return true;
@@ -346,7 +342,7 @@ luabridge::LuaRef QueryInfo(const string& type, const string& arg, lua_State* L)
 	}
 
 	auto queryData = Bind::queryXboxID(type, arg);
-	string j = yaml2json(YAML::Dump(queryData)).dump();
+	string j = yaml2json(queryData).dump();
 	return {L, j};
 }
 
@@ -361,9 +357,8 @@ bool BindXbox(string name, string qq, lua_State* L) {
 //######################### Info #########################
 luabridge::LuaRef GetGroup(lua_State* L) {
 	luabridge::LuaRef groupList = luabridge::newTable(L);
-	std::ifstream fin("config/config.yml");
-	YAML::Node config = YAML::Load(fin);
-	bool inGroup = false;
+	ConfigReader config("config/config.yml");
+	//bool inGroup = false;
 	for (auto i : config["group"]) {
 		groupList.append(i.as<string>());
 	}
@@ -372,8 +367,7 @@ luabridge::LuaRef GetGroup(lua_State* L) {
 
 luabridge::LuaRef GetAdmin(lua_State* L) {
 	luabridge::LuaRef groupList = luabridge::newTable(L);
-	std::ifstream fin("config/config.yml");
-	YAML::Node config = YAML::Load(fin);
+	ConfigReader config("config/config.yml");
 	bool inGroup = false;
 	for (auto i : config["admin"]) {
 		groupList.append(i.as<string>());
@@ -438,7 +432,7 @@ bool LoadPlugin() {
 		}
 		logger.info("All Plugins Loaded.");
 	}
-	catch (const exception& e) {
+	catch (const std::exception& e) {
 		logger.error(e.what());
 	}
 	return true;

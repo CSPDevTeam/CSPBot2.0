@@ -1,21 +1,22 @@
-﻿#include <string>
-#include <windows.h>
-#include <global.h>
-#include <cspbot20.h>
-#include <qthread.h>
-#include <iostream>
-#include <tchar.h>
-#include <stdio.h>
-#include <string>
+﻿#include "server.h"
+#include "global.h"
+#include "cspbot20.h"
+#include "logger.h"
+#include "config_reader.h"
 #include <regex>
-#include <yaml-cpp/yaml.h>
-#include <stdio.h>
-#include <logger.h>
-#include <helper.h>
-#include <server.h>
-#include <qprocess.h>
 
-using namespace std;
+//#include <windows.h>
+//#include <qthread.h>
+//#include <iostream>
+//#include <tchar.h>
+//#include <stdio.h>
+//#include <string>
+//#include <regex>
+//#include <yaml-cpp/yaml.h>
+//#include <stdio.h>
+//#include "logger.h"
+//#include "helper.h"
+//#include <qprocess.h>
 
 enum stopType : int {
 	normal,
@@ -48,7 +49,7 @@ bool Server::createServer() {
 	string runProgress;
 	if (startMode == 0) {
 		runProgress = "cmd.exe /c chcp 65001&cd \"{}\"&\"{}\"";
-		runProgress = fmt::format(runProgress, getConfig("progressPath"), getConfig("progressName"));
+		runProgress = fmt::format(runProgress, GetConfig("progressPath"), GetConfig("progressName"));
 	}
 	else if (startMode == 1) {
 		runProgress = "cmd.exe";
@@ -87,7 +88,7 @@ bool Server::sendCmd(string cmd) {
 	qDebug() << QString::fromStdString(cmd);
 
 	//检测停止
-	if (cmd == getConfig("stopCmd") + "\n") {
+	if (cmd == GetConfig("stopCmd") + "\n") {
 		normalStop = true;
 	}
 
@@ -101,7 +102,7 @@ bool Server::sendCmd(string cmd) {
 
 //软停止服务器
 bool Server::stopServer() {
-	string stopCmd = getConfig("stopCmd");
+	string stopCmd = GetConfig("stopCmd");
 	if (stopCmd == "!failed!") {
 		stopCmd = "stop";
 	}
@@ -113,7 +114,7 @@ bool Server::stopServer() {
 //处理BDS消息
 void Server::formatBDSLog(string line) {
 	//去掉Color并分割
-	regex pattern("\033\\[(.+?)m");
+	std::regex pattern("\033\\[(.+?)m");
 	string nocolor_line = regex_replace(line, pattern, "");
 	vector<string> nocolor_words = helper::split(nocolor_line, "\n");
 
@@ -229,9 +230,8 @@ void Server::catchInfo(QString line) {
 }
 
 YAML::Node getRegular() {
-	std::ifstream fin("data/regular.yml");
-	YAML::Node node = YAML::Load(fin); //读取regular配置文件
-	return node;
+	ConfigReader regular("data/regular.yml");
+	return regular.raw();
 }
 
 void Server::selfCatchLine(QString line) {

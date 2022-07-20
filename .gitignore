@@ -4,6 +4,6 @@ x64
 data
 plugins
 config
+logs
 *.user
 *.aps
-Bot

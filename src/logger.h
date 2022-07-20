@@ -1,14 +1,9 @@
 ﻿#pragma once
-// self
-#include "cspbot20.h"
-#include "server.h"
 #include "global.h"
-#include "helper.h"
 #include "ws_client.h"
-// third-party
-#include <FMT/chrono.h>
+#include <fmt/format.h>
 
-string getConfig(const string& key);
+string GetConfig(const string& key);
 
 class Logger {
 public:
@@ -75,7 +70,6 @@ public:
 	static string getTime() {
 		time_t tt = time(NULL);
 		struct tm* t = localtime(&tt);
-		std::ostringstream buffer;
 		string s = std::to_string(t->tm_sec);
 		if (s.length() == 1) {
 			s = "0" + s;
@@ -86,7 +80,7 @@ public:
 
 private:
 	int getLevel() {
-		string level = getConfig("LoggerLevel");
+		string level = GetConfig("LoggerLevel");
 		if (level == "!failed!") {
 			level = "debug";
 		}

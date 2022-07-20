@@ -1,12 +1,9 @@
-﻿#include <regular_edit.h>
+﻿#include "regular_edit.h"
+#include "config_reader.h"
+#include "message_box.h"
+#include <QtWidgets>
 #include <QGraphicsDropShadowEffect>
-#include <qevent.h>
-#include <qdebug.h>
-#include <qprocess.h>
-#include <QtCore/qpropertyanimation.h>
-#include <QtWidgets/qmessagebox.h>
-
-using namespace std;
+#include <fstream>
 
 RegularEdit::RegularEdit(Regular regular, bool newRegular, QWidget* parent)
 	: QWidget(parent) {
@@ -57,7 +54,7 @@ RegularEdit::RegularEdit(Regular regular, bool newRegular, QWidget* parent)
 
 void RegularEdit::saveRegular() {
 	//读取Yaml
-	YAML::Node regular = YAML::LoadFile("data/regular.yml");
+	ConfigReader regular("data/regular.yml");
 
 	if (mNewRegular == false) {
 		//转换成存储的Regular
@@ -78,23 +75,19 @@ void RegularEdit::saveRegular() {
 
 		//获取原对象
 		bool removed = false;
-		for (int i = 0; i < regular.size(); i++) {
+		for (int i = 0; i < regular.raw().size(); i++) {
 			if (regular[i]["Regular"].as<string>() == fmRegular &&
 				regular[i]["Action"].as<string>() == fmAction &&
 				regular[i]["From"].as<string>() == fmFrom &&
 				regular[i]["Permissions"].as<bool>() == fmPermission) {
-				regular.remove(i);
+				regular.raw().remove(i);
 				removed = true;
 				break;
 			}
 		}
 
 		if (!removed) {
-			QMessageBox::warning(
-				this,
-				"警告",
-				"无法正常删除原正则，请手动删除",
-				QMessageBox::Yes);
+			msgbox::ShowWarn("无法正常删除原正则，请手动删除");
 		}
 	}
 
@@ -119,11 +112,11 @@ void RegularEdit::saveRegular() {
 	newRegular["Action"] = tmAction;
 	newRegular["From"] = tmFrom;
 	newRegular["Permissions"] = tmPermission;
-	regular.push_back(newRegular);
+	regular.raw().push_back(newRegular);
 
 	//写入文件
-	ofstream fout("data/regular.yml");
-	fout << regular;
+	std::ofstream fout("data/regular.yml");
+	fout << regular.raw();
 	fout.close();
 
 	this->close();
@@ -131,7 +124,7 @@ void RegularEdit::saveRegular() {
 
 void RegularEdit::deleteRegular() {
 	//读取Yaml
-	YAML::Node regular = YAML::LoadFile("data/regular.yml");
+	ConfigReader regular("data/regular.yml");
 	//转换成存储的Regular
 	string fmRegular = mRegular.regular.toStdString();
 	string fmAction = mRegular.action.toStdString();
@@ -150,28 +143,24 @@ void RegularEdit::deleteRegular() {
 
 	//获取原对象
 	bool removed = false;
-	for (int i = 0; i < regular.size(); i++) {
+	for (int i = 0; i < regular.raw().size(); i++) {
 		if (regular[i]["Regular"].as<string>() == fmRegular &&
 			regular[i]["Action"].as<string>() == fmAction &&
 			regular[i]["From"].as<string>() == fmFrom &&
 			regular[i]["Permissions"].as<bool>() == fmPermission) {
-			regular.remove(i);
+			regular.raw().remove(i);
 			removed = true;
 			break;
 		}
 	}
 
 	if (!removed) {
-		QMessageBox::warning(
-			this,
-			"警告",
-			"无法正常删除正则，请手动删除",
-			QMessageBox::Yes);
+		msgbox::ShowWarn("无法正常删除原正则，请手动删除");
 	}
 
 	//写入文件
-	ofstream fout("data/regular.yml");
-	fout << regular;
+	std::ofstream fout("data/regular.yml");
+	fout << regular.raw();
 	fout.close();
 
 	this->close();

@@ -1,39 +1,39 @@
-﻿#include <cspbot20.h>
-#include <stdafx.h>
-#include <global.h>
-#include <mysysinfo/mysysinfo.h>
-#include <QtWidgets/QApplication>
-#include <ws_client.h>
-#include <framework.h>
-#include <logger.h>
-#include <plugins.h>
-#include <fstream>
-#include <global.h>
-#include <message_box.h>
+﻿#include "global.h"
+#include "cspbot20.h"
+#include "config_reader.h"
+#include "logger.h"
+#include "message_box.h"
+#include "plugins.h"
+//#include "stdafx.h"
+//#include "mysysinfo.h"
+//#include <QtWidgets/QApplication>
+//#include "ws_client.h"
+//#include "framework.h"
 
 #pragma comment(lib, "dbghelp.lib")
+// 引入库
+#ifdef _DEBUG
+#pragma comment(lib, "lib/libcrypto_d.lib")
+#pragma comment(lib, "lib/libssl_d.lib")
+#pragma comment(lib, "lib/LightWSClient_d.lib")
+#else
+#pragma comment(lib, "lib/libcrypto.lib")
+#pragma comment(lib, "lib/libssl.lib")
+#pragma comment(lib, "lib/LightWSClient.lib")
+#endif
 
-using namespace std;
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
 Logger logger("CSPBot");
 Logger serverLogger("Server");
 Logger mirai_logger("Mirai");
 
-string getConfig(const string& key) {
-	std::ifstream fin("config/config.yml", ios::in);
-	if (!fin.is_open()) {
-		return "!failed!";
-	}
-	auto config = YAML::Load(fin);
+string GetConfig(const string& key) {
+	ConfigReader config("config/config.yml");
 	return config[key].as<string>();
 };
 
 int checkConfigVersion() {
-	std::ifstream fin("config/config.yml", ios::in);
-	if (!fin.is_open()) {
-		return 2;
-	}
-	auto config = YAML::Load(fin);
+	ConfigReader config("config/config.yml");
 	if (config["Version"].as<int>() < g_config_version) {
 		return 1;
 	}
@@ -48,12 +48,9 @@ string checkConfigfull() {
 		"data/regular.yml",
 	};
 
-	for (string i : fileList) {
-		std::ifstream fin(i, ios::in);
-		if (!fin.is_open()) {
+	for (auto& i : fileList) {
+		if (fs::exists(i))
 			return i;
-		}
-		fin.close();
 	}
 
 	return "success.";

@@ -1,19 +1,18 @@
-﻿#include <cspbot20.h>
-#include <stdafx.h>
-#include <helper.h>
-#include <global.h>
-#include <logger.h>
-#include <ws_client.h>
-#include <regular_edit.h>
-#include <plugins.h>
+﻿#include "cspbot20.h"
+#include "stdafx.h"
+#include "helper.h"
+#include "global.h"
+#include "logger.h"
+#include "ws_client.h"
+#include "regular_edit.h"
+#include "plugins.h"
 #include <QInputDialog>
-#include <Event.h>
-#include <dialog.h>
-#include <message_box.h>
+#include "Event.h"
+#include "dialog.h"
+#include "message_box.h"
+#include "server.h"
+#include "config_reader.h"
 
-using namespace std;
-
-///////////////////////////////////////////// Global /////////////////////////////////////////////
 //关闭动画Animation
 QGraphicsOpacityEffect* c_pOpacity;
 QPropertyAnimation* c_pAnimation;
@@ -23,7 +22,6 @@ QPropertyAnimation* c_pAnimation;
 ///////////////////////////////////////////// Export /////////////////////////////////////////////
 //插入机器人日志
 void CSPBot::insertLog(QString a) {
-	;
 	ui.botconsole->setReadOnly(false);
 	ui.botconsole->append(a);
 	ui.botconsole->moveCursor(QTextCursor::End);
@@ -68,8 +66,8 @@ void CSPBot::slotClearConsole() { ui.botconsole->setText(""); }
 
 //更新上下行
 void CSPBot::slotUpdateSendRecive(int send, int recive) {
-	string sendString = to_string(send);
-	string reciveString = to_string(recive);
+	string sendString = std::to_string(send);
+	string reciveString = std::to_string(recive);
 	if (send > 99) {
 		sendString = "99+";
 	}
@@ -110,7 +108,7 @@ void CSPBot::slotDisConnectMirai() {
 }
 
 void CSPBot::slotMiraiMessageBox() {
-	if (getConfig("connectUrl") != "!failed!") {
+	if (GetConfig("connectUrl") != "!failed!") {
 		msgbox::ShowError("无法连接到Mirai");
 		// QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
 	}
@@ -129,14 +127,14 @@ void CSPBot::slotTimerFunc() {
 	else {
 		int f = nowTime - mGetTime;
 		if (f < 60) {
-			min = f%60;
+			min = f % 60;
 			flag = false;
 		}
 		else {
 			min = f / 60;
 		}
 	}
-	minString = to_string(min);
+	minString = std::to_string(min);
 	if (flag) {
 		if (min > 99) {
 			minString = "99+m";
@@ -148,7 +146,7 @@ void CSPBot::slotTimerFunc() {
 	else {
 		minString = minString + "s";
 	}
-	//qDebug() << QString::fromStdString(minString);
+	// qDebug() << QString::fromStdString(minString);
 	string minFormat = fmt::format("连接时间:{}", minString);
 	ui.websocketConnectedTime->setText(QString::fromStdString(minFormat));
 
@@ -244,17 +242,17 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	connect(ui.forceStop, &QPushButton::clicked, this, &CSPBot::forceStopServer);
 	connect(ui.clear, &QPushButton::clicked, this, &CSPBot::clear_console);
 	connect(ui.ServerCmd, &QPushButton::clicked, this, &CSPBot::startCmd); //绑定启动cmd
-	connect(ui.runCmd, &QPushButton::clicked, this, &CSPBot::insertCmd);   //绑定运行命令
+	connect(ui.runCmd, &QPushButton::clicked, this, &CSPBot::insertCmd); //绑定运行命令
 	connect(this, &CSPBot::signalStartLogger, this, &CSPBot::startLogger); //开启Logger服务
 
 	//绑定快捷键
-	connect(this, &CSPBot::runCommand, this, &CSPBot::insertCmd);	   //绑定回车输入命令
+	connect(this, &CSPBot::runCommand, this, &CSPBot::insertCmd); //绑定回车输入命令
 	connect(this, &CSPBot::runCmd, ui.ServerCmd, &QPushButton::click); //绑定启动cmd
 
 	//机器人Console
-	connect(ui.consoleSave, &QPushButton::clicked, this, &CSPBot::slotSaveConsole);	   //保存日志
-	connect(ui.consoleClear, &QPushButton::clicked, this, &CSPBot::slotClearConsole);  //清空控制台
-	connect(ui.connect, &QPushButton::clicked, this, &CSPBot::slotConnectMirai);	   //连接Mirai
+	connect(ui.consoleSave, &QPushButton::clicked, this, &CSPBot::slotSaveConsole); //保存日志
+	connect(ui.consoleClear, &QPushButton::clicked, this, &CSPBot::slotClearConsole); //清空控制台
+	connect(ui.connect, &QPushButton::clicked, this, &CSPBot::slotConnectMirai); //连接Mirai
 	connect(ui.disConnect, &QPushButton::clicked, this, &CSPBot::slotDisConnectMirai); //断开连接
 
 	//表格
@@ -714,8 +712,8 @@ void CSPBot::keyPressEvent(QKeyEvent* e) {
 ///////////////////////////////////////////// Table /////////////////////////////////////////////
 void CSPBot::InitPlayerTableView() {
 	try {
-		YAML::Node node = YAML::LoadFile("data/player.yml"); //读取player配置文件
-		int line_num = static_cast<int>(node.size());
+		ConfigReader player("data/player.yml");
+		int line_num = static_cast<int>(player.raw().size());
 		QStringList strHeader;
 		strHeader << "玩家名称"
 				  << "玩家Xuid"
@@ -730,7 +728,7 @@ void CSPBot::InitPlayerTableView() {
 
 		//居中显示并设置文本
 		int in = 0;
-		for (YAML::Node i : node) {
+		for (YAML::Node i : player.raw()) {
 			string playerName = i["playerName"].as<string>();
 			string xuid = i["xuid"].as<string>();
 			string qq = i["qq"].as<string>();
@@ -758,8 +756,8 @@ void CSPBot::InitPlayerTableView() {
 
 void CSPBot::InitRegularTableView() {
 	try {
-		YAML::Node node = YAML::LoadFile("data/regular.yml"); //读取player配置文件
-		int line_num = static_cast<int>(node.size());
+		ConfigReader regular("data/regular.yml");
+		int line_num = static_cast<int>(regular.raw().size());
 		QStringList strHeader;
 		strHeader << "正则"
 				  << "来源"
@@ -781,7 +779,7 @@ void CSPBot::InitRegularTableView() {
 		ui.regularAdmin->setModel(m_model);
 		//居中显示并设置文本
 		int in = 0;
-		for (YAML::Node i : node) {
+		for (YAML::Node i : regular.raw()) {
 			string Regular = i["Regular"].as<string>();
 			string Action = i["Action"].as<string>();
 			string From = i["From"].as<string>();

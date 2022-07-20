@@ -1,5 +1,4 @@
 ﻿#pragma once
-// third-party
 #include <ui_dialog.h>
 
 //枚举状态

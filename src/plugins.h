@@ -1,29 +1,8 @@
 ﻿#pragma once
-// self
-#include "logger.h"
-// third-party
-#include "../lua/lua.hpp"
+#include "lua/lua.hpp"
 #include <LuaBridge/LuaBridge.h>
 
 using luabridge::LuaRef;
-
-enum class EventCode {
-	onServerStart,
-	onServerStop,
-	onSendCommand,
-	onReceiveMsg,
-	onReceivePacket,
-	onStop,
-	onLogin,
-	onImport,
-	onSendMsg,
-	onRecall,
-	onConnectError,
-	onConnectLost,
-	onConsoleUpdate,
-	onBinded,
-	onUnBinded,
-};
 
 // class Callbacker {
 // public:

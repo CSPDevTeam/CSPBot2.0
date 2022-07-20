@@ -1,26 +1,19 @@
-﻿#include <framework.h>
+﻿#include "logger.h"
 #include <DbgHelp.h>
-#include <QApplication>
-#include <QtWidgets/qmessagebox.h>
-#include <FMT/chrono.h>
-#include <logger.h>
-#include <version.h>
-#include <filesystem>
-
-using namespace std;
-namespace fs = filesystem;
+//#include "framework.h"
+//#include <QApplication>
+//#include <QtWidgets/qmessagebox.h>
+//#include <FMT/chrono.h>
 
 //获取格式化时间
 string getTime() {
 	time_t tt = time(NULL);
 	struct tm* t = localtime(&tt);
-	ostringstream buffer;
-	string s = to_string(t->tm_sec);
+	string s = std::to_string(t->tm_sec);
 	if (s.length() == 1) {
 		s = "0" + s;
 	}
-	string timeString = fmt::format("{}-{}-{}_{}-{}-{}", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, s);
-	return timeString;
+	return fmt::format("{}-{}-{}_{}-{}-{}", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, s);
 };
 
 wchar_t* multiByteToWideChar(const string& pKey) {

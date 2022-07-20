@@ -5,11 +5,13 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <filesystem>
 
 using std::queue;
 using std::string;
 using std::vector;
 using std::unordered_map;
+namespace fs = std::filesystem;
 
 class CSPBot;
 class Server;

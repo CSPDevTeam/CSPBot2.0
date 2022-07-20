@@ -1,14 +1,6 @@
 ﻿#pragma once
-// self
 #include "global.h"
 #include "cspbot20.h"
-#include "logger.h"
-#include "ws_client.h"
-// third-party
-#include <qthread.h>
-#include <yaml-cpp/yaml.h>
-// system
-#include <regex>
 
 enum stopType;
 

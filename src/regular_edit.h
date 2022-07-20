@@ -1,10 +1,6 @@
 ﻿#pragma once
-// self
 #include "helper.h"
-// third-party
-#include <QtWidgets/QMainWindow>
 #include <ui_regularEdit.h>
-#include <QButtonGroup>
 
 class RegularEdit : public QWidget {
 	Q_OBJECT
