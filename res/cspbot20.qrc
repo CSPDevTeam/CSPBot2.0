@@ -1,4 +1,28 @@
 <RCC>
-    <qresource prefix="CSPBot20">
+    <qresource prefix="/icon">
+        <file>image/Main.svg</file>
+        <file>image/插件.svg</file>
+        <file>image/文本.svg</file>
+        <file>image/用户.svg</file>
+        <file>image/用户管理.svg</file>
+        <file>image/正则式.svg</file>
+        <file>image/主页.svg</file>
+    </qresource>
+    <qresource prefix="/dialog">
+        <file>image/error.svg</file>
+        <file>image/info.svg</file>
+        <file>image/warn.svg</file>
+    </qresource>
+    <qresource prefix="/a">
+        <file>image/a/1.png</file>
+        <file>image/a/2.png</file>
+        <file>image/a/3.png</file>
+        <file>image/a/4.png</file>
+        <file>image/a/addpage.png</file>
+        <file>image/a/subpage.png</file>
+        <file>image/a/tiao.png</file>
+    </qresource>
+    <qresource prefix="/qt">
+        <file>etc/qt.conf</file>
     </qresource>
 </RCC>

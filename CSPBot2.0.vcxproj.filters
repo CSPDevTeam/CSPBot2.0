@@ -309,9 +309,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="res\cspbot20.qrc" />
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="ui\cspbot20.ui">
       <Filter>Form Files</Filter>
     </QtUic>
@@ -530,5 +527,8 @@
     <QtMoc Include="src\mysysinfo.h">
       <Filter>Header File\System</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="res\cspbot20.qrc" />
   </ItemGroup>
 </Project>

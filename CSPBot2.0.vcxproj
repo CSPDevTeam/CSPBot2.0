@@ -63,11 +63,17 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -171,7 +177,6 @@
     <ClCompile Include="src\yaml-cpp\singledocparser.cpp" />
     <ClCompile Include="src\yaml-cpp\stream.cpp" />
     <ClCompile Include="src\yaml-cpp\tag.cpp" />
-    <QtRcc Include="res\cspbot20.qrc" />
     <QtUic Include="ui\cspbot20.ui" />
     <ClCompile Include="src\command.cpp" />
     <ClCompile Include="src\cspbot20.cpp" />
@@ -253,6 +258,9 @@
     <QtMoc Include="src\logger.h" />
     <QtMoc Include="src\dialog.h" />
     <QtMoc Include="src\cspbot20.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="res\cspbot20.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -321,7 +321,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 //######################### Command #########################
 
 bool RegisterCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State* L) {
-	if (command.find(cmd) != command.end() &&
+	if (g_command.find(cmd) != g_command.end() &&
 		cmd != "bind" &&
 		cmd != "unbind" &&
 		cmd != "motdbe" &&
@@ -331,7 +331,7 @@ bool RegisterCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State*
 		return false;
 		throw std::invalid_argument("Invalid command:" + cmd);
 	}
-	command.emplace(cmd, cbf);
+	g_command.emplace(cmd, cbf);
 	return true;
 }
 
@@ -357,9 +357,8 @@ bool BindXbox(string name, string qq, lua_State* L) {
 //######################### Info #########################
 luabridge::LuaRef GetGroup(lua_State* L) {
 	luabridge::LuaRef groupList = luabridge::newTable(L);
-	ConfigReader config("config/config.yml");
 	//bool inGroup = false;
-	for (auto i : config["group"]) {
+	for (auto i : g_config["group"]) {
 		groupList.append(i.as<string>());
 	}
 	return groupList;
@@ -367,16 +366,15 @@ luabridge::LuaRef GetGroup(lua_State* L) {
 
 luabridge::LuaRef GetAdmin(lua_State* L) {
 	luabridge::LuaRef groupList = luabridge::newTable(L);
-	ConfigReader config("config/config.yml");
 	bool inGroup = false;
-	for (auto i : config["admin"]) {
+	for (auto i : g_config["admin"]) {
 		groupList.append(i.as<string>());
 	}
 	return groupList;
 }
 
 void EnableListener(EventCode evc) {
-	enableEvent.emplace(evc, true);
+	g_enable_events.emplace(evc, true);
 }
 
 Plugin* GetPlugin(const string& name) {
@@ -403,7 +401,7 @@ bool RegisterPlugin(const string& name, const string& description, const string&
 bool LoadPlugin() {
 	//加载文件
 	try {
-		logger.info("Start Loading Plugins...");
+		g_logger.info("Start Loading Plugins...");
 		if (!fs::exists(PLUGIN_PATH))
 			fs::create_directories(PLUGIN_PATH);
 		for (auto& info : fs::directory_iterator(PLUGIN_PATH)) {
@@ -412,28 +410,28 @@ bool LoadPlugin() {
 
 				//忽略以'_'开头的文件
 				if (name.front() == '_') {
-					logger.warn("Ignoring {}", name);
+					g_logger.warn("Ignoring {}", name);
 					continue;
 				}
 				else {
-					logger.info("Loading Plugin {}", name);
+					g_logger.info("Loading Plugin {}", name);
 					auto m = luaL_dofile(g_lua_State, name.c_str());
 					if (m) {
 					}
 					else {
-						logger.error("Fail to load the plugin {}!", name);
+						g_logger.error("Fail to load the plugin {}!", name);
 					}
 					// Callbacker cbe(EventCode::onImport);
 					// cbe.insert("name", name);
 					// cbe.callback();
-					logger.info("Plugin {} Loaded.", name);
+					g_logger.info("Plugin {} Loaded.", name);
 				}
 			}
 		}
-		logger.info("All Plugins Loaded.");
+		g_logger.info("All Plugins Loaded.");
 	}
 	catch (const std::exception& e) {
-		logger.error(e.what());
+		g_logger.error(e.what());
 	}
 	return true;
 }

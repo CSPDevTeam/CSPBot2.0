@@ -28,10 +28,9 @@ void EventCallbacker::callback() {
 }
 
 vector<string> EventCallbacker::getEvent(EventCode ec) {
-	ConfigReader event_data("data/event.yml");
 	vector<string> eventList;
 	auto code = magic_enum::enum_name<EventCode>(ec);
-	for (auto i : event_data[string(code)]) {
+	for (auto i : g_event[string(code)]) {
 		eventList.push_back(i.as<string>());
 	}
 	return eventList;

@@ -62,11 +62,11 @@ messagePacket transMessagePacket(json j) {
 bool Mirai::connectMirai() {
 	bool connected = g_mirai->login();
 	if (connected) {
-		mirai_logger.info("连接到Mirai成功");
+		g_mirai_logger.info("连接到Mirai成功");
 	}
 	else {
 		emit signalMiraiMessageBox();
-		mirai_logger.error("无法连接到 Mirai");
+		g_mirai_logger.error("无法连接到 Mirai");
 	}
 
 	g_mirai->botProfile();
@@ -130,7 +130,7 @@ bool WsClient::shutdown() {
 		try {
 			ws.Shutdown();
 			g_mirai->logined = false;
-			mirai_logger.warn("Mirai已断开连接");
+			g_mirai_logger.warn("Mirai已断开连接");
 			reciveMsg = 0;
 			sendMsg = 0;
 			emit updateSendRecive(sendMsg, reciveMsg);
@@ -152,21 +152,18 @@ Mirai::Mirai() {
 }
 
 void Mirai::run() {
-	mirai_logger.info("Mirai启动中...");
+	g_mirai_logger.info("Mirai启动中...");
 	connectMirai();
-	mirai_logger.info("Mirai启动完成");
+	g_mirai_logger.info("Mirai启动完成");
 }
 
 void otherSendCmd(string cmd);
 
 void Mirai::selfGroupCatchLine(messagePacket message) {
-	ConfigReader regular("data/regular.yml");
-	ConfigReader config("config/config.yml");
-
 	vector<Regular> regularList;
 
 	//读取正则组
-	for (auto i : regular.raw()) {
+	for (auto i : g_regular.raw()) {
 		string mRegular = i["Regular"].as<string>();
 		string Action = i["Action"].as<string>();
 		string From = i["From"].as<string>();
@@ -206,7 +203,7 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 		int r_pos = r.indexIn(QString::fromStdString(message.message));
 		// bool qqAdmin = std::find(config["admin"].begin(), config["admin"].end(), message.qqNum) != config["admin"].end();
 		bool qqAdmin = false;
-		for (auto j : config["admin"]) {
+		for (auto j : g_config["admin"]) {
 			if (j.as<string>() == message.qq) {
 				qqAdmin = true;
 				break;
@@ -241,13 +238,13 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 	json msg_json = json::parse(msg);
 	string syncId = msg_json["syncId"].get<string>();
 	emit updateSendRecive(sendMsg, reciveMsg); //更新
-	mirai_logger.debug(msg_json.dump());
+	g_mirai_logger.debug(msg_json.dump());
 	emit packetCallback(QString::fromStdString(msg));
 	//登录包
 	if (syncId == "1") {
 		//设置UserImage
 		string qqNick = msg_json["data"]["nickname"].get<string>();
-		mirai_logger.info("{}登录 Mirai 成功", qqNick);
+		g_mirai_logger.info("{}登录 Mirai 成功", qqNick);
 		logined = true;
 		emit OtherCallback("onLogin");
 		string qqNum = GetConfig("qq");
@@ -260,7 +257,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 	else if (syncId == "2") {
 		int msgId = msg_json["data"]["messageId"];
 		if (msgId == -1) {
-			mirai_logger.warn("已发出信息但可能遭到屏蔽");
+			g_mirai_logger.warn("已发出信息但可能遭到屏蔽");
 		}
 	}
 	else if (syncId == "-1") {
@@ -268,10 +265,8 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 		if (msg_json["data"].find("type") != msg_json["data"].end() && msg_json["data"]["type"] == "GroupMessage") {
 			messagePacket msgPacket = transMessagePacket(msg_json);
 
-			// vector<string> allowGroup;
-			ConfigReader config("config/config.yml");
 			bool inGroup = false;
-			for (auto i : config["group"]) {
+			for (auto i : g_config["group"]) {
 				if (i.as<string>() == msgPacket.group) {
 					inGroup = true;
 					break;
@@ -301,7 +296,7 @@ void Mirai::onText(WebSocketClient& client, string msg) {
 
 //相应连接报错
 void Mirai::onError(WebSocketClient& client, string msg) {
-	mirai_logger.error("WebsocketClient error:{}", msg);
+	g_mirai_logger.error("WebsocketClient error:{}", msg);
 	logined = false;
 	reciveMsg = 0;
 	sendMsg = 0;
@@ -311,7 +306,7 @@ void Mirai::onError(WebSocketClient& client, string msg) {
 
 //响应连接丢失
 void Mirai::onLost(WebSocketClient& client, int code) {
-	mirai_logger.error("WebsocketClient Connect Lost,errorCode:{}", code);
+	g_mirai_logger.error("WebsocketClient Connect Lost,errorCode:{}", code);
 	logined = false;
 	reciveMsg = 0;
 	sendMsg = 0;
@@ -388,8 +383,7 @@ void Mirai::recallMsg(string target, bool callback) {
 }
 
 void Mirai::sendAllGroupMsg(string msg, bool callback) {
-	ConfigReader config("config/config.yml");
-	for (auto igroup : config["group"]) {
+	for (auto igroup : g_config["group"]) {
 		string group = std::to_string(igroup.as<long long>());
 		if (logined) {
 			sendGroupMsg(group, msg, callback);

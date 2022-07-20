@@ -513,8 +513,7 @@ string fmtConsole::FmtGroupRegular(messagePacket message, string cmd) {
 	fmter["{message}"] = message.message;
 	fmter["{permission}"] = message.perm;
 	string xboxid_ = message.memberName;
-	ConfigReader player("data/player.yml");
-	for (auto i : player.raw()) {
+	for (auto i : g_player.raw()) {
 		if (i["qq"].as<string>() == message.qq) {
 			xboxid_ = i["playerName"].as<string>();
 		}
@@ -557,7 +556,7 @@ string fmtConsole::FmtGroupRegular(messagePacket message, string cmd) {
 QString fmtConsole::getColoredLine(string line) {
 	QString qline = QString::fromStdString(line);
 	try {
-		if (ConfigReader("config/config.yml")["ConsoleColor"].as<bool>()) {
+		if (g_config["ConsoleColor"].as<bool>()) {
 			qline = qline.replace("<", "&lt;");
 			qline = qline.replace(">", "&gt;");
 			qline = qline.replace("\033[0m", "</font>");

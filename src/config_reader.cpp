@@ -25,7 +25,13 @@ json yaml2json(const YAML::Node& root) {
 	return j;
 }
 
+ConfigReader::ConfigReader() {}
+
 ConfigReader::ConfigReader(const string& file) {
+	readFile(file);
+}
+
+void ConfigReader::readFile(const string& file) {
 	try {
 		root = YAML::LoadFile(string(file));
 	}

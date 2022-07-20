@@ -53,9 +53,6 @@ RegularEdit::RegularEdit(Regular regular, bool newRegular, QWidget* parent)
 }
 
 void RegularEdit::saveRegular() {
-	//读取Yaml
-	ConfigReader regular("data/regular.yml");
-
 	if (mNewRegular == false) {
 		//转换成存储的Regular
 		string fmRegular = mRegular.regular.toStdString();
@@ -75,12 +72,12 @@ void RegularEdit::saveRegular() {
 
 		//获取原对象
 		bool removed = false;
-		for (int i = 0; i < regular.raw().size(); i++) {
-			if (regular[i]["Regular"].as<string>() == fmRegular &&
-				regular[i]["Action"].as<string>() == fmAction &&
-				regular[i]["From"].as<string>() == fmFrom &&
-				regular[i]["Permissions"].as<bool>() == fmPermission) {
-				regular.raw().remove(i);
+		for (int i = 0; i < g_regular.raw().size(); i++) {
+			if (g_regular[i]["Regular"].as<string>() == fmRegular &&
+				g_regular[i]["Action"].as<string>() == fmAction &&
+				g_regular[i]["From"].as<string>() == fmFrom &&
+				g_regular[i]["Permissions"].as<bool>() == fmPermission) {
+				g_regular.raw().remove(i);
 				removed = true;
 				break;
 			}
@@ -112,19 +109,17 @@ void RegularEdit::saveRegular() {
 	newRegular["Action"] = tmAction;
 	newRegular["From"] = tmFrom;
 	newRegular["Permissions"] = tmPermission;
-	regular.raw().push_back(newRegular);
+	g_regular.raw().push_back(newRegular);
 
 	//写入文件
 	std::ofstream fout("data/regular.yml");
-	fout << regular.raw();
+	fout << g_regular.raw();
 	fout.close();
 
 	this->close();
 }
 
 void RegularEdit::deleteRegular() {
-	//读取Yaml
-	ConfigReader regular("data/regular.yml");
 	//转换成存储的Regular
 	string fmRegular = mRegular.regular.toStdString();
 	string fmAction = mRegular.action.toStdString();
@@ -143,12 +138,12 @@ void RegularEdit::deleteRegular() {
 
 	//获取原对象
 	bool removed = false;
-	for (int i = 0; i < regular.raw().size(); i++) {
-		if (regular[i]["Regular"].as<string>() == fmRegular &&
-			regular[i]["Action"].as<string>() == fmAction &&
-			regular[i]["From"].as<string>() == fmFrom &&
-			regular[i]["Permissions"].as<bool>() == fmPermission) {
-			regular.raw().remove(i);
+	for (int i = 0; i < g_regular.raw().size(); i++) {
+		if (g_regular[i]["Regular"].as<string>() == fmRegular &&
+			g_regular[i]["Action"].as<string>() == fmAction &&
+			g_regular[i]["From"].as<string>() == fmFrom &&
+			g_regular[i]["Permissions"].as<bool>() == fmPermission) {
+			g_regular.raw().remove(i);
 			removed = true;
 			break;
 		}
@@ -160,7 +155,7 @@ void RegularEdit::deleteRegular() {
 
 	//写入文件
 	std::ofstream fout("data/regular.yml");
-	fout << regular.raw();
+	fout << g_regular.raw();
 	fout.close();
 
 	this->close();

@@ -74,8 +74,8 @@ border-bottom-left-radius:0px;</string>
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="cspbot20.qrc">
-       <normaloff>:/icon/Images/Main.svg</normaloff>:/icon/Images/Main.svg</iconset>
+      <iconset resource="../res/cspbot20.qrc">
+       <normaloff>:/icon/image/Main.svg</normaloff>:/icon/image/Main.svg</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -162,7 +162,7 @@ background-color: transparent;</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="cspbot20.qrc">:/dialog/Images/info.svg</pixmap>
+     <pixmap resource="../res/cspbot20.qrc">:/dialog/image/info.svg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -185,7 +185,7 @@ background-color: transparent;</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="cspbot20.qrc">:/dialog/Images/warn.svg</pixmap>
+     <pixmap resource="../res/cspbot20.qrc">:/dialog/image/warn.svg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -208,7 +208,7 @@ background-color: transparent;</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="cspbot20.qrc">:/dialog/Images/error.svg</pixmap>
+     <pixmap resource="../res/cspbot20.qrc">:/dialog/image/error.svg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -217,7 +217,8 @@ background-color: transparent;</string>
   </widget>
  </widget>
  <resources>
-  <include location="cspbot20.qrc"/>
+  <include location="../res/cspbot20.qrc"/>
+  <include location="../res/cspbot20.qrc"/>
  </resources>
  <connections/>
 </ui>

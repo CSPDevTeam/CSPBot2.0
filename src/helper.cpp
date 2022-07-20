@@ -139,11 +139,9 @@ string Motd::motdje(string host) {
 }
 
 bool Bind::bind(string qq, string name) {
-	ConfigReader player("data/player.yml");
-
 	vector<string> player_list;
 	vector<string> qq_list;
-	for (YAML::Node i : player.raw()) {
+	for (YAML::Node i : g_player.raw()) {
 		player_list.push_back(i["playerName"].as<string>());
 		qq_list.push_back(i["qq"].as<string>());
 	}
@@ -156,8 +154,8 @@ bool Bind::bind(string qq, string name) {
 		pl["playerName"] = name;
 		pl["qq"] = qq;
 		pl["xuid"] = "";
-		player.raw().push_back(pl);
-		fout << player.raw();
+		g_player.raw().push_back(pl);
+		fout << g_player.raw();
 	}
 	else {
 		return false;
@@ -166,9 +164,8 @@ bool Bind::bind(string qq, string name) {
 }
 
 bool Bind::unbind(string qq) {
-	ConfigReader player("data/player.yml");
 	vector<string> qq_list;
-	for (YAML::Node i : player.raw()) {
+	for (YAML::Node i : g_player.raw()) {
 		qq_list.push_back(i["qq"].as<string>());
 	}
 
@@ -178,9 +175,9 @@ bool Bind::unbind(string qq) {
 		auto it = find(qq_list.begin(), qq_list.end(), qq);
 		if (it != qq_list.end()) {
 			int index = it - qq_list.begin();
-			player.raw().remove(index);
+			g_player.raw().remove(index);
 		}
-		fout << player.raw();
+		fout << g_player.raw();
 	}
 	else {
 		return false;
@@ -190,12 +187,11 @@ bool Bind::unbind(string qq) {
 
 //绑定Xuid
 bool Bind::bindXuid(string name, string xuid) {
-	ConfigReader player("data/player.yml");
-	for (auto i : player.raw()) {
+	for (auto i : g_player.raw()) {
 		if (i["playerName"].as<string>() == name) {
 			std::ofstream fout("data/player.yml");
 			i["xuid"] = xuid;
-			fout << player.raw();
+			fout << g_player.raw();
 			return true;
 		}
 	}
@@ -204,9 +200,8 @@ bool Bind::bindXuid(string name, string xuid) {
 
 //查询信息
 YAML::Node Bind::queryXboxID(string type, string arg) {
-	ConfigReader player("data/player.yml");
 	//迭代搜索
-	for (auto i : player.raw()) {
+	for (auto i : g_player.raw()) {
 		if (type == "qq") {
 			if (i["qq"].as<string>() == arg) {
 				return i;

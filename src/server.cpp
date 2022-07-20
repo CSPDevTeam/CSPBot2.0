@@ -57,13 +57,13 @@ bool Server::createServer() {
 
 	myChildProcess->start(QString::fromStdString(runProgress));
 	if (myChildProcess->waitForStarted()) {
-		serverLogger.info("服务器启动成功,PID为:{}", myChildProcess->processId());
+		g_server_logger.info("服务器启动成功,PID为:{}", myChildProcess->processId());
 		emit changeStatus(true);
 		emit chenableForce(true);
 		started = true;
 	}
 	else {
-		serverLogger.error("服务器启动失败,原因:{}", myChildProcess->errorString().toStdString());
+		g_server_logger.error("服务器启动失败,原因:{}", myChildProcess->errorString().toStdString());
 	}
 
 	return true;
@@ -230,8 +230,7 @@ void Server::catchInfo(QString line) {
 }
 
 YAML::Node getRegular() {
-	ConfigReader regular("data/regular.yml");
-	return regular.raw();
+	return g_regular.raw();
 }
 
 void Server::selfCatchLine(QString line) {

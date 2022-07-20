@@ -4,11 +4,6 @@
 #include "logger.h"
 #include "message_box.h"
 #include "plugins.h"
-//#include "stdafx.h"
-//#include "mysysinfo.h"
-//#include <QtWidgets/QApplication>
-//#include "ws_client.h"
-//#include "framework.h"
 
 #pragma comment(lib, "dbghelp.lib")
 // 引入库
@@ -21,39 +16,43 @@
 #pragma comment(lib, "lib/libssl.lib")
 #pragma comment(lib, "lib/LightWSClient.lib")
 #endif
+#pragma warning(disable : 4996)
 
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
-Logger logger("CSPBot");
-Logger serverLogger("Server");
-Logger mirai_logger("Mirai");
+Logger g_logger("CSPBot");
+Logger g_server_logger("Server");
+Logger g_mirai_logger("Mirai");
+
+ConfigReader g_config;
+ConfigReader g_player;
+ConfigReader g_event;
+ConfigReader g_regular;
 
 string GetConfig(const string& key) {
-	ConfigReader config("config/config.yml");
-	return config[key].as<string>();
+	return g_config[key].as<string>();
 };
 
 int checkConfigVersion() {
-	ConfigReader config("config/config.yml");
-	if (config["Version"].as<int>() < g_config_version) {
+	if (g_config["Version"].as<int>() < g_config_version) {
 		return 1;
 	}
 	return 0;
 }
 
-string checkConfigfull() {
-	vector<string> fileList = {
-		"config/config.yml",
-		"data/event.yml",
-		"data/player.yml",
-		"data/regular.yml",
-	};
+void InitConfig() {
+	if (!fs::exists("config/config.yml"))
+		msgbox::ShowError("config/config.yml not found");
+	if (!fs::exists("data/player.yml"))
+		msgbox::ShowError("data/player.yml not found");
+	if (!fs::exists("data/event.yml"))
+		msgbox::ShowError("data/event.yml not found");
+	if (!fs::exists("data/regular.yml"))
+		msgbox::ShowError("data/regular.yml not found");
 
-	for (auto& i : fileList) {
-		if (fs::exists(i))
-			return i;
-	}
-
-	return "success.";
+	g_config.readFile("config/config.yml");
+	g_player.readFile("data/player.yml");
+	g_event.readFile("data/event.yml");
+	g_regular.readFile("data/regular.yml");
 }
 
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
@@ -80,24 +79,15 @@ int main(int argc, char* argv[]) {
 	//加载字体
 	QFontDatabase database;
 	auto fontFamily = database.families();
-	bool hasFont = fontFamily.contains("HarmonyOS Sans SC");
+	if (!fontFamily.contains("HarmonyOS Sans SC"))
+		msgbox::ShowHint("缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体");
+
+	InitConfig();
 
 	g_main_window = new CSPBot;
 	//展示窗口
 	g_main_window->show();
 	g_main_window->publicStartLogger();
-
-	try {
-		//检测文件完整性
-		string f = checkConfigfull();
-		if (f != "success.") {
-			msgbox::ShowError(QString::fromStdString("配置文件不完整\n缺少:") + f.c_str() + "文件");
-			return 1;
-		}
-	}
-	catch (const std::exception& e) {
-		msgbox::ShowError(e.what());
-	}
 
 	//检测文件版本
 	switch (checkConfigVersion()) {
@@ -114,9 +104,5 @@ int main(int argc, char* argv[]) {
 	g_lua_State = InitLua();
 	LoadPlugin();
 
-	//未安装字体提示
-	if (!hasFont) {
-		msgbox::ShowHint("缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体");
-	}
 	return a.exec();
 }

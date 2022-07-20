@@ -129,7 +129,7 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 			g_mirai->sendGroupMsg(group, "服务器不在运行中");
 		}
 	}
-	else if (command.find(Action_Type) != command.end()) {
+	else if (g_command.find(Action_Type) != g_command.end()) {
 		StringVector args;
 		int num = 0;
 		for (auto& i : sp) {

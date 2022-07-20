@@ -113,7 +113,7 @@ qproperty-iconSize: 32px 32px;
       <string>  控制终端</string>
      </property>
      <property name="icon">
-      <iconset resource="cspbot20.qrc">
+      <iconset>
        <normaloff>:/icon/Images/主页.svg</normaloff>:/icon/Images/主页.svg</iconset>
      </property>
     </widget>
@@ -179,7 +179,7 @@ QPushButton:hover{
       <string>  玩家管理</string>
      </property>
      <property name="icon">
-      <iconset resource="cspbot20.qrc">
+      <iconset>
        <normaloff>:/icon/Images/用户管理.svg</normaloff>:/icon/Images/用户管理.svg</iconset>
      </property>
     </widget>
@@ -218,7 +218,7 @@ QPushButton:hover{
       <string>  正则管理</string>
      </property>
      <property name="icon">
-      <iconset resource="cspbot20.qrc">
+      <iconset>
        <normaloff>:/icon/Images/正则式.svg</normaloff>:/icon/Images/正则式.svg</iconset>
      </property>
     </widget>
@@ -257,7 +257,7 @@ QPushButton:hover{
       <string>  插件管理</string>
      </property>
      <property name="icon">
-      <iconset resource="cspbot20.qrc">
+      <iconset>
        <normaloff>:/icon/Images/插件.svg</normaloff>:/icon/Images/插件.svg</iconset>
      </property>
     </widget>
@@ -296,7 +296,7 @@ QPushButton:hover{
       <string>  日志输出</string>
      </property>
      <property name="icon">
-      <iconset resource="cspbot20.qrc">
+      <iconset>
        <normaloff>:/icon/Images/文本.svg</normaloff>:/icon/Images/文本.svg</iconset>
      </property>
     </widget>
@@ -328,8 +328,8 @@ QPushButton:hover{
       <string>CSPBot</string>
      </property>
      <property name="icon">
-      <iconset resource="cspbot20.qrc">
-       <normaloff>:/icon/Images/Main.svg</normaloff>:/icon/Images/Main.svg</iconset>
+      <iconset resource="../res/cspbot20.qrc">
+       <normaloff>:/icon/image/Main.svg</normaloff>:/icon/image/Main.svg</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -1250,7 +1250,7 @@ QPushButton:hover{
   </widget>
  </widget>
  <resources>
-  <include location="cspbot20.qrc"/>
+  <include location="../res/cspbot20.qrc"/>
  </resources>
  <connections/>
 </ui>

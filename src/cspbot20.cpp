@@ -565,7 +565,7 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 
 void CSPBot::slotCommandCallback(QString cmd, StringVector fArgs) {
 	string type = cmd.toStdString();
-	if (command.find(type) != command.end()) {
+	if (g_command.find(type) != g_command.end()) {
 		luabridge::LuaRef args = luabridge::newTable(g_lua_State);
 		for (auto& i : fArgs) {
 			args.append(i.c_str());
@@ -712,8 +712,7 @@ void CSPBot::keyPressEvent(QKeyEvent* e) {
 ///////////////////////////////////////////// Table /////////////////////////////////////////////
 void CSPBot::InitPlayerTableView() {
 	try {
-		ConfigReader player("data/player.yml");
-		int line_num = static_cast<int>(player.raw().size());
+		int line_num = static_cast<int>(g_player.raw().size());
 		QStringList strHeader;
 		strHeader << "玩家名称"
 				  << "玩家Xuid"
@@ -728,7 +727,7 @@ void CSPBot::InitPlayerTableView() {
 
 		//居中显示并设置文本
 		int in = 0;
-		for (YAML::Node i : player.raw()) {
+		for (YAML::Node i : g_player.raw()) {
 			string playerName = i["playerName"].as<string>();
 			string xuid = i["xuid"].as<string>();
 			string qq = i["qq"].as<string>();
@@ -756,8 +755,7 @@ void CSPBot::InitPlayerTableView() {
 
 void CSPBot::InitRegularTableView() {
 	try {
-		ConfigReader regular("data/regular.yml");
-		int line_num = static_cast<int>(regular.raw().size());
+		int line_num = static_cast<int>(g_regular.raw().size());
 		QStringList strHeader;
 		strHeader << "正则"
 				  << "来源"
@@ -779,7 +777,7 @@ void CSPBot::InitRegularTableView() {
 		ui.regularAdmin->setModel(m_model);
 		//居中显示并设置文本
 		int in = 0;
-		for (YAML::Node i : regular.raw()) {
+		for (YAML::Node i : g_regular.raw()) {
 			string Regular = i["Regular"].as<string>();
 			string Action = i["Action"].as<string>();
 			string From = i["From"].as<string>();

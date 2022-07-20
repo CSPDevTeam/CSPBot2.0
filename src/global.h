@@ -19,6 +19,7 @@ class Mirai;
 class WsClient;
 class CommandAPI;
 class Logger;
+class ConfigReader;
 struct Plugin {
 	string name;
 	string description;
@@ -39,13 +40,18 @@ inline queue<string> g_queue;
 inline struct lua_State* g_lua_State = nullptr;
 
 inline unordered_map<EventCode, vector<string>> g_cb_functions;
-inline unordered_map<string, string> command;
+inline unordered_map<string, string> g_command;
 inline vector<Plugin> g_plugins;
-inline unordered_map<EventCode, bool> enableEvent;
+inline unordered_map<EventCode, bool> g_enable_events;
 
-extern Logger logger;
-extern Logger serverLogger;
-extern Logger mirai_logger;
+extern Logger g_logger;
+extern Logger g_server_logger;
+extern Logger g_mirai_logger;
+
+extern ConfigReader g_config;
+extern ConfigReader g_player;
+extern ConfigReader g_event;
+extern ConfigReader g_regular;
 
 // clang-format off
 #define CSP_TRY try {
