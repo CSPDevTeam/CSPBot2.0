@@ -37,7 +37,7 @@ void CheckConfigVersion() {
 		msgbox::ShowError("配置文件版本过低,请检查");
 }
 
-void InitConfig() {
+bool InitConfig() {
 	// if (!fs::exists("config/config.yml"))
 	//	msgbox::ShowError("config/config.yml not found");
 	// if (!fs::exists("data/player.yml"))
@@ -46,10 +46,11 @@ void InitConfig() {
 	//	msgbox::ShowError("data/event.yml not found");
 	// if (!fs::exists("data/regular.yml"))
 	//	msgbox::ShowError("data/regular.yml not found");
-	g_config.readFile("config/config.yml");
-	g_player.readFile("data/player.yml");
-	g_event.readFile("data/event.yml");
-	g_regular.readFile("data/regular.yml");
+	bool s_config_ret = g_config.readFile("config/config.yml");
+	bool s_player_ret = g_player.readFile("data/player.yml");
+	bool s_event_ret = g_event.readFile("data/event.yml");
+	bool s_regular_ret = g_regular.readFile("data/regular.yml");
+	return (s_config_ret && s_player_ret && s_event_ret && s_regular_ret);
 }
 
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
@@ -79,7 +80,9 @@ int main(int argc, char* argv[]) {
 	if (!fontFamily.contains("HarmonyOS Sans SC"))
 		msgbox::ShowHint("缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体");
 
-	InitConfig();
+	if (!InitConfig()) {
+		return 1;
+	}
 
 	g_main_window = new CSPBot;
 	//展示窗口

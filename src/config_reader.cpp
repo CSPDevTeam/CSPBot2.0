@@ -31,13 +31,15 @@ ConfigReader::ConfigReader(const string& file) {
 	readFile(file);
 }
 
-void ConfigReader::readFile(const string& file) {
+bool ConfigReader::readFile(const string& file) {
 	try {
 		root = YAML::LoadFile(string(file));
 	}
 	catch (const std::exception& e) {
 		msgbox::ShowError(e.what());
+		return false;
 	}
+	return true;
 }
 
 YAML::Node& ConfigReader::raw() {
