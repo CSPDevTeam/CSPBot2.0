@@ -322,6 +322,7 @@
     </None>
     <None Include=".clang-format" />
     <None Include=".gitignore" />
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\framework.h">
