@@ -1,8 +1,8 @@
-#include "helper.h"
+ï»¿#include "helper.h"
 #include "config_reader.h"
 #include <fstream>
 
-//×Ö·û´®Ìæ»»
+//å­—ç¬¦ä¸²æ›¿æ¢
 string helper::replace(const string& strSrc, const string& oldStr, const string& newStr, size_t count) {
 	string strRet = strSrc;
 	size_t pos = 0;
@@ -18,7 +18,7 @@ string helper::replace(const string& strSrc, const string& oldStr, const string&
 	return strRet;
 }
 
-//ÇĞ¸î×Ö·û´®
+//åˆ‡å‰²å­—ç¬¦ä¸²
 vector<string> helper::split(const string& str, const string& pattern) {
 	vector<string> res;
 	if (str == "")
@@ -36,7 +36,7 @@ vector<string> helper::split(const string& str, const string& pattern) {
 	return res;
 }
 
-//¼ì²âstringÊÇ·ñÊÇUTF-8
+//æ£€æµ‹stringæ˜¯å¦æ˜¯UTF-8
 bool helper::is_str_utf8(const char* str) {
 	unsigned int nBytes = 0;
 	unsigned char chr = *str;
@@ -85,7 +85,7 @@ bool helper::is_str_utf8(const char* str) {
 	return true;
 }
 
-// GBKÓëUTF-8»¥×ª
+// GBKä¸UTF-8äº’è½¬
 string helper::GbkToUtf8(const char* src_str) {
 	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[len + 1];
@@ -146,7 +146,7 @@ bool Bind::bind(string qq, string name) {
 		qq_list.push_back(i["qq"].as<string>());
 	}
 
-	//¼ì²âÓĞÃ»ÓĞÒÑ°ó¶¨µÄÕËºÅ
+	//æ£€æµ‹æœ‰æ²¡æœ‰å·²ç»‘å®šçš„è´¦å·
 	if (find(player_list.begin(), player_list.end(), name) == player_list.end() &&
 		find(qq_list.begin(), qq_list.end(), qq) == qq_list.end()) {
 		std::ofstream fout("data/player.yml");
@@ -169,7 +169,7 @@ bool Bind::unbind(string qq) {
 		qq_list.push_back(i["qq"].as<string>());
 	}
 
-	//¼ì²âÓĞÃ»ÓĞÒÑ°ó¶¨µÄÕËºÅ
+	//æ£€æµ‹æœ‰æ²¡æœ‰å·²ç»‘å®šçš„è´¦å·
 	if (find(qq_list.begin(), qq_list.end(), qq) != qq_list.end()) {
 		std::ofstream fout("data/player.yml");
 		auto it = find(qq_list.begin(), qq_list.end(), qq);
@@ -185,7 +185,7 @@ bool Bind::unbind(string qq) {
 	return true;
 }
 
-//°ó¶¨Xuid
+//ç»‘å®šXuid
 bool Bind::bindXuid(string name, string xuid) {
 	for (auto i : g_player.raw()) {
 		if (i["playerName"].as<string>() == name) {
@@ -198,9 +198,9 @@ bool Bind::bindXuid(string name, string xuid) {
 	return false;
 }
 
-//²éÑ¯ĞÅÏ¢
+//æŸ¥è¯¢ä¿¡æ¯
 YAML::Node Bind::queryXboxID(string type, string arg) {
-	//µü´úËÑË÷
+	//è¿­ä»£æœç´¢
 	for (auto i : g_player.raw()) {
 		if (type == "qq") {
 			if (i["qq"].as<string>() == arg) {

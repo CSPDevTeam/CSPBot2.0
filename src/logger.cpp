@@ -561,20 +561,23 @@ QString fmtConsole::getColoredLine(string line) {
 			qline = qline.replace(">", "&gt;");
 			qline = qline.replace("\033[0m", "</font>");
 			qline = qline.replace("\033[m", "</font>");
-			QRegExp color("\\033\\[38;2[\\d;]+m");
-			while (color.indexIn(qline) > -1) {
+			
+			auto color = QRegularExpression("\\033\\[38;2[\\d;]+m");
+			auto color_match = color.match(qline);
+			while (color_match.hasMatch()) {
 				QString rgb = "rgb(";
-				QString rgbcolor = color.cap(0);
+				QString rgbcolor = color_match.captured(0);
 				//提取color
 				rgbcolor = rgbcolor.replace("\033[38;2;", "").replace("m", "").replace(";", ",");
 				QString hexColor = QString::fromStdString(RGBToHex::rgb(rgbcolor.toStdString()));
-				qline = qline.replace(color.cap(0), "<font color=\"" + hexColor + "\" style=\"white-space: pre-wrap\">");
+				qline = qline.replace(color_match.captured(0), "<font color=\"" + hexColor + "\" style=\"white-space: pre-wrap\">");
+				color_match = color.match(qline);
 			}
 
-			int i = 0;
-			QRegExp normal_color("\\033\\[[\\d;]+m");
-			while (normal_color.indexIn(qline) > -1) {
-				QString rgbcolor = normal_color.cap(0);
+			auto normal_color= QRegularExpression("\\033\\[[\\d;]+m");
+			auto normal_color_match = normal_color.match(qline);
+			while (normal_color_match.hasMatch()) {
+				QString rgbcolor = normal_color_match.captured(0);
 				if (G_colorParts.find(rgbcolor) != G_colorParts.end()) {
 					QString HexColor = G_colorParts[rgbcolor];
 					qline.replace(rgbcolor, "<font color=\"" + HexColor + "\" style=\"white-space: pre-wrap\">");
@@ -582,11 +585,14 @@ QString fmtConsole::getColoredLine(string line) {
 				else {
 					qline.replace(rgbcolor, "<font color=\"#fff\" style=\"white-space: pre-wrap\">");
 				}
+				normal_color_match = normal_color.match(qline);
 			}
 
-			QRegExp xterm_color("\\033\\[38;5;[\\d]+m");
-			while (xterm_color.indexIn(qline) > -1) {
-				QString rgbcolor = xterm_color.cap(0);
+			
+			auto xterm_color= QRegularExpression("\\033\\[38;5[\\d;]+m");
+			auto xterm_color_match = xterm_color.match(qline);
+			while (xterm_color_match.hasMatch()) {
+				QString rgbcolor = xterm_color_match.captured(0);
 				QString Xterm256Code = rgbcolor.replace("\033[38;5;", "").replace("m", "");
 				if (Xtermcolor.find(Xterm256Code) != Xtermcolor.end()) {
 					QString HexColor = Xtermcolor[Xterm256Code];
@@ -595,6 +601,7 @@ QString fmtConsole::getColoredLine(string line) {
 				else {
 					qline.replace(rgbcolor, "<font color=\"#fff\" style=\"white-space: pre-wrap\">");
 				}
+				xterm_color_match = xterm_color.match(qline);
 			}
 
 			//删除多余的</font>
@@ -604,8 +611,9 @@ QString fmtConsole::getColoredLine(string line) {
 				qline = qline.remove(0, static_cast<int>(lline.length()));
 			}
 
-			QRegExp font("<font(.+)>");
-			if (font.indexIn(qline) == -1 && qline != "") {
+			auto font= QRegularExpression("<font(.+)>");
+			auto font_match = font.match(qline);			
+			if (!font_match.hasMatch() && qline != "") {
 				qline.replace("</font>", "");
 				qline = "<font style=\"white-space: pre-wrap\">" + qline + "</font>";
 			}

@@ -57,8 +57,9 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogge
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 int main(int argc, char* argv[]) {
 	QApplication a(argc, argv);
-	QTextCodec* codec = QTextCodec::codecForName("UTF-8"); // GB2312也可以
-	QTextCodec::setCodecForLocale(codec);
+	QApplication::setQuitOnLastWindowClosed(true);
+	//设置编码为UTF8
+	//QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 	//展示ssl版本
 	qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
