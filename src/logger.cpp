@@ -619,13 +619,13 @@ QString fmtConsole::getColoredLine(string line) {
 			}
 		}
 		else {
-			std::regex pattern("\033\\[(.+?)m");
-			qline = QString::fromStdString(regex_replace(line, pattern, ""));
+			QRegularExpression pattern("\033\\[(.+?)m");
+			qline = qline.replace(pattern, "");
 		}
 	}
 	catch (...) {
-		std::regex pattern("\033\\[(.+?)m");
-		qline = QString::fromStdString(regex_replace(line, pattern, ""));
+		QRegularExpression pattern("\033\\[(.+?)m");
+		qline = qline.replace(pattern, "");
 	}
 	return qline;
 }

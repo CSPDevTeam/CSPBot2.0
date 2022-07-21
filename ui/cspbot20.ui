@@ -59,7 +59,6 @@ border-bottom-left-radius:10px;</string>
      <property name="font">
       <font>
        <family>HarmonyOS Sans SC</family>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -87,7 +86,6 @@ border-radius:45px</string>
       <font>
        <family>HarmonyOS Sans SC</family>
        <pointsize>12</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -130,7 +128,6 @@ qproperty-iconSize: 32px 32px;
       <font>
        <family>HarmonyOS Sans SC</family>
        <pointsize>11</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -157,7 +154,6 @@ qproperty-iconSize: 32px 32px;
       <font>
        <family>HarmonyOS Sans SC</family>
        <pointsize>12</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -196,7 +192,6 @@ QPushButton:hover{
       <font>
        <family>HarmonyOS Sans SC</family>
        <pointsize>12</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -235,7 +230,6 @@ QPushButton:hover{
       <font>
        <family>HarmonyOS Sans SC</family>
        <pointsize>12</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -274,7 +268,6 @@ QPushButton:hover{
       <font>
        <family>HarmonyOS Sans SC</family>
        <pointsize>12</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -313,7 +306,6 @@ QPushButton:hover{
       <font>
        <family>HarmonyOS Sans SC</family>
        <pointsize>18</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -390,7 +382,7 @@ QPushButton:hover{
       </property>
       <property name="font">
        <font>
-        <family>HarmonyOS Sans SC</family>
+        <family>Consolas</family>
         <pointsize>10</pointsize>
        </font>
       </property>
@@ -723,7 +715,6 @@ padding-left:10px;</string>
        <font>
         <family>HarmonyOS Sans SC</family>
         <pointsize>25</pointsize>
-        <weight>50</weight>
         <bold>false</bold>
        </font>
       </property>
@@ -942,7 +933,7 @@ QHeaderView::section {
       </property>
       <property name="font">
        <font>
-        <family>HarmonyOS Sans SC</family>
+        <family>Consolas</family>
         <pointsize>11</pointsize>
        </font>
       </property>

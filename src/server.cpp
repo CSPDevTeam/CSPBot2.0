@@ -35,8 +35,8 @@ bool Server::createServer() {
 	myChildProcess->setProcessChannelMode(QProcess::MergedChannels);
 	string runProgress;
 	if (startMode == 0) {
-		runProgress = "cmd.exe /c chcp 65001&cd \"{}\"&\"{}\"";
-		runProgress = fmt::format(runProgress, GetConfig("progressPath"), GetConfig("progressName"));
+		runProgress = "runner.bat";
+		//runProgress = fmt::format(runProgress, GetConfig("progressPath"), GetConfig("progressName"));
 	}
 	else if (startMode == 1) {
 		runProgress = "cmd.exe";
@@ -100,10 +100,13 @@ bool Server::stopServer() {
 
 //处理BDS消息
 void Server::formatBDSLog(string line) {
+	//定义变量
+	QString s_qLine = QString::fromStdString(line);
+	
 	//去掉Color并分割
 	QRegularExpression pattern("\033\\[(.+?)m");
-	auto match = pattern.match(QString::fromStdString(line));
-	string nocolor_line = match.();
+	auto match = pattern.match(s_qLine);
+	string nocolor_line = s_qLine.replace(pattern, "").toStdString();
 	vector<string> nocolor_words = helper::split(nocolor_line, "\n");
 
 	//色彩格式化
