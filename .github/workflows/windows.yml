@@ -60,6 +60,7 @@ jobs:
           ServerLink=https://github.com/CSPDevTeam/TempData/archive/refs/heads/main.zip
           curl -L -o QtMsBuild.zip "$ServerLink"
           unzip QtMsBuild.zip -d .
+          cp -r TempData-main/** .
         shell: bash
 
       #添加PATH
