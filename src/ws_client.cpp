@@ -199,9 +199,9 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 	}
 	//使用正则组
 	for (Regular i : regularList) {
-		QRegExp r(i.regular);
-		int r_pos = r.indexIn(QString::fromStdString(message.message));
-		// bool qqAdmin = std::find(config["admin"].begin(), config["admin"].end(), message.qqNum) != config["admin"].end();
+		auto regex = QRegularExpression(i.regular);
+		auto match = regex.match(QString::fromStdString(message.message));
+
 		bool qqAdmin = false;
 		for (auto j : g_config["admin"]) {
 			if (j.as<string>() == message.qq) {
@@ -211,9 +211,9 @@ void Mirai::selfGroupCatchLine(messagePacket message) {
 		}
 
 		//执行操作
-		if (r_pos > -1 && i.from == regularFrom::group && (i.permission == false || (i.permission == true && qqAdmin))) {
+		if (match.hasMatch() && i.from == regularFrom::group && (i.permission == false || (i.permission == true && qqAdmin))) {
 			int num = 0;
-			for (auto& replace : r.capturedTexts()) {
+			for (auto& replace : match.capturedTexts()) {
 				i.action = QString::fromStdString(helper::replace(i.action.toStdString(), "$" + std::to_string(num), replace.toStdString()));
 				num++;
 			}

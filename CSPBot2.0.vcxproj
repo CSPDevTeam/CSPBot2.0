@@ -31,12 +31,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>5.15.2_msvc2019_64</QtInstall>
+    <QtInstall>6.3.1_msvc2019_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>5.15.2_msvc2019_64</QtInstall>
+    <QtInstall>6.3.1_msvc2019_64</QtInstall>
     <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -147,6 +147,7 @@
     <ClCompile Include="src\plugins.cpp" />
     <ClCompile Include="src\regular_edit.cpp" />
     <ClCompile Include="src\server.cpp" />
+    <ClCompile Include="src\WebSocketClient.cpp" />
     <ClCompile Include="src\ws_client.cpp" />
     <ClCompile Include="src\yaml-cpp\binary.cpp" />
     <ClCompile Include="src\yaml-cpp\contrib\graphbuilder.cpp" />

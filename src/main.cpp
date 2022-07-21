@@ -6,17 +6,13 @@
 #include "plugins.h"
 
 #pragma comment(lib, "dbghelp.lib")
-// 引入库
 #ifdef _DEBUG
 #pragma comment(lib, "lib/libcrypto_d.lib")
 #pragma comment(lib, "lib/libssl_d.lib")
-#pragma comment(lib, "lib/LightWSClient_d.lib")
 #else
 #pragma comment(lib, "lib/libcrypto.lib")
 #pragma comment(lib, "lib/libssl.lib")
-#pragma comment(lib, "lib/LightWSClient.lib")
 #endif
-#pragma warning(disable : 4996)
 
 ///////////////////////////////////////////// Global /////////////////////////////////////////////
 Logger g_logger("CSPBot");
@@ -38,28 +34,25 @@ void CheckConfigVersion() {
 }
 
 bool InitConfig() {
-	// if (!fs::exists("config/config.yml"))
-	//	msgbox::ShowError("config/config.yml not found");
-	// if (!fs::exists("data/player.yml"))
-	//	msgbox::ShowError("data/player.yml not found");
-	// if (!fs::exists("data/event.yml"))
-	//	msgbox::ShowError("data/event.yml not found");
-	// if (!fs::exists("data/regular.yml"))
-	//	msgbox::ShowError("data/regular.yml not found");
 	bool s_config_ret = g_config.readFile("config/config.yml");
 	bool s_player_ret = g_player.readFile("data/player.yml");
 	bool s_event_ret = g_event.readFile("data/event.yml");
 	bool s_regular_ret = g_regular.readFile("data/regular.yml");
-	return (s_config_ret && s_player_ret && s_event_ret && s_regular_ret);
+	return s_config_ret && s_player_ret && s_event_ret && s_regular_ret;
 }
 
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 int main(int argc, char* argv[]) {
+#if defined(Q_OS_WIN)
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
 	QApplication a(argc, argv);
-	QTextCodec* codec = QTextCodec::codecForName("UTF-8"); // GB2312也可以
-	QTextCodec::setCodecForLocale(codec);
+	//QApplication::setQuitOnLastWindowClosed(true);
+	//设置编码为UTF8
+	//QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 	//展示ssl版本
 	qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
@@ -78,7 +71,7 @@ int main(int argc, char* argv[]) {
 	QFontDatabase database;
 	auto fontFamily = database.families();
 	if (!fontFamily.contains("HarmonyOS Sans SC"))
-		msgbox::ShowHint("缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体");
+		msgbox::ShowInfo("缺少字体文件，可能会影响您使用CSPBot\n请根据文档来安装字体");
 
 	if (!InitConfig()) {
 		return 1;

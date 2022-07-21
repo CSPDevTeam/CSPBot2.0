@@ -1,8 +1,5 @@
 ﻿#pragma once
-#include <ctime>
-#include <optional>
 #include <sstream>
-
 #include "cspbot20.h"
 #include "helper.h"
 #include "ws_client.h"
@@ -11,18 +8,16 @@
 #include "server.h"
 #include "global.h"
 
-using namespace std;
-
 string fmtMotdBE(string msgJson, string returnMsg);
 string fmtMotdJE(string msgJson, string returnMsg);
 
-vector<string> CommandAPI::SplitCommand(const std::string& paras) {
+vector<string> CommandAPI::SplitCommand(const string& paras) {
 	if (paras.empty())
 		return vector<string>();
 
 	vector<string> res;
 	string now, strInQuote = "";
-	istringstream strIn(paras);
+	std::istringstream strIn(paras);
 	while (strIn >> now) {
 		if (!strInQuote.empty()) {
 			strInQuote = strInQuote + " " + now;
@@ -46,7 +41,7 @@ vector<string> CommandAPI::SplitCommand(const std::string& paras) {
 		}
 	}
 	if (!strInQuote.empty()) {
-		istringstream leftIn(strInQuote);
+		std::istringstream leftIn(strInQuote);
 		while (leftIn >> now)
 			res.push_back(now);
 	}
@@ -83,9 +78,9 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	}
 	else if (Action_Type == "motdbe") {
 		if (sp.size() > 2) {
-			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(QString::fromStdString(sp[1]));
-			if (r_pos > -1) {
+			auto regex = QRegularExpression("(\\w.+):(\\w+)");
+			auto match = regex.match(QString::fromStdString(sp[1]));
+			if (match.hasMatch()) {
 				string motd_respone = Motd::motdbe(sp[1]);
 				string fmt_respone;
 				fmt_respone = fmtMotdBE(motd_respone, sp[2]);
@@ -101,9 +96,9 @@ void CommandAPI::CustomCmd(string cmd, string group) {
 	}
 	else if (Action_Type == "motdje") {
 		if (sp.size() > 2) {
-			QRegExp r("(\\w.+):(\\w+)");
-			int r_pos = r.indexIn(QString::fromStdString(sp[1]));
-			if (r_pos > -1) {
+			auto regex = QRegularExpression("(\\w.+):(\\w+)");
+			auto matchs = regex.match(QString::fromStdString(sp[1]));
+			if (matchs.hasMatch()) {
 				string motd_respone = Motd::motdje(sp[1]);
 				string fmt_respone;
 				fmt_respone = fmtMotdJE(motd_respone, sp[2]);

@@ -7,7 +7,6 @@
 
 #define PLUGIN_PATH "plugins\\"
 
-
 int versionPacket = 1; // api版本
 // Buttons
 enum SelfStandardButton {
@@ -114,9 +113,9 @@ bool SetListener(const string& eventName, const luabridge::LuaRef& func, lua_Sta
 //######################### Motd #########################
 
 string MotdJE(const string& host, lua_State* L) {
-	QRegExp r("(\\w.+):(\\w+)");
-	int r_pos = r.indexIn(QString::fromStdString(host));
-	if (r_pos > -1) {
+	auto regex = QRegularExpression("(\\w.+):(\\w+)");
+	auto match = regex.match(QString::fromStdString(host));
+	if (match.hasMatch()) {
 		return Motd::motdje(host);
 	}
 	else {
@@ -124,9 +123,9 @@ string MotdJE(const string& host, lua_State* L) {
 	}
 }
 string MotdBE(const string& host, lua_State* L) {
-	QRegExp r("(\\w.+):(\\w+)");
-	int r_pos = r.indexIn(QString::fromStdString(host));
-	if (r_pos > -1) {
+	auto regex = QRegularExpression("(\\w.+):(\\w+)");
+	auto matchs = regex.match(QString::fromStdString(host));
+	if (matchs.hasMatch()) {
 		return Motd::motdbe(host);
 	}
 	else {
@@ -361,7 +360,7 @@ bool BindXbox(string name, string qq, lua_State* L) {
 //######################### Info #########################
 luabridge::LuaRef GetGroup(lua_State* L) {
 	luabridge::LuaRef groupList = luabridge::newTable(L);
-	//bool inGroup = false;
+	// bool inGroup = false;
 	for (auto i : g_config["group"]) {
 		groupList.append(i.as<string>());
 	}

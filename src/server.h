@@ -49,7 +49,7 @@ private slots:
 class ServerPoll : public QThread {
 	Q_OBJECT
 protected:
-	void run();
+	//void run();
 
 public:
 	ServerPoll(QObject* parent = NULL){};

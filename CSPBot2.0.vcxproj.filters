@@ -299,6 +299,9 @@
     <ClCompile Include="src\message_box.cpp">
       <Filter>Source File\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="src\WebSocketClient.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\CSPBot2.0.rc">

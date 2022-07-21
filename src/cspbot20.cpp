@@ -38,7 +38,7 @@ void CSPBot::startLogger() {
 //保存控制台日志
 void CSPBot::slotSaveConsole() {
 	if (ui.botconsole->toPlainText() == "") {
-		msgbox::ShowHint("控制台日志为空");
+		msgbox::ShowInfo("控制台日志为空");
 		// QMessageBox::information(this, "提示", "控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
 		return;
 	}

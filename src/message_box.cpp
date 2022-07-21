@@ -1,9 +1,9 @@
-#include "global.h"
-#include <qstring.h>
-#include "cspbot20.h"
+ï»¿#include "global.h"
 #include "message_box.h"
+#include "cspbot20.h"
+#include <QString>
 
-//ÏÔÊ¾ErrorĞÅÏ¢
+//æ˜¾ç¤ºErrorä¿¡æ¯
 void msgbox::ShowError(const QString& msg) {
 	QMessageBox msgBox;
 	msgBox.setIcon(QMessageBox::Icon::Critical);
@@ -11,16 +11,15 @@ void msgbox::ShowError(const QString& msg) {
 	msgBox.exec();
 }
 
-//ÏÔÊ¾InformationĞÅÏ¢
-void msgbox::ShowHint(const QString& msg) {
+//æ˜¾ç¤ºInformationä¿¡æ¯
+void msgbox::ShowInfo(const QString& msg) {
 	QMessageBox msgBox;
 	msgBox.setIcon(QMessageBox::Icon::Information);
 	msgBox.setText(msg);
 	msgBox.exec();
-	
 }
 
-//ÏÔÊ¾WarningĞÅÏ¢
+//æ˜¾ç¤ºWarningä¿¡æ¯
 void msgbox::ShowWarn(const QString& msg) {
 	QMessageBox msgBox;
 	msgBox.setIcon(QMessageBox::Icon::Warning);
@@ -28,7 +27,7 @@ void msgbox::ShowWarn(const QString& msg) {
 	msgBox.exec();
 }
 
-//ÏÔÊ¾QuestionĞÅÏ¢
+//æ˜¾ç¤ºQuestionä¿¡æ¯
 void msgbox::ShowQuestion(const QString& msg) {
 	QMessageBox msgBox;
 	msgBox.setIcon(QMessageBox::Icon::Question);

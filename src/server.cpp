@@ -5,19 +5,6 @@
 #include "config_reader.h"
 #include <regex>
 
-//#include <windows.h>
-//#include <qthread.h>
-//#include <iostream>
-//#include <tchar.h>
-//#include <stdio.h>
-//#include <string>
-//#include <regex>
-//#include <yaml-cpp/yaml.h>
-//#include <stdio.h>
-//#include "logger.h"
-//#include "helper.h"
-//#include <qprocess.h>
-
 enum stopType : int {
 	normal,
 	force,
@@ -190,42 +177,39 @@ void Server::progressFinished(int exitCode) {
 		g_server->TypeOfStop = accident;
 	}
 }
-
 void Server::catchInfo(QString line) {
-	QRegExp world("worlds\\/(.+)\\/db");
-	QRegExp version("Version\\s(.+)");
-	QRegExp PID("PID\\s(.+)[?]");
-	QRegExp Join("Player\\sconnected:\\s(.+),\\sxuid:\\s(.+)");
-	QRegExp Difficult("Difficulty:\\s(.+)\\s(.+)");
-	int world_pos = world.indexIn(line);
-	int version_pos = version.indexIn(line);
-	int pid_pos = PID.indexIn(line);
-	int join_pos = Join.indexIn(line);
-	int difficult_pos = Difficult.indexIn(line);
-	if (world_pos > -1) {
-		emit chLabel("world", world.cap(1));
+	QRegularExpression world("worlds\\/(.+)\\/db");
+	QRegularExpression version("Version\\s(.+)");
+	QRegularExpression pid("PID\\s(.+)[?]");
+	QRegularExpression join("Player\\sconnected:\\s(.+),\\sxuid:\\s(.+)");
+	QRegularExpression difficulty("Difficulty:\\s(.+)\\s(.+)");
+	auto world_matchs = world.match(line);
+	auto version_matchs = version.match(line);
+	auto pid_matchs = pid.match(line);
+	auto join_matchs = join.match(line);
+	auto difficulty_matchs = difficulty.match(line);
+	if (world_matchs.hasMatch()) {
+		emit chLabel("world", world_matchs.captured(1));
 	}
-	else if (version_pos > -1) {
-		string version_raw = version.cap(1).toStdString();
-		if (version_raw.find('(') != string::npos) {
-			QRegExp version_R("(.+)\\(");
-			int version_R_pos = version_R.indexIn(QString::fromStdString(version_raw));
-			if (version_R_pos > -1) {
-				version_raw = version_R.cap(1).toStdString();
+	else if (version_matchs.hasMatch()) {
+		string version_raw = version_matchs.captured(1).toStdString();
+		if (version_raw.find('(') != string::npos) {		
+			auto version_R_matchs = QRegularExpression("(.+)\\(").match(QString::fromStdString(version_raw));			
+			if (version_R_matchs.hasMatch()) {
+				version_raw = version_R_matchs.captured(1).toStdString();
 			}
 		}
 		string version_string = version_raw;
 		emit chLabel("g_VERSION", QString::fromStdString(version_string));
 	}
-	else if (pid_pos > -1) {
-		QString msg = "[CSPBot] 提示:已有一个PID为" + PID.cap(1) + "的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)";
-		emit insertBDSLog(msg);
+	else if (pid_matchs.hasMatch()) {
+		emit chLabel("pid", "[CSPBot] 提示:已有一个PID为" +pid_matchs.captured(1)+ "的相同目录进程，是否结束进程?（确认请输入y,取消请输入n)");
 	}
-	else if (difficult_pos > -1) {
-		emit chLabel("difficult", Difficult.cap(2));
+	else if (join_matchs.hasMatch()) {
+		Bind::bindXuid(join_matchs.captured(1).toStdString(), join_matchs.captured(2).toStdString());
 	}
-	else if (join_pos > -1) {
-		Bind::bindXuid(Join.cap(1).toStdString(), Join.cap(2).toStdString());
+	else if (difficulty_matchs.hasMatch()) {
+		emit chLabel("difficult", difficulty_matchs.captured(1));
 	}
 }
 
@@ -243,14 +227,13 @@ void Server::selfCatchLine(QString line) {
 		string From = i["From"].as<string>();
 		bool Permissions = i["Permissions"].as<bool>();
 
-		QRegExp r(QString::fromStdString(Regular));
-		int r_pos = r.indexIn(line);
-		// qDebug() << line << r << r_pos;
+		auto regex = QRegularExpression(QString::fromStdString(Regular));
+		auto matchs = regex.match(line);
 		//执行操作
-		if (r_pos > -1 && From == "console") {
+		if (matchs.hasMatch() && From == "console") {
 			string Action_type = Action.substr(0, 2);
 			int num = 0;
-			for (auto& replace : r.capturedTexts()) {
+			for (auto& replace : matchs.capturedTexts()) {
 				Action = helper::replace(Action, "$" + std::to_string(num), replace.toStdString());
 				num++;
 			}
