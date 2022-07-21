@@ -331,6 +331,10 @@ bool RegisterCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State*
 		return false;
 		throw std::invalid_argument("Invalid command:" + cmd);
 	}
+	if (g_command.find(cmd) != g_command.end()) {
+		return false;
+		throw std::invalid_argument("Invalid command:" + cmd);
+	}
 	g_command.emplace(cmd, cbf);
 	return true;
 }
