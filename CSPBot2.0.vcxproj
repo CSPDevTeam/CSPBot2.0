@@ -147,6 +147,7 @@
     <ClCompile Include="src\plugins.cpp" />
     <ClCompile Include="src\regular_edit.cpp" />
     <ClCompile Include="src\server.cpp" />
+    <ClCompile Include="src\WebSocketClient.cpp" />
     <ClCompile Include="src\ws_client.cpp" />
     <ClCompile Include="src\yaml-cpp\binary.cpp" />
     <ClCompile Include="src\yaml-cpp\contrib\graphbuilder.cpp" />

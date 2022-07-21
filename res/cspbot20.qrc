@@ -22,7 +22,5 @@
         <file>image/a/subpage.png</file>
         <file>image/a/tiao.png</file>
     </qresource>
-    <qresource prefix="/qt">
-        <file>etc/qt.conf</file>
-    </qresource>
+    <qresource prefix="/qt"/>
 </RCC>

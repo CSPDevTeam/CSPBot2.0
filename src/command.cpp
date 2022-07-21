@@ -1,8 +1,5 @@
 ﻿#pragma once
-#include <ctime>
-#include <optional>
 #include <sstream>
-
 #include "cspbot20.h"
 #include "helper.h"
 #include "ws_client.h"
@@ -11,18 +8,16 @@
 #include "server.h"
 #include "global.h"
 
-using namespace std;
-
 string fmtMotdBE(string msgJson, string returnMsg);
 string fmtMotdJE(string msgJson, string returnMsg);
 
-vector<string> CommandAPI::SplitCommand(const std::string& paras) {
+vector<string> CommandAPI::SplitCommand(const string& paras) {
 	if (paras.empty())
 		return vector<string>();
 
 	vector<string> res;
 	string now, strInQuote = "";
-	istringstream strIn(paras);
+	std::istringstream strIn(paras);
 	while (strIn >> now) {
 		if (!strInQuote.empty()) {
 			strInQuote = strInQuote + " " + now;
@@ -46,7 +41,7 @@ vector<string> CommandAPI::SplitCommand(const std::string& paras) {
 		}
 	}
 	if (!strInQuote.empty()) {
-		istringstream leftIn(strInQuote);
+		std::istringstream leftIn(strInQuote);
 		while (leftIn >> now)
 			res.push_back(now);
 	}
