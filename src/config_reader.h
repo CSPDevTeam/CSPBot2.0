@@ -11,7 +11,7 @@ class ConfigReader {
 public:
 	ConfigReader();
 	ConfigReader(const string& file);
-	void readFile(const string& file);
+	bool readFile(const string& file);
 	YAML::Node& raw();
 	YAML::Node operator[](const string& key);
 	YAML::Node operator[](int key);
