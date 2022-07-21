@@ -188,6 +188,7 @@
     <ClCompile Include="src\main.cpp" />
     <None Include=".clang-format" />
     <None Include=".gitignore" />
+    <None Include="cpp.hint" />
     <None Include="res\CSPBot2.0.ico" />
     <QtUic Include="ui\regularEdit.ui" />
     <ResourceCompile Include="res\CSPBot2.0.rc" />

@@ -1,0 +1,42 @@
+// 提示文件帮助 Visual Studio IDE 解释 Visual C++ 标识符,
+// 如函数和宏的名称。
+// 有关详细信息，请参见 https://go.microsoft.com/fwlink/?linkid=865984
+#define slots
+#define FMT_BEGIN_NAMESPACE namespace fmt { inline namespace v9 {
+#define FMT_END_NAMESPACE } }
+#define FMT_API __declspec(dllexport)
+#define FMT_API __declspec(dllimport)
+#define FMT_API __attribute__((visibility("default")))
+#define FMT_API
+#define Q_OBJECT public: QT_WARNING_PUSH Q_OBJECT_NO_OVERRIDE_WARNING static const QMetaObject staticMetaObject; virtual const QMetaObject *metaObject() const; virtual void *qt_metacast(const char *); virtual int qt_metacall(QMetaObject::Call, int, void **); QT_TR_FUNCTIONS private: Q_OBJECT_NO_ATTRIBUTES_WARNING Q_DECL_HIDDEN_STATIC_METACALL static void qt_static_metacall(QObject *, QMetaObject::Call, int, void **); QT_WARNING_POP struct QPrivateSignal {}; QT_ANNOTATE_CLASS(qt_qobject, "")
+#define Q_OBJECT
+#define LUA_API __declspec(dllexport)
+#define LUA_API __declspec(dllimport)
+#define LUA_API
+#define l_sinline
+#define LUALIB_API
+#define LUAI_FUNC __attribute__((visibility("internal"))) extern
+#define LUAI_FUNC
+#define LUAMOD_API
+#define LUAI_DDEC(dec)
+#define YAML_CPP_NOEXCEPT
+#define QT_BEGIN_MOC_NAMESPACE
+#define QT_WARNING_PUSH __pragma(warning(push))
+#define QT_WARNING_PUSH QT_DO_PRAGMA(warning(push))
+#define QT_WARNING_PUSH QT_DO_PRAGMA(clang diagnostic push)
+#define QT_WARNING_PUSH QT_DO_PRAGMA(GCC diagnostic push)
+#define QT_WARNING_PUSH
+#define QT_WARNING_DISABLE_DEPRECATED QT_WARNING_DISABLE_INTEL(1478 1786)
+#define QT_WARNING_DISABLE_DEPRECATED QT_WARNING_DISABLE_MSVC(4996)
+#define QT_WARNING_DISABLE_DEPRECATED QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
+#define QT_WARNING_DISABLE_DEPRECATED QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
+#define QT_WARNING_DISABLE_DEPRECATED
+#define vmdispatch(x) goto *disptab[x];
+#define vmdispatch(o) switch(o)
+#define LUAI_DDEF
+#define LUA_USE_JUMPTABLE
+#define clLvalue(o) check_exp(ttisLclosure(o), gco2lcl(val_(o).gc))
+#define s2v(o) (&(o)->val)
+#define lua_assert(c) assert(c)
+#define lua_assert(c) ((void)0)
+#define l_unlikely(x) luai_unlikely(x)
