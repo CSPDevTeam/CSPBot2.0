@@ -109,7 +109,6 @@ void CSPBot::slotDisConnectMirai() {
 void CSPBot::slotMiraiMessageBox() {
 	if (GetConfig("connectUrl") != "!failed!") {
 		msgbox::ShowError("无法连接到Mirai");
-		// QMessageBox::critical(this, "Mirai错误", "无法连接到Mirai", QMessageBox::Ok);
 	}
 }
 
@@ -233,8 +232,8 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 
 	//绑定事件
 	connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
-	connect(this, SIGNAL(signalStartServer()), this, SLOT(startServer()));
-
+	connect(this, &CSPBot::signalStartServer, this, &CSPBot::startServer);
+	
 	// Server类按钮
 	connect(ui.start, &QPushButton::clicked, this, &CSPBot::startServer);
 	connect(ui.stop, &QPushButton::clicked, this, &CSPBot::stopServer);
@@ -281,7 +280,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	ui.ServerLog->setReadOnly(true);
 	ui.botconsole->setReadOnly(true);
 	g_cmd_api = new CommandAPI();
-	connect(g_cmd_api, SIGNAL(signalStartServer()), this, SLOT(startServer()));
+	connect(g_cmd_api, &CommandAPI::signalStartServer, this, &CSPBot::startServer);
 	connect(g_cmd_api, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
 	connect(g_cmd_api, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
 	/////// timer /////////

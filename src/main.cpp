@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
 
 	QApplication a(argc, argv);
 	//QApplication::setQuitOnLastWindowClosed(true);
+	
 	//设置编码为UTF8
 	//QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 	//展示ssl版本

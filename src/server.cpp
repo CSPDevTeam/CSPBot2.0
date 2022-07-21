@@ -3,7 +3,7 @@
 #include "cspbot20.h"
 #include "logger.h"
 #include "config_reader.h"
-#include <regex>
+//#include <regex>
 
 enum stopType : int {
 	normal,
@@ -101,8 +101,9 @@ bool Server::stopServer() {
 //处理BDS消息
 void Server::formatBDSLog(string line) {
 	//去掉Color并分割
-	std::regex pattern("\033\\[(.+?)m");
-	string nocolor_line = regex_replace(line, pattern, "");
+	QRegularExpression pattern("\033\\[(.+?)m");
+	auto match = pattern.match(QString::fromStdString(line));
+	string nocolor_line = match.();
 	vector<string> nocolor_words = helper::split(nocolor_line, "\n");
 
 	//色彩格式化
