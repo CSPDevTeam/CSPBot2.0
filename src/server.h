@@ -33,7 +33,7 @@ public:
 private:
 	void catchInfo(QString line);	  //抓取信息
 	void selfCatchLine(QString line); //抓取命令
-	void formatBDSLog(string line);	  //处理BDS发来的信息
+	void formatBDSLog(QString s_qLine); //处理BDS发来的信息
 	int startMode = 0;				  //开启模式
 	QProcess* myChildProcess;		  //子进程指针
 	bool started = false;			  //是否开启

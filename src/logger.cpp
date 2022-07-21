@@ -553,8 +553,7 @@ string fmtConsole::FmtGroupRegular(messagePacket message, string cmd) {
 	return second_;
 }
 
-QString fmtConsole::getColoredLine(string line) {
-	QString qline = QString::fromStdString(line);
+QString fmtConsole::getColoredLine(QString qline) {
 	try {
 		if (g_config["ConsoleColor"].as<bool>()) {
 			qline = qline.replace("<", "&lt;");

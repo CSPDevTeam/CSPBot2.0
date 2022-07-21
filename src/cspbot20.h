@@ -123,6 +123,10 @@ private:
 	void InitRegularTableView();
 	void InitPluginTableView();
 
+	/////// Animation ///////
+	QGraphicsOpacityEffect* c_pOpacity;
+	QPropertyAnimation* c_pAnimation;
+
 
 	//////// UI ////////
 	Ui::Form ui;

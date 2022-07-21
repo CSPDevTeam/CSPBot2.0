@@ -109,7 +109,7 @@ namespace fmtConsole {
 string getCPUUsed();
 string FmtConsoleRegular(string cmd);
 string FmtGroupRegular(messagePacket message, string cmd);
-QString getColoredLine(string line);
+QString getColoredLine(QString qline);
 } // namespace fmtConsole
 
 class LoggerReader : public QThread {

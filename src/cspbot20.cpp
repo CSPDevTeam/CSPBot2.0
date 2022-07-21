@@ -12,11 +12,6 @@
 #include "server.h"
 #include "config_reader.h"
 
-//关闭动画Animation
-QGraphicsOpacityEffect* c_pOpacity;
-QPropertyAnimation* c_pAnimation;
-// Mirai登录连接
-// bool connectMirai();
 
 ///////////////////////////////////////////// Export /////////////////////////////////////////////
 //插入机器人日志
@@ -39,7 +34,6 @@ void CSPBot::startLogger() {
 void CSPBot::slotSaveConsole() {
 	if (ui.botconsole->toPlainText() == "") {
 		msgbox::ShowInfo("控制台日志为空");
-		// QMessageBox::information(this, "提示", "控制台日志为空", QMessageBox::Yes, QMessageBox::Yes);
 		return;
 	}
 	QString fileName = QFileDialog::getSaveFileName(this, tr("保存当前日志"), "", tr("日志文件(*.txt)"));
@@ -50,7 +44,6 @@ void CSPBot::slotSaveConsole() {
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 		msgbox::ShowError("日志文件保存失败!");
-		// QMessageBox::critical(this, "严重错误", "文件保存失败！", QMessageBox::Yes, QMessageBox::Yes);
 	}
 	else {
 		QTextStream stream(&file);

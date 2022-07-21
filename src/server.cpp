@@ -11,20 +11,7 @@ enum stopType : int {
 	accident,
 } stoptype;
 
-void setUTF8() {
-#ifdef _WIN32
-	// SetConsoleOutputCP(65001);
-	CONSOLE_FONT_INFOEX info = {0};
-	info.cbSize = sizeof(info);
-	info.dwFontSize.Y = 16; // leave X as zero
-	info.FontWeight = FW_NORMAL;
-	// wcscpy(info.FaceName, L"Consolas");
-	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), NULL, &info);
-#endif
-}
-
 bool Server::createServer() {
-	// setUTF8();
 	myChildProcess = new QProcess(this);
 
 	//绑定事件
@@ -33,16 +20,15 @@ bool Server::createServer() {
 	QObject::connect(myChildProcess, SIGNAL(finished(int)), this, SLOT(progressFinished(int)));
 
 	myChildProcess->setProcessChannelMode(QProcess::MergedChannels);
-	string runProgress;
+	QString runProgress;
 	if (startMode == 0) {
 		runProgress = "runner.bat";
-		//runProgress = fmt::format(runProgress, GetConfig("progressPath"), GetConfig("progressName"));
 	}
 	else if (startMode == 1) {
 		runProgress = "cmd.exe";
 	}
 
-	myChildProcess->start(QString::fromStdString(runProgress));
+	myChildProcess->start(runProgress);
 	if (myChildProcess->waitForStarted()) {
 		g_server_logger.info("服务器启动成功,PID为:{}", myChildProcess->processId());
 		emit changeStatus(true);
@@ -99,26 +85,23 @@ bool Server::stopServer() {
 }
 
 //处理BDS消息
-void Server::formatBDSLog(string line) {
-	//定义变量
-	QString s_qLine = QString::fromStdString(line);
+void Server::formatBDSLog(QString s_line) {
 	
-	//去掉Color并分割
+	//去掉Color
 	QRegularExpression pattern("\033\\[(.+?)m");
-	auto match = pattern.match(s_qLine);
-	string nocolor_line = s_qLine.replace(pattern, "").toStdString();
-	vector<string> nocolor_words = helper::split(nocolor_line, "\n");
-
-	//色彩格式化
-	vector<string> words = helper::split(line, "\n");
+	auto match = pattern.match(s_line);
+	QString s_line_colorless = s_line.replace(pattern, "");
+	
+	//分割字符串
+	QStringList s_colorless_list = s_line_colorless.split("\n");
+	QStringList s_color_list = s_line.split("\n");
 
 	//对控制台输出色彩
-	for (string i : words) {
-		string _line = helper::replace(i, "\n", "");
-		_line = helper::replace(_line, "\r", "");
-		if (_line != "") {
-			QString qline = QString::fromStdString(_line);
-			QString coloredLine = fmtConsole::getColoredLine(_line);
+	for (QString i : s_color_list) {
+		i = i.replace("\n", "");
+		i = i.replace("\r", "");
+		if (i != "") {
+			QString coloredLine = fmtConsole::getColoredLine(i);
 			if (coloredLine != "") {
 				emit insertBDSLog(coloredLine);
 			}
@@ -126,17 +109,16 @@ void Server::formatBDSLog(string line) {
 	}
 
 	//去掉颜色进行回调
-	for (string i : nocolor_words) {
-		string _line = helper::replace(i, "\n", "");
-		_line = helper::replace(_line, "\r", "");
-		if (_line != "") {
-			QString qline = QString::fromStdString(_line);
-			catchInfo(qline);
-			selfCatchLine(qline);
+	for (QString i : s_colorless_list) {
+		i = i.replace("\n", "");
+		i = i.replace("\r", "");
+		if (i != "") {
+			catchInfo(i);
+			selfCatchLine(i);
 
 			// Callback
-			std::unordered_map<string, string> p;
-			p.emplace("line", _line);
+			StringMap p;
+			p.emplace("line", i.toStdString());
 			emit OtherCallback("onConsoleUpdate", p);
 		}
 	}
@@ -146,11 +128,8 @@ void Server::formatBDSLog(string line) {
 void Server::receiver() {
 	char output[2049];
 	while (myChildProcess->readLine(output, 2048)) {
-		string line = output;
-		formatBDSLog(line);
+		formatBDSLog(output);
 	}
-	// emit insertBDSLog(output).c_str();
-	// formatBDSLog(output);
 }
 
 //获取NormalStop变量
@@ -163,6 +142,7 @@ bool Server::getStarted() {
 	return started;
 };
 
+//进程结束
 void Server::progressFinished(int exitCode) {
 	g_server->started = false;
 	emit insertBDSLog("[CSPBot] 进程已终止. 结束代码:" + QString::number(exitCode));
@@ -181,6 +161,8 @@ void Server::progressFinished(int exitCode) {
 		g_server->TypeOfStop = accident;
 	}
 }
+
+//抓取内置正则
 void Server::catchInfo(QString line) {
 	QRegularExpression world("worlds\\/(.+)\\/db");
 	QRegularExpression version("Version\\s(.+)");
