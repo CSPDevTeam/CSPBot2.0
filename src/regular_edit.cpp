@@ -24,16 +24,11 @@ RegularEdit::RegularEdit(Regular regular, bool newRegular, QWidget* parent)
 	shadow_effect->setBlurRadius(10);
 	regular_ui.background->setGraphicsEffect(shadow_effect);
 
-	vector<QWidget*> widget = {
-		regular_ui.save,
-		regular_ui.cancel,
-		regular_ui.regularTest,
-		regular_ui.remove,
-	};
-	for (QWidget* i : widget) {
-		setGraphics(i);
-	}
-
+	setGraphics(regular_ui.save);
+	setGraphics(regular_ui.cancel);
+	setGraphics(regular_ui.regularEdit);
+	setGraphics(regular_ui.remove);
+	
 	//分组
 	groupButton1 = new QButtonGroup(this);
 	groupButton1->addButton(regular_ui.console, 0);

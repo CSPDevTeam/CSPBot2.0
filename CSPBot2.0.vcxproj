@@ -162,6 +162,7 @@
     <ResourceCompile Include="res\CSPBot2.0.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\magic_enum.hpp" />
     <ClInclude Include="src\event.h" />
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\global.h" />
