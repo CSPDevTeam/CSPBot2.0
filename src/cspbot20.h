@@ -128,6 +128,8 @@ private:
 	void InitPluginTableView();
 	//Update
 	void updateRegularData();
+	void updatePlayerData();
+	void updatePluginData();
 	//Pointer
 	QStandardItemModel* Regular_model;
 	QStandardItemModel* Player_model;

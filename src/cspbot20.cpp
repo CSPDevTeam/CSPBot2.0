@@ -830,11 +830,83 @@ void CSPBot::updateRegularData() {
 		s_model->setData(index3, QString::fromStdString(i["Action"].as<string>()));
 		s_model->setData(index4, QString::fromStdString(i["Permissions"].as<bool>() ? "是" : "否"));
 		
+		//设置居中
+		Regular_model->item(in, 0)->setTextAlignment(Qt::AlignCenter);
+		Regular_model->item(in, 1)->setTextAlignment(Qt::AlignCenter);
+		Regular_model->item(in, 2)->setTextAlignment(Qt::AlignCenter);
+		Regular_model->item(in, 3)->setTextAlignment(Qt::AlignCenter);
 		
 		in++;
 	}
 	
 	ui.regularAdmin->setUpdatesEnabled(true); //恢复界面刷新
+}
+
+void CSPBot::updatePlayerData() {
+	int line_num = static_cast<int>(g_player.raw().size()); //行数
+	ui.playerAdmin->setUpdatesEnabled(false); //暂停界面刷新
+	QAbstractItemModel* s_model = ui.playerAdmin->model();
+	if (s_model == nullptr) {
+		return;
+	}
+	s_model->removeRows(0, s_model->rowCount()); //删除所有行
+	s_model->insertRows(0, line_num); //添加行
+
+	int in = 0;
+	for (auto i : g_regular.raw()) {
+		QModelIndex index1 = s_model->index(in, 0);
+		QModelIndex index2 = s_model->index(in, 1);
+		QModelIndex index3 = s_model->index(in, 2);
+
+		//设置数据
+		s_model->setData(index1, QString::fromStdString(i["playerName"].as<string>()));
+		s_model->setData(index2, QString::fromStdString(i["xuid"].as<string>()));
+		s_model->setData(index3, QString::fromStdString(i["qq"].as<string>()));
+
+		//设置居中
+		Player_model->item(in, 0)->setTextAlignment(Qt::AlignCenter);
+		Player_model->item(in, 1)->setTextAlignment(Qt::AlignCenter);
+		Player_model->item(in, 2)->setTextAlignment(Qt::AlignCenter);
+		
+		in++;
+	}
+
+	ui.playerAdmin->setUpdatesEnabled(true); //恢复界面刷新
+}
+
+void CSPBot::updatePluginData() {
+	int line_num = static_cast<int>(g_plugins.size()); //行数
+	ui.pluginAdmin->setUpdatesEnabled(false); //暂停界面刷新
+	QAbstractItemModel* s_model = ui.pluginAdmin->model();
+	if (s_model == nullptr) {
+		return;
+	}
+	s_model->removeRows(0, s_model->rowCount()); //删除所有行
+	s_model->insertRows(0, line_num); //添加行
+
+	int in = 0;
+	for (auto &i : g_plugins) {
+		QModelIndex index1 = s_model->index(in, 0);
+		QModelIndex index2 = s_model->index(in, 1);
+		QModelIndex index3 = s_model->index(in, 2);
+		QModelIndex index4 = s_model->index(in, 3);
+
+		//设置数据
+		s_model->setData(index1, QString::fromStdString(i.name));
+		s_model->setData(index2, QString::fromStdString(i.description));
+		s_model->setData(index3, QString::fromStdString(i.version));
+		s_model->setData(index4, QString::fromStdString(i.author));
+
+		//设置居中
+		Plugin_model->item(in, 0)->setTextAlignment(Qt::AlignCenter);
+		Plugin_model->item(in, 1)->setTextAlignment(Qt::AlignCenter);
+		Plugin_model->item(in, 2)->setTextAlignment(Qt::AlignCenter);
+		Plugin_model->item(in, 3)->setTextAlignment(Qt::AlignCenter);
+
+		in++;
+	}
+
+	ui.pluginAdmin->setUpdatesEnabled(true); //恢复界面刷新
 }
 
 
