@@ -86,7 +86,7 @@ bool Server::stopServer() {
 
 //处理BDS消息
 void Server::formatBDSLog(QString s_line) {
-	
+	s_line = s_line.toUtf8();
 	//去掉Color
 	QRegularExpression pattern("\033\\[(.+?)m");
 	auto match = pattern.match(s_line);
@@ -95,7 +95,7 @@ void Server::formatBDSLog(QString s_line) {
 	//分割字符串
 	QStringList s_colorless_list = s_line_colorless.split("\n");
 	QStringList s_color_list = s_line.split("\n");
-
+	
 	//对控制台输出色彩
 	for (QString i : s_color_list) {
 		i = i.replace("\n", "");

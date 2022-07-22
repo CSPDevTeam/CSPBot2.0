@@ -84,6 +84,7 @@ int main(int argc, char* argv[]) {
 
 	//检测文件版本
 	CheckConfigVersion();
-
-	return a.exec();
+	int ret = a.exec();
+	g_main_window->deleteLater();
+	return ret;
 }

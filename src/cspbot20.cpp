@@ -264,10 +264,15 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	ui.forceStop->setEnabled(false);
 	ui.ServerLog->setReadOnly(true);
 	ui.botconsole->setReadOnly(true);
+	//设置Logger最大行数
+	ui.ServerLog->document()->setMaximumBlockCount(150);
+	
+	/////// Command /////////
 	g_cmd_api = new CommandAPI();
 	connect(g_cmd_api, &CommandAPI::signalStartServer, this, &CSPBot::startServer);
 	connect(g_cmd_api, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
 	connect(g_cmd_api, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
+	
 	/////// timer /////////
 	QTimer* timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc()));
@@ -378,6 +383,7 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
 	}
 
 	ui.user->setText(qqNick);
+	reply->deleteLater();
 }
 
 QPixmap PixmapToRound(QPixmap& src, int radius) {
@@ -490,6 +496,10 @@ bool CSPBot::checkClose() {
 ///////////////////////////////////////////// Server /////////////////////////////////////////////
 //构造Server
 void CSPBot::buildServer(int mode) {
+	if (!fs::exists("runner.bat")) {
+		msgbox::ShowWarn("服务器无法启动\n原因:在目录下没有runner.bat文件");
+		return;
+	}
 	g_server = new Server(mode, this);
 	//绑定检测器
 	connect(g_server, SIGNAL(insertBDSLog(QString)), this, SLOT(slotInsertBDSLog(QString)));
@@ -504,6 +514,7 @@ void CSPBot::buildServer(int mode) {
 //插入BDS日志
 void CSPBot::slotInsertBDSLog(QString log) {
 	ui.ServerLog->setReadOnly(false);
+	//添加日志
 	ui.ServerLog->append(log);
 	ui.ServerLog->moveCursor(QTextCursor::End);
 	ui.ServerLog->setReadOnly(true);
@@ -512,7 +523,7 @@ void CSPBot::slotInsertBDSLog(QString log) {
 // Callback
 bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 	// Python Callbacker
-	qDebug() << "CallBack:" << listener;
+	//qDebug() << "CallBack:" << listener;
 	string eventName = listener.toStdString();
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code) {
