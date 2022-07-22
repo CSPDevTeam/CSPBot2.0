@@ -8,6 +8,7 @@
 typedef std::unordered_map<std::string, std::string> StringMap;
 typedef time_t mTime;
 typedef std::vector<std::string> StringVector;
+class LoggerReader;
 
 class CSPBot : public QMainWindow {
 	Q_OBJECT
@@ -89,6 +90,9 @@ private slots:
 	/////////////// Plugin //////////////////
 	void slotDebug();
 
+	/////////////// Pointer ////////////////
+	void deletePointer();
+
 
 	///////////////////////////////////////////// Private /////////////////////////////////////////////
 private:
@@ -122,11 +126,22 @@ private:
 	void InitPlayerTableView();
 	void InitRegularTableView();
 	void InitPluginTableView();
+	//Update
+	void updateRegularData();
+	//Pointer
+	QStandardItemModel* Regular_model;
+	QStandardItemModel* Player_model;
+	QStandardItemModel* Plugin_model;
 
 	/////// Animation ///////
 	QGraphicsOpacityEffect* c_pOpacity;
 	QPropertyAnimation* c_pAnimation;
 
+	/////// Pointer ////////
+	QList<QObject*> pointer;
+
+	////// Logger /////////
+	LoggerReader* loggerReader;
 
 	//////// UI ////////
 	Ui::Form ui;

@@ -7,6 +7,7 @@ class RegularEdit : public QWidget {
 
 public:
 	RegularEdit(Regular regular, bool newRegular, QWidget* parent = Q_NULLPTR);
+	~RegularEdit();
 
 private slots:
 	void on_actionClose_triggered(); //关闭窗口

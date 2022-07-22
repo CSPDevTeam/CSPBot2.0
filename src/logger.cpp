@@ -2,9 +2,8 @@
 #include "mysysinfo.h"
 #include "helper.h"
 #include "config_reader.h"
+#include "global.h"
 #include <regex>
-
-inline MySysInfo* mysysinfo = new MySysInfo();
 
 string fmtMotdBE(string msgJson, string returnMsg) {
 	string tempReturnMsg = returnMsg;
@@ -70,12 +69,14 @@ string fmtMotdJE(string msgJson, string returnMsg) {
 
 std::unordered_map<string, string> getRam() {
 	double nMemTotal, nMemUsed;
+	MySysInfo* mysysinfo = new MySysInfo(g_main_window);
 	mysysinfo->GetMemUsage(nMemTotal, nMemUsed);
 	std::unordered_map<string, string> ram;
 	ram.emplace("all", fmt::format("{0:.2f}", nMemTotal));
 	ram.emplace("canuse", fmt::format("{0:.2f}", nMemTotal - nMemUsed));
 	ram.emplace("percent", fmt::format("{0:.2f}", (nMemUsed / nMemTotal) * 100) + "%");
 	ram.emplace("used", fmt::format("{0:.2f}", nMemUsed));
+	mysysinfo->deleteLater();
 	return ram;
 }
 
@@ -410,9 +411,11 @@ public:
 
 string fmtConsole::getCPUUsed() {
 	double nCpuPercent = 0;
+	MySysInfo* mysysinfo = new MySysInfo();
 	mysysinfo->GetCpuUsage(nCpuPercent);
 	/*MySysInfo msys;
 	msys.GetCpuUsage(ncpupercent);*/
+	mysysinfo->deleteLater();
 	return fmt::format("{0:.2f}", nCpuPercent);
 }
 
@@ -631,7 +634,7 @@ QString fmtConsole::getColoredLine(QString qline) {
 
 // LoggerReader
 void LoggerReader::run() {
-	while (true) {
+	while (canRun) {
 		if (!g_queue.empty()) {
 			try {
 				QString mLog = QString::fromStdString(g_queue.front());

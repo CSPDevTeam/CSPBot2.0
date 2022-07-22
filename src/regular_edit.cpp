@@ -47,6 +47,10 @@ RegularEdit::RegularEdit(Regular regular, bool newRegular, QWidget* parent)
 	connect(regular_ui.remove, SIGNAL(clicked()), this, SLOT(deleteRegular()));
 }
 
+RegularEdit::~RegularEdit() {
+	this->deleteLater();
+}
+
 void RegularEdit::saveRegular() {
 	if (mNewRegular == false) {
 		//转换成存储的Regular
@@ -153,7 +157,7 @@ void RegularEdit::deleteRegular() {
 	fout << g_regular.raw();
 	fout.close();
 
-	this->close();
+	on_actionClose_triggered();
 }
 
 void RegularEdit::setRegular() {
@@ -218,4 +222,5 @@ void RegularEdit::mouseReleaseEvent(QMouseEvent* event) {
 
 void RegularEdit::on_actionClose_triggered() {
 	close();
+	this->deleteLater();
 }

@@ -85,7 +85,14 @@ int main(int argc, char* argv[]) {
 	//检测文件版本
 	CheckConfigVersion();
 	int ret = a.exec();
+	
+	//释放内存
+	g_cmd_api->deleteLater();
+	g_mirai->deleteLater();
+	g_wsc->deleteLater();
 	g_main_window->deleteLater();
+	
+	
 	return ret;
 }
 namespace std {

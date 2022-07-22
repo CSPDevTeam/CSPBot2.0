@@ -24,7 +24,7 @@ void CSPBot::insertLog(QString a) {
 //启动机器人日志
 void CSPBot::startLogger() {
 	//////// Logger ////////
-	LoggerReader* loggerReader = new LoggerReader(this);
+	loggerReader = new LoggerReader(this);
 	connect(loggerReader, SIGNAL(updateLog(QString)), this, SLOT(insertLog(QString)));
 	loggerReader->start();
 }
@@ -141,9 +141,10 @@ void CSPBot::slotTimerFunc() {
 	}
 
 	/////// Table ////////
-	InitPlayerTableView();
-	InitRegularTableView();
-	InitPluginTableView();
+	updateRegularData();
+	//InitPlayerTableView();
+	//InitRegularTableView();
+	//InitPluginTableView();
 }
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
@@ -158,21 +159,22 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	;
 	this->setAttribute(Qt::WA_TranslucentBackground);
 	this->setWindowTitle(QString("CSPBot v") + g_VERSION);
-	//设置窗口阴影
-	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
-	shadow_effect->setOffset(0, 0);
-	shadow_effect->setColor(Qt::gray);
-	shadow_effect->setBlurRadius(10);
-	ui.background->setGraphicsEffect(shadow_effect);
 
 	//滚动条
-	vector<QScrollBar*> bars = {ui.ServerLog->verticalScrollBar(), ui.botconsole->verticalScrollBar(), ui.playerAdmin->verticalScrollBar(), ui.regularAdmin->verticalScrollBar(), ui.pluginAdmin->verticalScrollBar()};
+	vector<QScrollBar*> bars = {
+		ui.ServerLog->verticalScrollBar(),
+		ui.botconsole->verticalScrollBar(),
+		ui.playerAdmin->verticalScrollBar(),
+		ui.regularAdmin->verticalScrollBar(),
+		ui.pluginAdmin->verticalScrollBar()
+	};
 	for (QScrollBar* bar : bars) {
 		setAllScrollbar(bar);
 	}
 
 	//阴影设置
 	vector<QWidget*> buttons = {
+		ui.background,
 		ui.ServerLog,
 		ui.controlWidget,
 		ui.statusWidget,
@@ -216,7 +218,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	connect(ui.about, &QPushButton::clicked, this, &CSPBot::showAbout);
 
 	//绑定事件
-	connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
+	connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::deletePointer);
 	connect(this, &CSPBot::signalStartServer, this, &CSPBot::startServer);
 
 	// Server类按钮
@@ -284,6 +286,25 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	InitPluginTableView();
 }
 
+void CSPBot::deletePointer() {
+	for (auto i : pointer) {
+		delete i;
+	}
+	ui.regularAdmin->deleteLater();
+	ui.regularAdmin->model()->deleteLater();
+	loggerReader->canRun = false;
+	loggerReader->quit();
+	loggerReader->wait();
+	delete loggerReader;
+	delete c_pOpacity;
+	delete c_pAnimation;
+	delete Regular_model;
+	delete Player_model;
+	delete Plugin_model;
+	close();
+}
+
+
 ///////////////////////////////////////////// Style /////////////////////////////////////////////
 void CSPBot::setGraphics(QWidget* bt) {
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
@@ -291,6 +312,7 @@ void CSPBot::setGraphics(QWidget* bt) {
 	shadow_effect->setColor(Qt::gray);
 	shadow_effect->setBlurRadius(8);
 	bt->setGraphicsEffect(shadow_effect);
+	pointer.push_back(shadow_effect);
 }
 
 void CSPBot::setAllScrollbar(QScrollBar* bar) {
@@ -692,128 +714,60 @@ void CSPBot::keyPressEvent(QKeyEvent* e) {
 
 ///////////////////////////////////////////// Table /////////////////////////////////////////////
 void CSPBot::InitPlayerTableView() {
-	try {
-		int line_num = static_cast<int>(g_player.raw().size());
-		QStringList strHeader;
-		strHeader << "玩家名称"
-				  << "玩家Xuid"
-				  << "玩家QQ号";
-
-		QStandardItemModel* m_model = new QStandardItemModel();
-		m_model->setHorizontalHeaderLabels(strHeader);
-		m_model->setColumnCount(strHeader.size());
-		m_model->setRowCount(line_num);
-		ui.playerAdmin->verticalHeader()->hide();
-		ui.playerAdmin->setModel(m_model);
-
-		//居中显示并设置文本
-		int in = 0;
-		for (YAML::Node i : g_player.raw()) {
-			string playerName = i["playerName"].as<string>();
-			string xuid = i["xuid"].as<string>();
-			string qq = i["qq"].as<string>();
-			QStandardItem* item1 = new QStandardItem(QString::fromStdString(playerName));
-			item1->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item2 = new QStandardItem(QString::fromStdString(xuid));
-			item2->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item3 = new QStandardItem(QString::fromStdString(qq));
-			item3->setTextAlignment(Qt::AlignCenter);
-			m_model->setItem(in, 0, item1);
-			m_model->setItem(in, 1, item2);
-			m_model->setItem(in, 2, item3);
-			in++;
-		}
-		ui.playerAdmin->horizontalHeader()->setStretchLastSection(true);
-		ui.playerAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-		ui.playerAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
-		// ui.playerAdmin->setFrameShape(QListWidget::NoFrame);
-		ui.playerAdmin->setAlternatingRowColors(true);
-		ui.playerAdmin->setShowGrid(false);
-	} catch (...) {
-	}
+	QStringList strHeader;
+	strHeader << "玩家名称" << "玩家Xuid" << "玩家QQ号";
+	Player_model = new QStandardItemModel();
+	Player_model->setHorizontalHeaderLabels(strHeader);
+	Player_model->setColumnCount(strHeader.size());
+	ui.playerAdmin->verticalHeader()->hide();
+	ui.playerAdmin->setModel(Player_model);
+	ui.playerAdmin->horizontalHeader()->setStretchLastSection(true);
+	ui.playerAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui.playerAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.playerAdmin->setAlternatingRowColors(true);
+	ui.playerAdmin->setShowGrid(false);
 }
 
 void CSPBot::InitRegularTableView() {
-	try {
-		int line_num = static_cast<int>(g_regular.raw().size());
-		QStringList strHeader;
-		strHeader << "正则"
-				  << "来源"
-				  << "执行"
-				  << "权限";
+	QStringList strHeader;
+	strHeader << "正则" << "来源" << "执行" << "权限";
+	Regular_model = new QStandardItemModel();
+	Regular_model->setHorizontalHeaderLabels(strHeader);
+	Regular_model->setColumnCount(strHeader.size());
+	ui.regularAdmin->verticalHeader()->hide();
+	ui.regularAdmin->setModel(Regular_model);
+	ui.regularAdmin->horizontalHeader()->setStretchLastSection(true);
+	ui.regularAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui.regularAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.regularAdmin->setAlternatingRowColors(true);
+	ui.regularAdmin->setShowGrid(false);
+	updateRegularData();
+}
 
-		QStandardItemModel* m_model = new QStandardItemModel();
-		//添加表头数据
-		m_model->setHorizontalHeaderLabels(strHeader);
-		//设置列数
-		m_model->setColumnCount(strHeader.size());
-		//设置行数
-		m_model->setRowCount(line_num);
-
-		//隐藏列表头
-		ui.regularAdmin->verticalHeader()->hide();
-
-		// setModel.
-		ui.regularAdmin->setModel(m_model);
-		//居中显示并设置文本
-		int in = 0;
-		for (YAML::Node i : g_regular.raw()) {
-			string Regular = i["Regular"].as<string>();
-			string Action = i["Action"].as<string>();
-			string From = i["From"].as<string>();
-			string Permissions;
-			if (i["Permissions"].as<bool>()) {
-				Permissions = "是";
-			} else if (!i["Permissions"].as<bool>()) {
-				Permissions = "否";
-			}
-			QStandardItem* item1 = new QStandardItem();
-			item1->setData(QString::fromStdString(Regular));
-			item1->setTextAlignment(Qt::AlignCenter);
-			static QStandardItem* item2 = new QStandardItem();
-			item2->setData(QString::fromStdString(From));
-			item2->setTextAlignment(Qt::AlignCenter);
-			static QStandardItem* item3 = new QStandardItem();
-			item3->setData(QString::fromStdString(Action));
-			item3->setTextAlignment(Qt::AlignCenter);
-			static QStandardItem* item4 = new QStandardItem();
-			item4->setData(QString::fromStdString(Permissions));
-			item4->setTextAlignment(Qt::AlignCenter);
-			m_model->setItem(in, 0, item1);
-			m_model->setItem(in, 1, item2);
-			m_model->setItem(in, 2, item3);
-			m_model->setItem(in, 3, item4);
-			in++;
-		}
-		ui.regularAdmin->horizontalHeader()->setStretchLastSection(true);
-		ui.regularAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-		ui.regularAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
-		// ui.playerAdmin->setFrameShape(QListWidget::NoFrame);
-		ui.regularAdmin->setAlternatingRowColors(true);
-		ui.regularAdmin->setShowGrid(false);
-	} catch (...) {
-	}
+void CSPBot::InitPluginTableView() {
+	QStringList strHeader;
+	strHeader << "插件" << "介绍" << "版本" << "作者";
+	Plugin_model = new QStandardItemModel();
+	Plugin_model->setHorizontalHeaderLabels(strHeader);
+	Plugin_model->setColumnCount(strHeader.size());
+	ui.pluginAdmin->verticalHeader()->hide();
+	ui.pluginAdmin->setModel(Plugin_model);
+	ui.pluginAdmin->horizontalHeader()->setStretchLastSection(true);
+	ui.pluginAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	ui.pluginAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.pluginAdmin->setAlternatingRowColors(true);
+	ui.pluginAdmin->setShowGrid(false);
 }
 
 //选中自动选中该行
-void CSPBot::clickRegularTable(QModelIndex index) { ui.regularAdmin->selectRow(index.row()); }
+void CSPBot::clickRegularTable(QModelIndex index) { 
+	ui.regularAdmin->selectRow(index.row()); 
+}
 
 void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	int row = ui.regularAdmin->currentIndex().row();
 	auto modelViewOneUp = ui.regularAdmin->model();
 	vector<string> regularData;
-	/*
-	enum regularAction { Console, Group, Command };
-	enum regularFrom { group, console };
-	struct Regular {
-		QString regular;
-		std::string action;
-		regularAction type;
-		regularFrom from;
-		bool permission;
-	};
-	strHeader << "正则" << "来源" << "执行" << "权限";
-	*/
 	for (int i = 0; i < 5; i++) {
 		QModelIndex index = modelViewOneUp->index(row, i);
 		QString name = modelViewOneUp->data(index).toString();
@@ -852,54 +806,44 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	regEdit->show();
 }
 
+///////////////////////////////////////////// Update Table /////////////////////////////////////////////
+void CSPBot::updateRegularData() {
+	int line_num = static_cast<int>(g_regular.raw().size()); //行数
+	ui.regularAdmin->setUpdatesEnabled(false); //暂停界面刷新
+	QAbstractItemModel* s_model = ui.regularAdmin->model();
+	if (s_model == nullptr) {
+		return;
+	}
+	s_model->removeRows(0, s_model->rowCount()); //删除所有行
+	s_model->insertRows(0, line_num); //添加行
+	
+	int in = 0;
+	for (auto i : g_regular.raw()) {
+		QModelIndex index1 = s_model->index(in, 0);
+		QModelIndex index2 = s_model->index(in, 1);
+		QModelIndex index3 = s_model->index(in, 2);
+		QModelIndex index4 = s_model->index(in, 3);
+		
+		//设置数据
+		s_model->setData(index1, QString::fromStdString(i["Regular"].as<string>()));
+		s_model->setData(index2, QString::fromStdString(i["From"].as<string>()));
+		s_model->setData(index3, QString::fromStdString(i["Action"].as<string>()));
+		s_model->setData(index4, QString::fromStdString(i["Permissions"].as<bool>() ? "是" : "否"));
+		
+		
+		in++;
+	}
+	
+	ui.regularAdmin->setUpdatesEnabled(true); //恢复界面刷新
+}
+
+
+///////////////////////////////////////////// Other Window /////////////////////////////////////////////
 //新建正则
 void CSPBot::newRegular() {
 	Regular regular = {"", "", Console, console, false};
 	RegularEdit* regEdit = new RegularEdit(regular, true, this);
 	regEdit->show();
-}
-
-void CSPBot::InitPluginTableView() {
-	try {
-		int line_num = static_cast<int>(g_plugins.size());
-		QStringList strHeader;
-		strHeader << "插件"
-				  << "介绍"
-				  << "版本"
-				  << "作者";
-
-		QStandardItemModel* m_model = new QStandardItemModel();
-		m_model->setHorizontalHeaderLabels(strHeader);
-		m_model->setColumnCount(strHeader.size());
-		m_model->setRowCount(line_num);
-		ui.pluginAdmin->verticalHeader()->hide();
-		ui.pluginAdmin->setModel(m_model);
-		int in = 0;
-		for (auto& x : g_plugins) {
-			QStandardItem* item1 = new QStandardItem(QString::fromStdString(x.name));
-			QStandardItem* item2 = new QStandardItem(QString::fromStdString(x.description));
-			QStandardItem* item3 = new QStandardItem(QString::fromStdString(x.version));
-			QStandardItem* item4 = new QStandardItem(QString::fromStdString(x.author));
-
-			//居中文本
-			item1->setTextAlignment(Qt::AlignCenter);
-			item2->setTextAlignment(Qt::AlignCenter);
-			item3->setTextAlignment(Qt::AlignCenter);
-			item4->setTextAlignment(Qt::AlignCenter);
-
-			m_model->setItem(in, 0, item1);
-			m_model->setItem(in, 1, item2);
-			m_model->setItem(in, 2, item3);
-			m_model->setItem(in, 3, item4);
-			in++;
-		}
-		ui.pluginAdmin->horizontalHeader()->setStretchLastSection(true);
-		ui.pluginAdmin->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-		ui.pluginAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
-		ui.pluginAdmin->setAlternatingRowColors(true);
-		ui.pluginAdmin->setShowGrid(false);
-	} catch (...) {
-	}
 }
 
 void CSPBot::showAbout() {

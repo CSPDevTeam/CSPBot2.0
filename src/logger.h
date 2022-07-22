@@ -113,4 +113,5 @@ signals:
 public:
 	LoggerReader(QObject* parent = NULL){};
 	~LoggerReader(){};
+	bool canRun = true;
 };
