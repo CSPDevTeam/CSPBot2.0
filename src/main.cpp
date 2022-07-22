@@ -86,8 +86,5 @@ int main(int argc, char* argv[]) {
 	//检测文件版本
 	CheckConfigVersion();
 
-	g_lua_State = InitLua();
-	LoadPlugin();
-
 	return a.exec();
 }

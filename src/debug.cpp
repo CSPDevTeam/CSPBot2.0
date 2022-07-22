@@ -31,8 +31,7 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 	if (!fs::exists("logs\\"))
 		fs::create_directory("logs\\");
 	//创建 Dump 文件
-	string fileName = "logs/{}_CrashDump_{}.dmp";
-	fileName = fmt::format(fileName, g_VERSION, getTime());
+	string fileName = fmt::format("logs/{}_CrashDump_{}.dmp", g_VERSION, getTime());
 	wchar_t* wc = multiByteToWideChar(fileName);
 	HANDLE hDumpFile = CreateFile(wc, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hDumpFile != INVALID_HANDLE_VALUE) {
@@ -48,8 +47,7 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException) {
 
 	//弹出一个错误对话框
 	QMessageBox msgBox;
-	string text = "CSPBot出现严重错误，正在退出\n具体请查阅{}文件";
-	text = fmt::format(text, fileName);
+	string text = fmt::format("CSPBot出现严重错误，正在退出\n具体请查阅{}文件", fileName);
 	msgBox.setWindowTitle("严重错误");
 	msgBox.setText(QString::fromStdString(text));
 	msgBox.exec();

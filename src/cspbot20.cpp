@@ -12,7 +12,6 @@
 #include "server.h"
 #include "config_reader.h"
 
-
 ///////////////////////////////////////////// Export /////////////////////////////////////////////
 //插入机器人日志
 void CSPBot::insertLog(QString a) {
@@ -44,8 +43,7 @@ void CSPBot::slotSaveConsole() {
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 		msgbox::ShowError("日志文件保存失败!");
-	}
-	else {
+	} else {
 		QTextStream stream(&file);
 		stream << ui.botconsole->toPlainText();
 		stream.flush();
@@ -79,8 +77,7 @@ void CSPBot::slotConnectMirai() {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在连接Mirai...");
 		insertLog(QString::fromStdString(formatLog));
 		g_mirai->connectMirai();
-	}
-	else {
+	} else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在已处于已连接状态.");
 		insertLog(QString::fromStdString(formatLog));
 	}
@@ -91,8 +88,7 @@ void CSPBot::slotDisConnectMirai() {
 	if (g_mirai->logined == false) {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在未处于已连接状态.");
 		insertLog(QString::fromStdString(formatLog));
-	}
-	else {
+	} else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在断开Mirai...");
 		insertLog(QString::fromStdString(formatLog));
 		g_wsc->shutdown();
@@ -114,14 +110,12 @@ void CSPBot::slotTimerFunc() {
 	bool flag = true;
 	if (mGetTime == 0) {
 		min = 0;
-	}
-	else {
+	} else {
 		int f = nowTime - mGetTime;
 		if (f < 60) {
 			min = f % 60;
 			flag = false;
-		}
-		else {
+		} else {
 			min = f / 60;
 		}
 	}
@@ -129,12 +123,10 @@ void CSPBot::slotTimerFunc() {
 	if (flag) {
 		if (min > 99) {
 			minString = "99+m";
-		}
-		else {
+		} else {
 			minString = minString + "m";
 		}
-	}
-	else {
+	} else {
 		minString = minString + "s";
 	}
 	// qDebug() << QString::fromStdString(minString);
@@ -144,8 +136,7 @@ void CSPBot::slotTimerFunc() {
 	//////// Mirai ////////
 	if (g_mirai->logined) {
 		ui.websocketStatus->setText("状态: 已连接");
-	}
-	else {
+	} else {
 		ui.websocketStatus->setText("状态: 未连接");
 	}
 
@@ -163,7 +154,8 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	//窗口样式
 	this->setAttribute(Qt::WA_TranslucentBackground, true);
 	//设置无边框
-	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);;
+	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+	;
 	this->setAttribute(Qt::WA_TranslucentBackground);
 	this->setWindowTitle(QString("CSPBot v") + g_VERSION);
 	//设置窗口阴影
@@ -226,7 +218,7 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	//绑定事件
 	connect(c_pAnimation, &QPropertyAnimation::finished, this, &CSPBot::close);
 	connect(this, &CSPBot::signalStartServer, this, &CSPBot::startServer);
-	
+
 	// Server类按钮
 	connect(ui.start, &QPushButton::clicked, this, &CSPBot::startServer);
 	connect(ui.stop, &QPushButton::clicked, this, &CSPBot::stopServer);
@@ -381,8 +373,7 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
 	pixmap.loadFromData(jpegData);
 	if (!pixmap.isNull()) {
 		ui.userImage->setPixmap(PixmapToRound(pixmap, 45)); // 你在QLabel显示图片
-	}
-	else {
+	} else {
 		ui.userImage->setText("图片加载错误");
 	}
 
@@ -420,17 +411,13 @@ void CSPBot::switchPage() {
 	}
 	if (button == ui.mainPage) {
 		ui.main->setCurrentIndex(0);
-	}
-	else if (button == ui.playerPage) {
+	} else if (button == ui.playerPage) {
 		ui.main->setCurrentIndex(1);
-	}
-	else if (button == ui.regularPage) {
+	} else if (button == ui.regularPage) {
 		ui.main->setCurrentIndex(2);
-	}
-	else if (button == ui.pluginPage) {
+	} else if (button == ui.pluginPage) {
 		ui.main->setCurrentIndex(3);
-	}
-	else if (button == ui.logPage) {
+	} else if (button == ui.logPage) {
 		ui.main->setCurrentIndex(4);
 	}
 	button->setStyleSheet("background-color:#ccdff8;\ncolor:#666666;\nborder-radius:10px;\nqproperty-iconSize: 32px 32px;\n");
@@ -493,8 +480,7 @@ bool CSPBot::checkClose() {
 			// else {
 			//	return false;
 			// }
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -555,14 +541,14 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 };
 
 void CSPBot::slotCommandCallback(QString cmd, StringVector fArgs) {
-	string type = cmd.toStdString();
-	if (g_command.find(type) != g_command.end()) {
-		luabridge::LuaRef args = luabridge::newTable(g_lua_State);
-		for (auto& i : fArgs) {
-			args.append(i.c_str());
-		}
-		// command[type](args);
-	}
+	// string type = cmd.toStdString();
+	// if (g_command.find(type) != g_command.end()) {
+	//	luabridge::LuaRef args = luabridge::newTable(g_lua_State);
+	//	for (auto& i : fArgs) {
+	//		args.append(i.c_str());
+	//	}
+	//	// command[type](args);
+	// }
 }
 
 void CSPBot::slotPacketCallback(QString msg) {
@@ -578,8 +564,7 @@ void CSPBot::slotPacketCallback(QString msg) {
 void CSPBot::slotChangeStatus(bool a) {
 	if (a) {
 		ui.ServerStatus->setText("状态: 已启动");
-	}
-	else {
+	} else {
 		ui.ServerStatus->setText("状态: 未启动");
 	}
 };
@@ -588,11 +573,9 @@ void CSPBot::slotChangeStatus(bool a) {
 void CSPBot::slotChLabel(QString title, QString content) {
 	if (title == "world") {
 		ui.ServerWorld->setText("世界:" + content);
-	}
-	else if (title == "g_VERSION") {
+	} else if (title == "g_VERSION") {
 		ui.ServerVersion->setText("版本:" + content);
-	}
-	else if (title == "difficult") {
+	} else if (title == "difficult") {
 		ui.ServerDifficult->setText("难度:" + content);
 	}
 };
@@ -606,8 +589,7 @@ void CSPBot::slotChenableForce(bool a) {
 		ui.start->setEnabled(false);
 		ui.inputCmd->setEnabled(true);
 		ui.runCmd->setEnabled(true);
-	}
-	else {
+	} else {
 		/*ui.change->setText("启动");*/
 		ui.stop->setEnabled(false);
 		ui.start->setEnabled(true);
@@ -661,8 +643,7 @@ void CSPBot::insertCmd() {
 			ui.inputCmd->setText("");
 			g_server->sendCmd(cmd + "\n");
 		}
-	}
-	catch (...) {
+	} catch (...) {
 	}
 }
 
@@ -680,8 +661,7 @@ void CSPBot::slotDebug() {
 	if (text == "crash") {
 		int* x = 0;
 		*x = 1;
-	}
-	else if (text == "cmd") {
+	} else if (text == "cmd") {
 		emit runCommand();
 	}
 }
@@ -690,8 +670,7 @@ void CSPBot::slotDebug() {
 void CSPBot::keyPressEvent(QKeyEvent* e) {
 	if (e->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier) && e->key() == Qt::Key_C) {
 		emit runCmd();
-	}
-	else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
+	} else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
 		emit runCommand();
 	}
 	// DEBUG调试器
@@ -739,8 +718,7 @@ void CSPBot::InitPlayerTableView() {
 		// ui.playerAdmin->setFrameShape(QListWidget::NoFrame);
 		ui.playerAdmin->setAlternatingRowColors(true);
 		ui.playerAdmin->setShowGrid(false);
-	}
-	catch (...) {
+	} catch (...) {
 	}
 }
 
@@ -775,8 +753,7 @@ void CSPBot::InitRegularTableView() {
 			string Permissions;
 			if (i["Permissions"].as<bool>()) {
 				Permissions = "是";
-			}
-			else if (!i["Permissions"].as<bool>()) {
+			} else if (!i["Permissions"].as<bool>()) {
 				Permissions = "否";
 			}
 			QStandardItem* item1 = new QStandardItem(QString::fromStdString(Regular));
@@ -799,8 +776,7 @@ void CSPBot::InitRegularTableView() {
 		// ui.playerAdmin->setFrameShape(QListWidget::NoFrame);
 		ui.regularAdmin->setAlternatingRowColors(true);
 		ui.regularAdmin->setShowGrid(false);
-	}
-	catch (...) {
+	} catch (...) {
 	}
 }
 
@@ -838,11 +814,9 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	regularAction regular_action;
 	if (Action_type == "<<") {
 		regular_action = regularAction::Console;
-	}
-	else if (Action_type == ">>") {
+	} else if (Action_type == ">>") {
 		regular_action = regularAction::Group;
-	}
-	else {
+	} else {
 		regular_action = regularAction::Command;
 	};
 
@@ -854,8 +828,7 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	transform(mFrom.begin(), mFrom.end(), mFrom.begin(), ::tolower);
 	if (mFrom == "group") {
 		regular_from = regularFrom::group;
-	}
-	else {
+	} else {
 		regular_from = regularFrom::console;
 	};
 
@@ -910,14 +883,12 @@ void CSPBot::InitPluginTableView() {
 		ui.pluginAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
 		ui.pluginAdmin->setAlternatingRowColors(true);
 		ui.pluginAdmin->setShowGrid(false);
-	}
-	catch (...) {
+	} catch (...) {
 	}
 }
 
 void CSPBot::showAbout() {
-	string text = "CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制";
-	text = fmt::format(text, g_VERSION);
+	string text = fmt::format("CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制", g_VERSION);
 	QApplication::beep();
 	QMessageBox::about(this, "关于CSPbot v2", QString::fromStdString(text));
 }

@@ -4,10 +4,10 @@
 #include "config_reader.h"
 #include "helper.h"
 #include "logger.h"
+#include "message_box.h"
 
 #define PLUGIN_PATH "plugins\\"
 
-int versionPacket = 1; // api版本
 // Buttons
 enum SelfStandardButton {
 	NoButton = 0,
@@ -33,7 +33,7 @@ enum SelfStandardButton {
 
 //######################### Server #########################
 
-bool RunCommand(const string& cmd, lua_State* L) {
+bool RunCommand(const string& cmd) {
 	return g_server->sendCmd(cmd + '\n');
 }
 
@@ -45,54 +45,50 @@ bool ThreadMirai(string cbe, StringMap qm) {
 		string group = qm.at("group");
 		string msg = qm.at("msg");
 		g_mirai->sendGroupMsg(group, msg, false);
-	}
-	else if (type == "sendAllGroup") {
+	} else if (type == "sendAllGroup") {
 		string msg = qm.at("msg");
 		g_mirai->sendAllGroupMsg(msg, false);
-	}
-	else if (type == "recallMsg") {
+	} else if (type == "recallMsg") {
 		string target = qm.at("target");
 		g_mirai->recallMsg(target, false);
-	}
-	else if (type == "App") {
+	} else if (type == "App") {
 		string group = qm.at("group");
 		string code = qm.at("code");
 		g_mirai->send_app(group, code);
-	}
-	else if (type == "sendPacket") {
+	} else if (type == "sendPacket") {
 		string code = qm.at("packet");
 		g_mirai->SendPacket(code);
 	}
 	return true;
 }
 // Mirai API
-void SendGroupMsg(const string& group, const string& msg, lua_State* L) {
+void SendGroupMsg(const string& group, const string& msg) {
 	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("msg", msg);
 	ThreadMirai("sendGroup", data);
 }
 
-void SendAllGroupMsg(const string& msg, lua_State* L) {
+void SendAllGroupMsg(const string& msg) {
 	std::unordered_map<string, string> data;
 	data.emplace("msg", msg);
 	ThreadMirai("sendAllGroup", data);
 }
 
-void RecallMsg(const string& target, lua_State* L) {
+void RecallMsg(const string& target) {
 	std::unordered_map<string, string> data;
 	data.emplace("target", target);
 	ThreadMirai("recallMsg", data);
 }
 
-void SendApp(const string& group, const string& code, lua_State* L) {
+void SendApp(const string& group, const string& code) {
 	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("code", code);
 	ThreadMirai("App", data);
 }
 
-void SendPacket(const string& packet, lua_State* L) {
+void SendPacket(const string& packet) {
 	std::unordered_map<string, string> data;
 	data.emplace("packet", packet);
 	ThreadMirai("sendPacket", data);
@@ -100,7 +96,7 @@ void SendPacket(const string& packet, lua_State* L) {
 
 //######################### Listener #########################
 
-bool SetListener(const string& eventName, const luabridge::LuaRef& func, lua_State* L) {
+bool SetListener(const string& eventName, const string& func) {
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code)
 		throw std::invalid_argument("Invalid event name " + eventName);
@@ -112,23 +108,22 @@ bool SetListener(const string& eventName, const luabridge::LuaRef& func, lua_Sta
 
 //######################### Motd #########################
 
-string MotdJE(const string& host, lua_State* L) {
+string MotdJE(const string& host) {
 	auto regex = QRegularExpression("(\\w.+):(\\w+)");
 	auto match = regex.match(QString::fromStdString(host));
 	if (match.hasMatch()) {
 		return Motd::motdje(host);
-	}
-	else {
+	} else {
 		return "{}";
 	}
 }
-string MotdBE(const string& host, lua_State* L) {
+
+string MotdBE(const string& host) {
 	auto regex = QRegularExpression("(\\w.+):(\\w+)");
 	auto matchs = regex.match(QString::fromStdString(host));
 	if (matchs.hasMatch()) {
 		return Motd::motdbe(host);
-	}
-	else {
+	} else {
 		return "{}";
 	}
 }
@@ -138,62 +133,43 @@ string MotdBE(const string& host, lua_State* L) {
 string QButtonToString(QMessageBox::StandardButton c) {
 	if (c == QMessageBox::NoButton) {
 		return "NoButton";
-	}
-	else if (c == QMessageBox::Ok) {
+	} else if (c == QMessageBox::Ok) {
 		return "Ok";
-	}
-	else if (c == QMessageBox::Save) {
+	} else if (c == QMessageBox::Save) {
 		return "Save";
-	}
-	else if (c == QMessageBox::SaveAll) {
+	} else if (c == QMessageBox::SaveAll) {
 		return "SaveAll";
-	}
-	else if (c == QMessageBox::Open) {
+	} else if (c == QMessageBox::Open) {
 		return "Open";
-	}
-	else if (c == QMessageBox::Yes) {
+	} else if (c == QMessageBox::Yes) {
 		return "Yes";
-	}
-	else if (c == QMessageBox::YesToAll) {
+	} else if (c == QMessageBox::YesToAll) {
 		return "YesToAll";
-	}
-	else if (c == QMessageBox::No) {
+	} else if (c == QMessageBox::No) {
 		return "No";
-	}
-	else if (c == QMessageBox::NoToAll) {
+	} else if (c == QMessageBox::NoToAll) {
 		return "NoToAll";
-	}
-	else if (c == QMessageBox::Abort) {
+	} else if (c == QMessageBox::Abort) {
 		return "Abort";
-	}
-	else if (c == QMessageBox::Retry) {
+	} else if (c == QMessageBox::Retry) {
 		return "Retry";
-	}
-	else if (c == QMessageBox::Ignore) {
+	} else if (c == QMessageBox::Ignore) {
 		return "Ignore";
-	}
-	else if (c == QMessageBox::Close) {
+	} else if (c == QMessageBox::Close) {
 		return "Close";
-	}
-	else if (c == QMessageBox::Cancel) {
+	} else if (c == QMessageBox::Cancel) {
 		return "Cancel";
-	}
-	else if (c == QMessageBox::Discard) {
+	} else if (c == QMessageBox::Discard) {
 		return "Discard";
-	}
-	else if (c == QMessageBox::Help) {
+	} else if (c == QMessageBox::Help) {
 		return "Help";
-	}
-	else if (c == QMessageBox::Apply) {
+	} else if (c == QMessageBox::Apply) {
 		return "Apply";
-	}
-	else if (c == QMessageBox::Reset) {
+	} else if (c == QMessageBox::Reset) {
 		return "Reset";
-	}
-	else if (c == QMessageBox::RestoreDefaults) {
+	} else if (c == QMessageBox::RestoreDefaults) {
 		return "RestoreDefaults";
-	}
-	else {
+	} else {
 		return "";
 	}
 }
@@ -201,75 +177,55 @@ string QButtonToString(QMessageBox::StandardButton c) {
 QMessageBox::StandardButton StringToQButton(string c) {
 	if (c == "NoButton") {
 		return QMessageBox::NoButton;
-	}
-	else if (c == "Ok") {
+	} else if (c == "Ok") {
 		return QMessageBox::Ok;
-	}
-	else if (c == "Save") {
+	} else if (c == "Save") {
 		return QMessageBox::Save;
-	}
-	else if (c == "SaveAll") {
+	} else if (c == "SaveAll") {
 		return QMessageBox::SaveAll;
-	}
-	else if (c == "Open") {
+	} else if (c == "Open") {
 		return QMessageBox::Open;
-	}
-	else if (c == "Yes") {
+	} else if (c == "Yes") {
 		return QMessageBox::Yes;
-	}
-	else if (c == "YesToAll") {
+	} else if (c == "YesToAll") {
 		return QMessageBox::YesToAll;
-	}
-	else if (c == "No") {
+	} else if (c == "No") {
 		return QMessageBox::No;
-	}
-	else if (c == "NoToAll") {
+	} else if (c == "NoToAll") {
 		return QMessageBox::NoToAll;
-	}
-	else if (c == "Abort") {
+	} else if (c == "Abort") {
 		return QMessageBox::Abort;
-	}
-	else if (c == "Retry") {
+	} else if (c == "Retry") {
 		return QMessageBox::Retry;
-	}
-	else if (c == "Ignore") {
+	} else if (c == "Ignore") {
 		return QMessageBox::Ignore;
-	}
-	else if (c == "Close") {
+	} else if (c == "Close") {
 		return QMessageBox::Close;
-	}
-	else if (c == "Cancel") {
+	} else if (c == "Cancel") {
 		return QMessageBox::Cancel;
-	}
-	else if (c == "Discard") {
+	} else if (c == "Discard") {
 		return QMessageBox::Discard;
-	}
-	else if (c == "Help") {
+	} else if (c == "Help") {
 		return QMessageBox::Help;
-	}
-	else if (c == "Apply") {
+	} else if (c == "Apply") {
 		return QMessageBox::Apply;
-	}
-	else if (c == "Reset") {
+	} else if (c == "Reset") {
 		return QMessageBox::Reset;
-	}
-	else if (c == "RestoreDefaults") {
+	} else if (c == "RestoreDefaults") {
 		return QMessageBox::RestoreDefaults;
-	}
-	else {
+	} else {
 		return QMessageBox::FlagMask;
 	}
 }
 
 //构造弹窗
-string ShowTipWindow(const string& type, const string& title, const string& content, const luabridge::LuaRef& buttonType, lua_State* L) {
+string ShowTipWindow(const string& type, const string& title, const string& content, const vector<string>& buttonType) {
 	QFlags<QMessageBox::StandardButton> btn;
-	for (int i = 0; i < buttonType.length(); ++i) {
-		string Btype = buttonType[i];
-		auto event_code = StringToQButton(Btype);
+	for (auto& b : buttonType) {
+		auto event_code = StringToQButton(b);
 
 		if (event_code == QMessageBox::FlagMask) {
-			throw std::invalid_argument("Invalid StandardButton name " + Btype);
+			throw std::invalid_argument("Invalid StandardButton name " + b);
 		}
 
 		btn = btn | event_code;
@@ -319,7 +275,7 @@ string ShowTipWindow(const string& type, const string& title, const string& cont
 
 //######################### Command #########################
 
-bool RegisterCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State* L) {
+bool RegisterCommand(const string& cmd, const string& cbf) {
 	if (g_command.find(cmd) != g_command.end() &&
 		cmd != "bind" &&
 		cmd != "unbind" &&
@@ -339,41 +295,30 @@ bool RegisterCommand(const string& cmd, const luabridge::LuaRef& cbf, lua_State*
 }
 
 //######################### Player #########################
-luabridge::LuaRef QueryInfo(const string& type, const string& arg, lua_State* L) {
+json QueryInfo(const string& type, const string& arg) {
 	if (type != "qq" && type != "xuid" && type != "player") {
 		throw std::invalid_argument("Invalid type:" + type);
 	}
 
 	auto queryData = Bind::queryXboxID(type, arg);
-	string j = yaml2json(queryData).dump();
-	return {L, j};
+	return yaml2json(queryData).dump();
 }
 
-bool UnbindXbox(string qq, lua_State* L) {
+bool UnbindXbox(string qq) {
 	return Bind::unbind(qq);
 }
 
-bool BindXbox(string name, string qq, lua_State* L) {
+bool BindXbox(string name, string qq) {
 	return Bind::bind(qq, name);
 }
 
 //######################### Info #########################
-luabridge::LuaRef GetGroup(lua_State* L) {
-	luabridge::LuaRef groupList = luabridge::newTable(L);
-	// bool inGroup = false;
-	for (auto i : g_config["group"]) {
-		groupList.append(i.as<string>());
-	}
-	return groupList;
+auto GetGroup() {
+	return g_config["group"];
 }
 
-luabridge::LuaRef GetAdmin(lua_State* L) {
-	luabridge::LuaRef groupList = luabridge::newTable(L);
-	bool inGroup = false;
-	for (auto i : g_config["admin"]) {
-		groupList.append(i.as<string>());
-	}
-	return groupList;
+auto GetAdmin() {
+	return g_config["admin"];
 }
 
 void EnableListener(EventCode evc) {
@@ -394,90 +339,9 @@ bool HasPlugin(const string& name) {
 	return GetPlugin(name) != nullptr;
 }
 
-bool RegisterPlugin(const string& name, const string& description, const string& author, const string& version, lua_State* L) {
+bool RegisterPlugin(const string& name, const string& description, const string& author, const string& version) {
 	if (HasPlugin(name))
 		return false;
 	g_plugins.push_back({name, description, author, version});
 	return true;
-}
-
-bool LoadPlugin() {
-	//加载文件
-	try {
-		g_logger.info("Start Loading Plugins...");
-		if (!fs::exists(PLUGIN_PATH))
-			fs::create_directories(PLUGIN_PATH);
-		for (auto& info : fs::directory_iterator(PLUGIN_PATH)) {
-			if (info.path().extension() == ".lua") {
-				string name(info.path().stem().u8string());
-
-				//忽略以'_'开头的文件
-				if (name.front() == '_') {
-					g_logger.warn("Ignoring {}", name);
-					continue;
-				}
-				else {
-					g_logger.info("Loading Plugin {}", name);
-					auto m = luaL_dofile(g_lua_State, name.c_str());
-					if (m) {
-					}
-					else {
-						g_logger.error("Fail to load the plugin {}!", name);
-					}
-					// Callbacker cbe(EventCode::onImport);
-					// cbe.insert("name", name);
-					// cbe.callback();
-					g_logger.info("Plugin {} Loaded.", name);
-				}
-			}
-		}
-		g_logger.info("All Plugins Loaded.");
-	}
-	catch (const std::exception& e) {
-		g_logger.error(e.what());
-	}
-	return true;
-}
-
-lua_State* InitLua() {
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
-	luabridge::getGlobalNamespace(L)
-		.beginClass<Logger>("Logger")
-		.addConstructor<void (*)(string)>()
-		.addFunction("info", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->info(msg); }))
-		.addFunction("debug", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->debug(msg); }))
-		.addFunction("error", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->error(msg); }))
-		.addFunction("error", std::function([](Logger* thiz, const string& msg, lua_State* L) { thiz->warn(msg); }))
-		.endClass()
-		.addFunction("GetVersion", std::function([](lua_State* L) { return g_VERSION; }))
-		.addFunction("SendGroupMsg", &SendGroupMsg)
-		.addFunction("SendAllGroupMsg", &SendAllGroupMsg)
-		.addFunction("RecallMsg", &RecallMsg)
-		.addFunction("SendApp", &SendApp)
-		.addFunction("SendPacket", &SendPacket)
-		.addFunction("SetListener", &SetListener)
-		.addFunction("MotdBE", &MotdBE)
-		.addFunction("MotdJE", &MotdJE)
-		.addFunction("Tip", &ShowTipWindow)
-		.addFunction("GetAPIVersion", std::function([](lua_State* L) { return versionPacket; }))
-		.addFunction("RegisterCommand", &RegisterCommand)
-
-		.addFunction("RunCommand", &RunCommand)
-		.addFunction("GetServerStatus", std::function([](lua_State* L) { return g_server->getStarted(); }))
-
-		.addFunction("QueryInfo", &QueryInfo)
-		.addFunction("Unbind", &UnbindXbox)
-		.addFunction("Bind", &BindXbox)
-
-		.addFunction("GetAdmin", &GetAdmin)
-		.addFunction("GetGroup", &GetGroup)
-
-		.addFunction("RegisterPlugin", &RegisterPlugin);
-
-	return L;
-}
-
-void DeinitLua(lua_State* L) {
-	lua_close(L);
 }

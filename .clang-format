@@ -26,28 +26,11 @@ AlwaysBreakTemplateDeclarations: Yes
 BasedOnStyle: LLVM
 BinPackArguments: false
 BinPackParameters: false
-BraceWrapping:
-  AfterCaseLabel: false
-  AfterClass: false
-  AfterControlStatement: false
-  AfterEnum: false
-  AfterFunction: false
-  AfterNamespace: false
-  AfterStruct: false
-  AfterUnion: false
-  BeforeCatch: true
-  BeforeElse: true
-  BeforeLambdaBody: false
-  BeforeWhile: false
-  IndentBraces: false
-  SplitEmptyFunction: false
-  SplitEmptyRecord: false
-  SplitEmptyNamespace: false
-BreakBeforeBraces: Custom
+BreakBeforeBraces: Attach
 ColumnLimit: 0
 Cpp11BracedListStyle: true
 FixNamespaceComments: true
-IndentCaseLabels: false
+IndentCaseLabels: true
 IndentPPDirectives: None
 IndentWidth: 4
 KeepEmptyLinesAtTheStartOfBlocks: false

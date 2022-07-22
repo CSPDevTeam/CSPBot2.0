@@ -1,9 +1,4 @@
 ﻿#pragma once
-#include "lua/lua.hpp"
-#include <LuaBridge/LuaBridge.h>
-
-using luabridge::LuaRef;
-
 // class Callbacker {
 // public:
 //	Callbacker(EventCode t) : type_(t), arg_(luabridge::newTable(g_lua_State)) {}
@@ -40,7 +35,3 @@ using luabridge::LuaRef;
 //	EventCode type_;
 //	LuaValue arg_;
 // };
-
-lua_State* InitLua();
-
-bool LoadPlugin();

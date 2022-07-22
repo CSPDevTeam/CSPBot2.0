@@ -9,60 +9,55 @@ class Logger {
 public:
 	Logger(const string& title) : title_(title) {}
 
-	template <typename... Args>
-	void info(const string& msg, const Args&... args) {
-		try {
-			string str = fmt::format(msg, args...);
-			if (getLevel() <= 2) {
-				pushToQueue("<font color = \"#008000\">" + getTime() + " I/" + title_ + ": " + str + "\n</font>");
-			}
+	void info(const string& msg) {
+		if (getLevel() <= 2) {
+			pushToQueue("<font color = \"#008000\">" + getTime() + " I/" + title_ + ": " + msg + "\n</font>");
 		}
-		catch (...) {
-			if (getLevel() <= 2) {
-				pushToQueue("<font color = \"#008000\">" + getTime() + " I/" + title_ + ": " + msg + "\n</font>");
-			}
+	}
+	template <typename... Args>
+	void info(const char* msg, Args&&... args) {
+		string str = fmt::format(msg, std::forward<Args>(args)...);
+		if (getLevel() <= 2) {
+			pushToQueue("<font color = \"#008000\">" + getTime() + " I/" + title_ + ": " + str + "\n</font>");
 		}
 	};
-	template <typename... Args>
-	void error(const string& msg, const Args&... args) {
-		try {
-			string str = fmt::format(msg, args...);
-			if (getLevel() <= 4) {
-				pushToQueue("<font color = \"#FF0000\">" + getTime() + " E/" + title_ + ": " + str + "\n</font>");
-			}
+	
+	void error(const string& msg) {
+		if (getLevel() <= 1) {
+			pushToQueue("<font color = \"#FF0000\">" + getTime() + " E/" + title_ + ": " + msg + "\n</font>");
 		}
-		catch (...) {
-			if (getLevel() <= 4) {
-				pushToQueue("<font color = \"#FF0000\">" + getTime() + " E/" + title_ + ": " + msg + "\n</font>");
-			}
+	}
+	template <typename... Args>
+	constexpr void error(const char* msg, Args&&... args) {
+		string str = fmt::format(msg, std::forward<Args>(args)...);
+		if (getLevel() <= 4) {
+			pushToQueue("<font color = \"#FF0000\">" + getTime() + " E/" + title_ + ": " + str + "\n</font>");
 		}
 	};
-	template <typename... Args>
-	void warn(const string& msg, const Args&... args) {
-		try {
-			string str = fmt::format(msg, args...);
-			if (getLevel() <= 3) {
-				pushToQueue("<font color = \"#FFCC66\">" + getTime() + " W/" + title_ + ": " + str + "\n</font>");
-			}
+	
+	void warn(const string& msg) {
+		if (getLevel() <= 1) {
+			pushToQueue("<font color = \"#FFCC66\">" + getTime() + " W/" + title_ + ": " + msg + "\n</font>");
 		}
-		catch (...) {
-			if (getLevel() <= 3) {
-				pushToQueue("<font color = \"#FFCC66\">" + getTime() + " W/" + title_ + ": " + msg + "\n</font>");
-			}
+	}
+	template <typename... Args>
+	void warn(const char* msg, Args&&... args) {
+		string str = fmt::format(msg, std::forward<Args>(args)...);
+		if (getLevel() <= 3) {
+			pushToQueue("<font color = \"#FFCC66\">" + getTime() + " W/" + title_ + ": " + str + "\n</font>");
 		}
 	};
-	template <typename... Args>
-	void debug(const string& msg, const Args&... args) {
-		try {
-			string str = fmt::format(msg, args...);
-			if (getLevel() <= 1) {
-				pushToQueue("<font color = \"#6699FF\">" + getTime() + " D/" + title_ + ": " + str + "\n</font>");
-			}
+
+	void debug(const string& msg) {
+		if (getLevel() <= 0) {
+			pushToQueue("<font color = \"#6699FF\">" + getTime() + " D/" + title_ + ": " + msg + "\n</font>");
 		}
-		catch (...) {
-			if (getLevel() <= 1) {
-				pushToQueue("<font color = \"#6699FF\">" + getTime() + " D/" + title_ + ": " + msg + "\n</font>");
-			}
+	}
+	template <typename... Args>
+	void debug(const char* msg, Args&&... args) {
+		string str = fmt::format(msg, std::forward<Args>(args)...);
+		if (getLevel() <= 1) {
+			pushToQueue("<font color = \"#6699FF\">" + getTime() + " D/" + title_ + ": " + str + "\n</font>");
 		}
 	};
 
@@ -86,14 +81,11 @@ private:
 		}
 		if (level == "info") {
 			return 2;
-		}
-		else if (level == "warn") {
+		} else if (level == "warn") {
 			return 3;
-		}
-		else if (level == "error") {
+		} else if (level == "error") {
 			return 4;
-		}
-		else {
+		} else {
 			return 1;
 		}
 	};
