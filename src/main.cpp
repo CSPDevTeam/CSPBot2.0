@@ -9,6 +9,8 @@
 #ifdef _DEBUG
 #pragma comment(lib, "lib/libcrypto_d.lib")
 #pragma comment(lib, "lib/libssl_d.lib")
+#pragma comment(lib, "lib/vld.lib")
+#include <vld.h>
 #else
 #pragma comment(lib, "lib/libcrypto.lib")
 #pragma comment(lib, "lib/libssl.lib")
@@ -50,10 +52,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 	QApplication a(argc, argv);
-	//QApplication::setQuitOnLastWindowClosed(true);
 	
-	//设置编码为UTF8
-	//QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 	//展示ssl版本
 	qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
