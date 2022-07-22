@@ -98,13 +98,17 @@ jobs:
           cp x64/Release/*.pdb D:/out/PDB
         shell: bash
 
-      - name: Upload plugins
+      - name: Upload Main
         uses: actions/upload-artifact@v1.0.0
         with:
-          name: CSPBot
-          path: |
-            D:/out/BuildConfig
-            D:/out/PDB
+          name: CSPBot2.0
+          path: D:/out/BuildConfig
+
+      - name: Upload Main
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: PDB
+          path: D:/out/PDB
 
       - name: Compress to zip
         run: |
