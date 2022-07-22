@@ -361,7 +361,7 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
 	QUrl url(szUrl);
 	QNetworkAccessManager manager;
 	QEventLoop loop;
-	qDebug() << "Reading picture form " << url;
+	//qDebug() << "Reading picture form " << url;
 	QNetworkReply* reply = manager.get(QNetworkRequest(url));
 	//请求结束并下载完成后，退出子事件循环
 	QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -512,7 +512,7 @@ void CSPBot::slotInsertBDSLog(QString log) {
 // Callback
 bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 	// Python Callbacker
-	qDebug() << "CallBack:" << listener;
+	//qDebug() << "CallBack:" << listener;
 	string eventName = listener.toStdString();
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code) {
@@ -756,13 +756,17 @@ void CSPBot::InitRegularTableView() {
 			} else if (!i["Permissions"].as<bool>()) {
 				Permissions = "否";
 			}
-			QStandardItem* item1 = new QStandardItem(QString::fromStdString(Regular));
+			QStandardItem* item1 = new QStandardItem();
+			item1->setData(QString::fromStdString(Regular));
 			item1->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item2 = new QStandardItem(QString::fromStdString(From));
+			static QStandardItem* item2 = new QStandardItem();
+			item2->setData(QString::fromStdString(From));
 			item2->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item3 = new QStandardItem(QString::fromStdString(Action));
+			static QStandardItem* item3 = new QStandardItem();
+			item3->setData(QString::fromStdString(Action));
 			item3->setTextAlignment(Qt::AlignCenter);
-			QStandardItem* item4 = new QStandardItem(QString::fromStdString(Permissions));
+			static QStandardItem* item4 = new QStandardItem();
+			item4->setData(QString::fromStdString(Permissions));
 			item4->setTextAlignment(Qt::AlignCenter);
 			m_model->setItem(in, 0, item1);
 			m_model->setItem(in, 1, item2);

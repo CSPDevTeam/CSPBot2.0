@@ -10,15 +10,6 @@
 #define FMT_API
 #define Q_OBJECT public: QT_WARNING_PUSH Q_OBJECT_NO_OVERRIDE_WARNING static const QMetaObject staticMetaObject; virtual const QMetaObject *metaObject() const; virtual void *qt_metacast(const char *); virtual int qt_metacall(QMetaObject::Call, int, void **); QT_TR_FUNCTIONS private: Q_OBJECT_NO_ATTRIBUTES_WARNING Q_DECL_HIDDEN_STATIC_METACALL static void qt_static_metacall(QObject *, QMetaObject::Call, int, void **); QT_WARNING_POP struct QPrivateSignal {}; QT_ANNOTATE_CLASS(qt_qobject, "")
 #define Q_OBJECT
-#define LUA_API __declspec(dllexport)
-#define LUA_API __declspec(dllimport)
-#define LUA_API
-#define l_sinline
-#define LUALIB_API
-#define LUAI_FUNC __attribute__((visibility("internal"))) extern
-#define LUAI_FUNC
-#define LUAMOD_API
-#define LUAI_DDEC(dec)
 #define YAML_CPP_NOEXCEPT
 #define QT_BEGIN_MOC_NAMESPACE
 #define QT_WARNING_PUSH __pragma(warning(push))
@@ -33,10 +24,4 @@
 #define QT_WARNING_DISABLE_DEPRECATED
 #define vmdispatch(x) goto *disptab[x];
 #define vmdispatch(o) switch(o)
-#define LUAI_DDEF
-#define LUA_USE_JUMPTABLE
-#define clLvalue(o) check_exp(ttisLclosure(o), gco2lcl(val_(o).gc))
-#define s2v(o) (&(o)->val)
-#define lua_assert(c) assert(c)
-#define lua_assert(c) ((void)0)
-#define l_unlikely(x) luai_unlikely(x)
+#define MAGIC_ENUM_FOR_EACH_256

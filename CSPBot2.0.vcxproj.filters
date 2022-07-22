@@ -195,10 +195,10 @@
       <Filter>Source File</Filter>
     </ClCompile>
     <ClCompile Include="src\fmt\format.cc">
-      <Filter>Source File</Filter>
+      <Filter>Source File\fmt</Filter>
     </ClCompile>
     <ClCompile Include="src\fmt\os.cc">
-      <Filter>Source File</Filter>
+      <Filter>Source File\fmt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="src\message_box.h">
       <Filter>Header File\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="include\magic_enum.hpp">
+      <Filter>Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

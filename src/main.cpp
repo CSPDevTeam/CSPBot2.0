@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 	QApplication a(argc, argv);
 	
 	//展示ssl版本
-	qDebug() << QSslSocket::sslLibraryBuildVersionString();
+	//qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
 	//设置缩放
 	qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
@@ -86,4 +86,16 @@ int main(int argc, char* argv[]) {
 	CheckConfigVersion();
 
 	return a.exec();
+}
+namespace std {
+//template <class _First, class... _Rest>
+//struct _Enforce_same {
+//	static_assert(conjunction_v<is_same<_First, _Rest>...>,
+//		"N4687 26.3.7.2 [array.cons]/2: "
+//		"Requires: (is_same_v<T, U> && ...) is true. Otherwise the program is ill-formed.");
+//	using type = _First;
+//};
+//
+//template <class _First, class... _Rest>
+//array(_First, _Rest...) -> array<typename _Enforce_same<_First, _Rest...>::type, 1 + sizeof...(_Rest)>;
 }
