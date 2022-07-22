@@ -1,0 +1,140 @@
+name: Windows
+on: 
+  # push代码时触发workflow
+  push:
+    paths:
+      - '*.pro'
+      - '**'
+      - '.github/workflows/windows.yml'
+  pull_request:
+    paths:
+      - '*.pro'
+      - '**'
+      - '.github/workflows/windows.yml' 
+jobs:
+  build:
+    name: Build
+    # 运行平台， windows-latest目前是windows server 2019 
+    # 参考文档 https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md
+    runs-on: windows-latest
+    strategy:
+      # 矩阵配置
+      matrix:
+        include:
+          - qt_ver: 6.3.1       
+            qt_arch: win64_msvc2019_64
+            msvc_arch: x64
+            qt_arch_install: msvc2019_64
+            
+
+    env:
+      targetName: CSPBot2.0
+    # 步骤
+    steps:
+      # 安装Qt
+      - name: Install Qt
+        # 使用外部action。这个action专门用来安装Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          # Version of Qt to install
+          version: ${{ matrix.qt_ver }}
+          # Target platform for build
+          # target: ${{ matrix.qt_target }}
+          arch: ${{ matrix.qt_arch }}
+          cached: 'false'
+          dir: 'D:\Qt\Qt6.3.1'
+          aqtversion: '==2.0.5'    
+
+      # 拉取代码
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1
+
+      #下载Build配置
+      - name: Download BuildConfig
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          ServerLink=https://github.com/CSPDevTeam/TempData/archive/refs/heads/main.zip
+          curl -L -o QtMsBuild.zip "$ServerLink"
+          unzip QtMsBuild.zip -d .
+          cp -r TempData-main/** .
+        shell: bash
+
+      #添加PATH
+      - name: add Path
+        id: addpath
+        shell: powershell
+        run: |
+          Get-ChildItem D:\Qt\Qt6.3.1\Qt\6.3.1\msvc2019_64\
+
+      # msvc编译
+      - name: msvc-build
+        id: build
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
+          set DefaultQtVersion=D:\Qt\Qt6.3.1\Qt\6.3.1\msvc2019_64\bin
+          set QTDIR=D:\Qt\Qt6.3.1\Qt\6.3.1\msvc2019_64\bin
+          MSBuild.exe ./CSPBot2.0.sln -property:Configuration=Release
+
+      - name: MkDirs
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          mkdir D:/out/BuildConfig
+          mkdir D:/out/BuildConfig/config
+          mkdir D:/out/BuildConfig/data
+          mkdir D:/out/PDB
+    
+      #cp config/*.yml D:/out/BuildConfig/config
+      #cp data/*.yml D:/out/BuildConfig/data 
+      - name: Copy Out Files
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          cp -r BuildConfig/** D:/out/BuildConfig
+          cp x64/Release/*.exe D:/out/BuildConfig
+          cp x64/Release/*.pdb D:/out/PDB
+        shell: bash
+
+      - name: Upload Main
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: CSPBot2.0
+          path: D:/out/BuildConfig
+
+      - name: Upload PDB
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: PDB
+          path: D:/out/PDB
+
+      - name: Compress to zip
+        run: |
+          7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip D:/out/BuildConfig
+          7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-PDB.zip D:/out/PDB
+        shell: bash
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: v${{env.RELEASE_TAG}}
+          body_path: ./CHANGELOG.md
+          files: |
+            D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip
+            D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-PDB.zip
+        env:
+            GITHUB_REPOSITORY: CSPDevTeam/CSPBot2.0
+
+
+
+  Clean:
+    runs-on: ubuntu-latest
+    if: ${{ always() }} # 防止前面三者跑着跑着报错，这一步骤不执行导致libs删不掉的现象发生
+    needs: [build]
+    steps:
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+          name: libs
