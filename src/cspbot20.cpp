@@ -142,6 +142,8 @@ void CSPBot::slotTimerFunc() {
 
 	/////// Table ////////
 	updateRegularData();
+	updatePlayerData();
+	updatePluginData();
 	//InitPlayerTableView();
 	//InitRegularTableView();
 	//InitPluginTableView();
@@ -726,6 +728,7 @@ void CSPBot::InitPlayerTableView() {
 	ui.playerAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.playerAdmin->setAlternatingRowColors(true);
 	ui.playerAdmin->setShowGrid(false);
+	updatePlayerData();
 }
 
 void CSPBot::InitRegularTableView() {
@@ -757,6 +760,7 @@ void CSPBot::InitPluginTableView() {
 	ui.pluginAdmin->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.pluginAdmin->setAlternatingRowColors(true);
 	ui.pluginAdmin->setShowGrid(false);
+	updatePluginData();
 }
 
 //选中自动选中该行
@@ -853,7 +857,7 @@ void CSPBot::updatePlayerData() {
 	s_model->insertRows(0, line_num); //添加行
 
 	int in = 0;
-	for (auto i : g_regular.raw()) {
+	for (auto i : g_player.raw()) {
 		QModelIndex index1 = s_model->index(in, 0);
 		QModelIndex index2 = s_model->index(in, 1);
 		QModelIndex index3 = s_model->index(in, 2);
