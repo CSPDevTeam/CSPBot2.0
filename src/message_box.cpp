@@ -9,6 +9,7 @@ void msgbox::ShowError(const QString& msg) {
 	msgBox.setIcon(QMessageBox::Icon::Critical);
 	msgBox.setText(msg);
 	msgBox.exec();
+	msgBox.deleteLater();
 }
 
 //显示Information信息
@@ -17,6 +18,7 @@ void msgbox::ShowInfo(const QString& msg) {
 	msgBox.setIcon(QMessageBox::Icon::Information);
 	msgBox.setText(msg);
 	msgBox.exec();
+	msgBox.deleteLater();
 }
 
 //显示Warning信息
@@ -25,6 +27,7 @@ void msgbox::ShowWarn(const QString& msg) {
 	msgBox.setIcon(QMessageBox::Icon::Warning);
 	msgBox.setText(msg);
 	msgBox.exec();
+	msgBox.deleteLater();
 }
 
 //显示Question信息
@@ -33,4 +36,5 @@ void msgbox::ShowQuestion(const QString& msg) {
 	msgBox.setIcon(QMessageBox::Icon::Question);
 	msgBox.setText(msg);
 	msgBox.exec();
+	msgBox.deleteLater();
 }

@@ -1,6 +1,9 @@
 ﻿#include "helper.h"
 #include "config_reader.h"
 #include <fstream>
+#include <string>
+
+using namespace std;
 
 //字符串替换
 string helper::replace(const string& strSrc, const string& oldStr, const string& newStr, size_t count) {
@@ -118,6 +121,37 @@ string helper::Utf8ToGbk(const char* src_str) {
 	if (szGBK)
 		delete[] szGBK;
 	return strTemp;
+}
+
+//str和wstr互转
+wstring helper::str2wstr(const string& str) {
+	return str2wstr(str, CP_UTF8);
+}
+
+std::wstring helper::str2wstr(const std::string& str, UINT codePage) {
+	auto len = MultiByteToWideChar(codePage, 0, str.c_str(), -1, nullptr, 0);
+	auto* buffer = new wchar_t[len + 1];
+	MultiByteToWideChar(codePage, 0, str.c_str(), -1, buffer, len + 1);
+	buffer[len] = L'\0';
+
+	wstring result = wstring(buffer);
+	delete[] buffer;
+	return result;
+}
+
+string helper::wstr2str(const wstring& wstr) {
+	return wstr2str(wstr, CP_UTF8);
+}
+
+std::string helper::wstr2str(const std::wstring& wstr, UINT codePage) {
+	auto len = WideCharToMultiByte(codePage, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	char* buffer = new char[len + 1];
+	WideCharToMultiByte(codePage, 0, wstr.c_str(), -1, buffer, len + 1, nullptr, nullptr);
+	buffer[len] = '\0';
+
+	string result = string(buffer);
+	delete[] buffer;
+	return result;
 }
 
 string Motd::motdbe(string host) {

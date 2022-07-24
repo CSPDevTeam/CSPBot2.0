@@ -3,7 +3,8 @@
 #include "config_reader.h"
 #include "logger.h"
 #include "message_box.h"
-#include "plugins.h"
+#include "pluginManager.h"
+#include "plugin.h"
 
 #pragma comment(lib, "dbghelp.lib")
 #ifdef _DEBUG
@@ -20,6 +21,7 @@
 Logger g_logger("CSPBot");
 Logger g_server_logger("Server");
 Logger g_mirai_logger("Mirai");
+Logger g_plugin_logger("Plugin");
 
 ConfigReader g_config;
 ConfigReader g_player;
@@ -84,6 +86,11 @@ int main(int argc, char* argv[]) {
 
 	//检测文件版本
 	CheckConfigVersion();
+
+	//加载插件
+	plugin::initPluginModel();
+
+	//退出
 	int ret = a.exec();
 	
 	//释放内存
@@ -94,16 +101,4 @@ int main(int argc, char* argv[]) {
 	
 	
 	return ret;
-}
-namespace std {
-//template <class _First, class... _Rest>
-//struct _Enforce_same {
-//	static_assert(conjunction_v<is_same<_First, _Rest>...>,
-//		"N4687 26.3.7.2 [array.cons]/2: "
-//		"Requires: (is_same_v<T, U> && ...) is true. Otherwise the program is ill-formed.");
-//	using type = _First;
-//};
-//
-//template <class _First, class... _Rest>
-//array(_First, _Rest...) -> array<typename _Enforce_same<_First, _Rest...>::type, 1 + sizeof...(_Rest)>;
 }

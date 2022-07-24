@@ -5,7 +5,7 @@
 #include "logger.h"
 #include "ws_client.h"
 #include "regular_edit.h"
-#include "plugins.h"
+#include "pluginManager.h"
 #include <QInputDialog>
 #include "Event.h"
 #include "message_box.h"
@@ -546,25 +546,16 @@ void CSPBot::slotInsertBDSLog(QString log) {
 
 // Callback
 bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
-	// Python Callbacker
-	//qDebug() << "CallBack:" << listener;
 	string eventName = listener.toStdString();
 	auto event_code = magic_enum::enum_cast<EventCode>(eventName);
 	if (!event_code) {
 		return false;
 	}
 	EventCode ct = event_code.value();
-	// Callbacker cb(ct);
-	// for (auto& i : args) {
-	//	string key = i.first;
-	//	string value = i.second;
-	//	if (!helper::is_str_utf8(value.c_str())) {
-	//		return false;
-	//	}
-	//	cb.insert(key.c_str(), value);
-	// }
-	// bool ret = cb.callback();
 	bool ret = 0;
+	for (auto i : g_cb_functions[ct]) {
+		((void (*)())i)(args);
+	}
 	// Event Callbacker
 	EventCallbacker ecb(ct);
 	std::vector<string> args_;
@@ -749,7 +740,7 @@ void CSPBot::InitRegularTableView() {
 
 void CSPBot::InitPluginTableView() {
 	QStringList strHeader;
-	strHeader << "插件" << "介绍" << "版本" << "作者";
+	strHeader << "插件" << "介绍" << "版本";
 	Plugin_model = new QStandardItemModel();
 	Plugin_model->setHorizontalHeaderLabels(strHeader);
 	Plugin_model->setColumnCount(strHeader.size());
@@ -893,19 +884,16 @@ void CSPBot::updatePluginData() {
 		QModelIndex index1 = s_model->index(in, 0);
 		QModelIndex index2 = s_model->index(in, 1);
 		QModelIndex index3 = s_model->index(in, 2);
-		QModelIndex index4 = s_model->index(in, 3);
 
 		//设置数据
-		s_model->setData(index1, QString::fromStdString(i.name));
-		s_model->setData(index2, QString::fromStdString(i.description));
-		s_model->setData(index3, QString::fromStdString(i.version));
-		s_model->setData(index4, QString::fromStdString(i.author));
+		s_model->setData(index1, QString::fromStdString(i.second.name));
+		s_model->setData(index2, QString::fromStdString(i.second.desc));
+		s_model->setData(index3, QString::fromStdString(i.second.version.toString()));
 
 		//设置居中
 		Plugin_model->item(in, 0)->setTextAlignment(Qt::AlignCenter);
 		Plugin_model->item(in, 1)->setTextAlignment(Qt::AlignCenter);
 		Plugin_model->item(in, 2)->setTextAlignment(Qt::AlignCenter);
-		Plugin_model->item(in, 3)->setTextAlignment(Qt::AlignCenter);
 
 		in++;
 	}
@@ -925,5 +913,10 @@ void CSPBot::newRegular() {
 void CSPBot::showAbout() {
 	string text = fmt::format("CSPbot2.0 由CSPDev开发\n版本号:{}\n本程序遵守GPL v3.0许可证，未经许可禁止倒卖，复制", g_VERSION);
 	QApplication::beep();
-	QMessageBox::about(this, "关于CSPbot v2", QString::fromStdString(text));
+	QMessageBox msgBox;
+	msgBox.setWindowTitle("关于CSPbot 2.0");
+	msgBox.setText(QString::fromStdString(text));
+	//msgBox.setParent(this);
+	int ret = msgBox.exec();
+	msgBox.deleteLater();
 }

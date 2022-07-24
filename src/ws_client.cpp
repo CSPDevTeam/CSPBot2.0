@@ -66,6 +66,7 @@ bool Mirai::connectMirai() {
 	}
 	else {
 		emit signalMiraiMessageBox();
+		emit signalConnect(0);
 		g_mirai_logger.error("无法连接到 Mirai");
 	}
 

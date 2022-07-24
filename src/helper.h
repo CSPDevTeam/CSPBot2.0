@@ -22,6 +22,13 @@ bool is_str_utf8(const char* str);
 string GbkToUtf8(const char* src_str);
 
 string Utf8ToGbk(const char* src_str);
+
+// Str与WStr互转
+std::wstring str2wstr(const string& str);
+std::wstring str2wstr(const std::string& str, UINT codePage);
+string wstr2str(const std::wstring& wstr);
+std::string wstr2str(const std::wstring& wstr, UINT codePage);
+
 } // namespace helper
 
 namespace Motd {

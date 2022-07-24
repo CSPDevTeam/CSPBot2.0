@@ -3,7 +3,7 @@
 #include "cspbot20.h"
 #include "helper.h"
 #include "ws_client.h"
-#include "plugins.h"
+#include "pluginManager.h"
 #include "helper.h"
 #include "server.h"
 #include "global.h"
@@ -53,6 +53,9 @@ vector<string> CommandAPI::SplitCommand(const string& paras) {
 
 void CommandAPI::CustomCmd(string cmd, string group) {
 	vector<string> sp = SplitCommand(cmd);
+	if (sp.size() <= 0) {
+		return;
+	}
 	string Action_Type = sp[0];
 	if (Action_Type == "bind") {
 		if (sp.size() > 2) {

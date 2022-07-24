@@ -52,7 +52,17 @@ void Server::run() {
 
 //强制停止
 bool Server::forceStopServer() {
-	QProcess::startDetached("taskkill -t  -f /pid " + QString::number(myChildProcess->processId()));
+	QProcess process(this);
+	QStringList argument;
+	process.setProgram("taskkill");
+	argument << "/F"
+			 << "/T"
+			 << "/PID" << QString::number(myChildProcess->processId());
+	process.setArguments(argument);
+	process.start();
+	process.waitForStarted();
+	process.waitForFinished();
+	TypeOfStop = force;
 	return true;
 }
 
@@ -90,7 +100,8 @@ void Server::formatBDSLog(QString s_line) {
 	//去掉Color
 	QRegularExpression pattern("\033\\[(.+?)m");
 	auto match = pattern.match(s_line);
-	QString s_line_colorless = s_line.replace(pattern, "");
+	QString s_line_colorless = s_line;
+	s_line_colorless = s_line_colorless.replace(pattern, "");
 	
 	//分割字符串
 	QStringList s_colorless_list = s_line_colorless.split("\n");
@@ -128,7 +139,8 @@ void Server::formatBDSLog(QString s_line) {
 void Server::receiver() {
 	char output[2049];
 	while (myChildProcess->readLine(output, 2048)) {
-		formatBDSLog(output);
+		QString line = QString::fromUtf8(output);
+		formatBDSLog(line);
 	}
 }
 
