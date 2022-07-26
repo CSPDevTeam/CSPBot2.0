@@ -119,11 +119,11 @@ jobs:
           path: D:/out/PDB
 
       #打包开发套件
-      - name: Upload Devlop
+      - name: Upload Develop
         uses: actions/upload-artifact@v1.0.0
         with:
-          name: Devlop
-          path: D:/out/Devlop
+          name: Develop
+          path: D:/out/Develop
 
       - name: Compress to zip
         run: |
