@@ -87,6 +87,10 @@ jobs:
           mkdir D:/out/BuildConfig/config
           mkdir D:/out/BuildConfig/data
           mkdir D:/out/PDB
+          mkdir D:/out/Develop
+          mkdir D:/out/Develop/SDK
+          mkdir D:/out/Develop/SDK/Head
+          mkdir D:/out/Develop/SDK/Lib
     
       #cp config/*.yml D:/out/BuildConfig/config
       #cp data/*.yml D:/out/BuildConfig/data 
@@ -96,24 +100,36 @@ jobs:
           cp -r BuildConfig/** D:/out/BuildConfig
           cp x64/Release/*.exe D:/out/BuildConfig
           cp x64/Release/*.pdb D:/out/PDB
+          cp x64/Release/*.lib D:/out/Develop/SDK/Lib
+          cp src/plugin.h D:/out/Develop/SDK/Head
         shell: bash
 
+      #打包主程序
       - name: Upload Main
         uses: actions/upload-artifact@v1.0.0
         with:
           name: CSPBot2.0
           path: D:/out/BuildConfig
 
+      #打包PDB
       - name: Upload PDB
         uses: actions/upload-artifact@v1.0.0
         with:
           name: PDB
           path: D:/out/PDB
 
+      #打包开发套件
+      - name: Upload Devlop
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: Devlop
+          path: D:/out/Devlop
+
       - name: Compress to zip
         run: |
           7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip D:/out/BuildConfig
           7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-PDB.zip D:/out/PDB
+          7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-Devlop.zip D:/out/Devlop
         shell: bash
 
       - name: Release
@@ -125,6 +141,7 @@ jobs:
           files: |
             D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip
             D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-PDB.zip
+            D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-Devlop.zip D:/out/Devlop
         env:
             GITHUB_REPOSITORY: CSPDevTeam/CSPBot2.0
 
