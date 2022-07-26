@@ -129,7 +129,7 @@ jobs:
         run: |
           7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip D:/out/BuildConfig
           7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-PDB.zip D:/out/PDB
-          7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-Devlop.zip D:/out/Devlop
+          7z a D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-Develop.zip D:/out/Develop
         shell: bash
 
       - name: Release
@@ -141,7 +141,7 @@ jobs:
           files: |
             D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}.zip
             D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-PDB.zip
-            D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-Devlop.zip D:/out/Devlop
+            D:/out/zip/CSPBot-${{ steps.vars.outputs.sha_short }}-Develop.zip D:/out/Develop
         env:
             GITHUB_REPOSITORY: CSPDevTeam/CSPBot2.0
 
