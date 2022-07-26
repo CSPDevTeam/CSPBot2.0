@@ -206,26 +206,21 @@ vector<string> GetAdmin() {
 
 //Logger
 cspLogger::cspLogger(string name) {
-	_modelName = name;
-	_logger = new Logger("[" + _modelName + "]");
+	_logger = new Logger("Plugin [" + name + "]");
 }
 
-template <typename... Args>
-void cspLogger::info(const char* msg, Args&&... args) {
-	_logger->info(msg, std::forward<Args>(args)...);
+void cspLogger::info(const char* msg) {
+	_logger->info(msg);
 }
 
-template <typename... Args>
-void cspLogger::warn(const char* msg, Args&&... args) {
-	_logger->warn(msg, std::forward<Args>(args)...);
+void cspLogger::warn(const char* msg) {
+	_logger->warn(msg);
 }
 
-template <typename... Args>
-void cspLogger::error(const char* msg, Args&&... args) {
-	_logger->error(msg, std::forward<Args>(args)...);
+void cspLogger::error(const char* msg) {
+	_logger->error(msg);
 }
 
-template <typename... Args>
-void cspLogger::debug(const char* msg, Args&&... args) {
-	_logger->debug(msg, std::forward<Args>(args)...);
+void cspLogger::debug(const char* msg) {
+	_logger->debug(msg);
 }

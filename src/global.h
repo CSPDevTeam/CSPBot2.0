@@ -9,7 +9,6 @@
 #include <filesystem>
 #include <Windows.h>
 #include <map>
-#include "plugin.h"
 
 using std::queue;
 using std::string;
@@ -27,6 +26,15 @@ class Logger;
 class ConfigReader;
 
 enum class EventCode;
+
+#ifdef CSPBot_EXPORTS
+#define CSPAPI __declspec(dllexport)
+#else
+#define CSPAPI __declspec(dllimport)
+#endif
+
+typedef void (*CommandCallback)(std::vector<std::string> args);
+typedef void (*EventCallback)(std::unordered_map<std::string, std::string> data);
 
 // Type
 struct Version {
@@ -75,7 +83,7 @@ inline Server* g_server;
 inline Mirai* g_mirai;
 inline WsClient* g_wsc;
 inline CommandAPI* g_cmd_api;
-inline queue<string> g_queue;
+inline CSPAPI queue<string> g_queue;
 
 inline unordered_map<EventCode, vector<EventCallback>> g_cb_functions;
 inline unordered_map<string, vector<CommandCallback>> g_command;
@@ -88,7 +96,7 @@ extern Logger g_mirai_logger;
 extern Logger g_plugin_logger;
 
 
-extern ConfigReader g_config;
+extern CSPAPI ConfigReader g_config;
 extern ConfigReader g_player;
 extern ConfigReader g_event;
 extern ConfigReader g_regular;

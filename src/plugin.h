@@ -34,6 +34,10 @@ enum class EventCode {
 	onBinded,
 	onUnBinded,
 };
+//命令回调
+typedef void (*CommandCallback)(std::vector<std::string> args);
+//事件监听
+typedef void (*EventCallback)(std::unordered_map<std::string, std::string> data);
 #endif
 
 //窗口类型
@@ -67,14 +71,6 @@ enum button_Type {
 	RestoreDefaults = 0x08000000,
 };
 
-//命令回调
-typedef void(*CommandCallback)(std::vector<std::string> args);
-//事件监听
-typedef void (*EventCallback)(std::unordered_map<std::string,std::string> data);
-
-//导出Logger
-class CSPAPI cspLogger;
-
 //向外导出
 CSPAPI bool runCommand(const string& cmd);
 CSPAPI void SendGroupMsg(const string& group, const string& msg);
@@ -94,19 +90,14 @@ CSPAPI std::vector<std::string> GetGroup();
 CSPAPI std::vector<std::string> GetAdmin();
 
 //导出Logger
-class cspLogger {
+class CSPAPI cspLogger {
 public:
 	cspLogger(string name);
-	template <typename... Args>
-	CSPAPI void info(const char* msg, Args&&... args);
-	template <typename... Args>
-	CSPAPI void warn(const char* msg, Args&&... args);
-	template <typename... Args>
-	CSPAPI void error(const char* msg, Args&&... args);
-	template <typename... Args>
-	CSPAPI void debug(const char* msg, Args&&... args);
+	void info(const char* msg);
+	void warn(const char* msg);
+	void error(const char* msg);
+	void debug(const char* msg);
 
 private:
-	string _modelName;
 	Logger* _logger;
 };

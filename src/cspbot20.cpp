@@ -553,8 +553,8 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 	}
 	EventCode ct = event_code.value();
 	bool ret = 0;
-	for (auto i : g_cb_functions[ct]) {
-		((void (*)())i)(args);
+	for (auto &i : g_cb_functions[ct]) {
+		i(args);
 	}
 	// Event Callbacker
 	EventCallbacker ecb(ct);
