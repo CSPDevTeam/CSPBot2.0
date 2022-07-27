@@ -74,7 +74,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source File\System</Filter>
     </ClCompile>
-    <ClCompile Include="src\pluginsApi.cpp">
+    <ClCompile Include="src\plugins_api.cpp">
       <Filter>Source File\Plugins</Filter>
     </ClCompile>
     <ClCompile Include="src\command.cpp">
@@ -200,7 +200,7 @@
     <ClCompile Include="src\fmt\os.cc">
       <Filter>Source File\fmt</Filter>
     </ClCompile>
-    <ClCompile Include="src\pluginManager.cpp">
+    <ClCompile Include="src\plugin_manager.cpp">
       <Filter>Source File\Plugins</Filter>
     </ClCompile>
   </ItemGroup>
@@ -319,13 +319,10 @@
     <ClInclude Include="include\magic_enum.hpp">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="src\pluginManager.h">
+    <ClInclude Include="src\plugin_manager.h">
       <Filter>Header File\Plugins</Filter>
     </ClInclude>
     <ClInclude Include="src\plugin.h">
-      <Filter>Header File\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="pluginInfo.h">
       <Filter>Header File\Plugins</Filter>
     </ClInclude>
   </ItemGroup>

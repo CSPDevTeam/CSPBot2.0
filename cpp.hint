@@ -24,4 +24,10 @@
 #define QT_WARNING_DISABLE_DEPRECATED
 #define vmdispatch(x) goto *disptab[x];
 #define vmdispatch(o) switch(o)
-#define MAGIC_ENUM_FOR_EACH_256
+#define MAGIC_ENUM_FOR_EACH_256#define FMT_MODULE_EXPORT
+#define FMT_MODULE_EXPORT_BEGIN
+#define FMT_MODULE_EXPORT_BEGIN export {
+#define FMT_MODULE_EXPORT
+#define FMT_CONSTEXPR
+#define FMT_END_DETAIL_NAMESPACE }
+#define FMT_END_DETAIL_NAMESPACE } export {

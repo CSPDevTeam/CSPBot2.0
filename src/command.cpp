@@ -3,7 +3,6 @@
 #include "cspbot20.h"
 #include "helper.h"
 #include "ws_client.h"
-#include "pluginManager.h"
 #include "helper.h"
 #include "server.h"
 #include "global.h"

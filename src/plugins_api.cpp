@@ -1,4 +1,4 @@
-﻿#include "pluginManager.h"
+﻿#include "plugin_manager.h"
 #include "global.h"
 #include "server.h"
 #include "config_reader.h"
@@ -23,17 +23,21 @@ bool ThreadMirai(string cbe, StringMap qm) {
 		string group = qm.at("group");
 		string msg = qm.at("msg");
 		g_mirai->sendGroupMsg(group, msg, false);
-	} else if (type == "sendAllGroup") {
+	}
+	else if (type == "sendAllGroup") {
 		string msg = qm.at("msg");
 		g_mirai->sendAllGroupMsg(msg, false);
-	} else if (type == "recallMsg") {
+	}
+	else if (type == "recallMsg") {
 		string target = qm.at("target");
 		g_mirai->recallMsg(target, false);
-	} else if (type == "App") {
+	}
+	else if (type == "App") {
 		string group = qm.at("group");
 		string code = qm.at("code");
 		g_mirai->send_app(group, code);
-	} else if (type == "sendPacket") {
+	}
+	else if (type == "sendPacket") {
 		string code = qm.at("packet");
 		g_mirai->SendPacket(code);
 	}
@@ -87,7 +91,8 @@ string MotdJE(string host) {
 	auto match = regex.match(QString::fromStdString(host));
 	if (match.hasMatch()) {
 		return Motd::motdje(host);
-	} else {
+	}
+	else {
 		return "{}";
 	}
 }
@@ -97,7 +102,8 @@ string MotdBE(string host) {
 	auto matchs = regex.match(QString::fromStdString(host));
 	if (matchs.hasMatch()) {
 		return Motd::motdbe(host);
-	} else {
+	}
+	else {
 		return "{}";
 	}
 }
@@ -117,36 +123,35 @@ button_Type ShowTipWindow(window_Type type, string title, string content, const 
 	switch (type) {
 		case information:
 			Choosedbtn = QMessageBox::information(
-				g_main_window,
-				QString::fromStdString(title),
-				QString::fromStdString(content),
-				btn);
+			    g_main_window,
+			    QString::fromStdString(title),
+			    QString::fromStdString(content),
+			    btn);
 			break;
 		case question:
 			Choosedbtn = QMessageBox::question(
-				g_main_window,
-				QString::fromStdString(title),
-				QString::fromStdString(content),
-				btn);
+			    g_main_window,
+			    QString::fromStdString(title),
+			    QString::fromStdString(content),
+			    btn);
 			break;
 		case warning:
 			Choosedbtn = QMessageBox::warning(
-				g_main_window,
-				QString::fromStdString(title),
-				QString::fromStdString(content),
-				btn);
+			    g_main_window,
+			    QString::fromStdString(title),
+			    QString::fromStdString(content),
+			    btn);
 			break;
 		case critical:
 			Choosedbtn = QMessageBox::critical(
-				g_main_window,
-				QString::fromStdString(title),
-				QString::fromStdString(content),
-				btn);
+			    g_main_window,
+			    QString::fromStdString(title),
+			    QString::fromStdString(content),
+			    btn);
 			break;
 		default:
 			break;
 	}
-
 
 	//返回值
 	return button_Type(Choosedbtn);
@@ -156,12 +161,12 @@ button_Type ShowTipWindow(window_Type type, string title, string content, const 
 
 bool RegisterCommand(string cmd, CommandCallback cbf) {
 	if (g_command.find(cmd) != g_command.end() &&
-		cmd != "bind" &&
-		cmd != "unbind" &&
-		cmd != "motdbe" &&
-		cmd != "motdje" &&
-		cmd != "start" &&
-		cmd != "stop") {
+	    cmd != "bind" &&
+	    cmd != "unbind" &&
+	    cmd != "motdbe" &&
+	    cmd != "motdje" &&
+	    cmd != "start" &&
+	    cmd != "stop") {
 		return false;
 		throw std::runtime_error("Invalid command:" + cmd);
 	}
@@ -204,7 +209,7 @@ vector<string> GetAdmin() {
 	return admin;
 }
 
-//Logger
+// Logger
 cspLogger::cspLogger(string name) {
 	_logger = new Logger("Plugin [" + name + "]");
 }

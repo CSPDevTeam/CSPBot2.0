@@ -3,7 +3,7 @@
 #include "config_reader.h"
 #include "logger.h"
 #include "message_box.h"
-#include "pluginManager.h"
+//#include "plugin_manager.h"
 #include "plugin.h"
 
 #pragma comment(lib, "dbghelp.lib")
@@ -45,7 +45,7 @@ bool InitConfig() {
 	return s_config_ret && s_player_ret && s_event_ret && s_regular_ret;
 }
 
-LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException); //开启CrashLogger
+LONG ApplicationCrashHandler(EXCEPTION_POINTERS* pException);//开启CrashLogger
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
 int main(int argc, char* argv[]) {
@@ -89,13 +89,12 @@ int main(int argc, char* argv[]) {
 
 	//退出
 	int ret = a.exec();
-	
+
 	//释放内存
 	g_cmd_api->deleteLater();
 	g_mirai->deleteLater();
 	g_wsc->deleteLater();
 	g_main_window->deleteLater();
-	
-	
+
 	return ret;
 }

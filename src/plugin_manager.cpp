@@ -1,4 +1,4 @@
-﻿#include "pluginManager.h"
+﻿#include "plugin_manager.h"
 #include "logger.h"
 #include "helper.h"
 #include <Windows.h>
@@ -11,12 +11,12 @@ using namespace std;
 
 // Version
 Version::Version(int major, int minor, int revision, Status status)
-	: major(major), minor(minor), revision(revision), status(status) {
+    : major(major), minor(minor), revision(revision), status(status) {
 }
 
 bool Version::operator<(Version b) {
 	return major < b.major || (major == b.major && minor < b.minor) ||
-		(major == b.major && minor == b.minor && revision < b.revision);
+	    (major == b.major && minor == b.minor && revision < b.revision);
 }
 
 bool Version::operator==(Version b) {
@@ -104,15 +104,15 @@ Plugin* plugin::getPlugin(HMODULE handle) {
 
 //注册插件
 bool plugin::registerPlugin(HMODULE handle, std::string name, std::string desc, Version version, std::map<std::string, std::string> others) {
-	if (handle != nullptr) // DLL Plugin
+	if (handle != nullptr)// DLL Plugin
 	{
 		if (getPlugin(handle) != nullptr) {
 			for (auto& data : g_plugins) {
 				return data.second.handle == handle;
 			}
-		} 
+		}
 		else if (getPlugin(name) != nullptr) {
-			return false; // 拒绝覆盖他人的数据
+			return false;// 拒绝覆盖他人的数据
 		}
 	}
 
@@ -122,7 +122,8 @@ bool plugin::registerPlugin(HMODULE handle, std::string name, std::string desc, 
 	try {
 		plugin.filePath = filesystem::path(helper::str2wstr(others.at("PluginFilePath"))).lexically_normal().u8string();
 		others.erase("PluginFilePath");
-	} catch (...) {
+	}
+	catch (...) {
 		if (handle)
 			plugin.filePath = GetModulePath(handle);
 	}
@@ -136,7 +137,7 @@ bool plugin::load_plugin(string pluginFilePath, bool isHotLoad) {
 		filesystem::path path(filesystem::path(pluginFilePath).lexically_normal());
 		string file_name = path.filename().u8string();
 		string file_ext = path.extension().u8string();
-		
+
 		if (file_ext != ".dll") {
 			return false;
 		}
@@ -150,40 +151,41 @@ bool plugin::load_plugin(string pluginFilePath, bool isHotLoad) {
 				}
 				return false;
 			}
-		} else {
+		}
+		else {
 			g_plugin_logger.error("Fail to load the plugin {}!", file_name);
 			return false;
 		}
-		
+
 		//调用onPostInit
 		if (!getPlugin(lib)) {
 			return false;
 		}
-		
-		//Call onPostInit
+
+		// Call onPostInit
 		auto fn = GetProcAddress(getPlugin(lib)->handle, "onPostInit");
 		if (fn) {
 			try {
 				((void (*)())fn)();
 				return true;
-			} 
+			}
 			catch (std::exception& e) {
 				g_plugin_logger.error("Plugin <{}> throws an std::exception in onPostInit", file_name);
 				g_plugin_logger.error("Exception: {}", e.what());
 				g_plugin_logger.error("Fail to init this plugin!");
 				return false;
-			} 
+			}
 			catch (...) {
 				g_plugin_logger.error("Plugin <{}> throws an exception in onPostInit", file_name);
 				g_plugin_logger.error("Fail to init this plugin!");
 				return false;
 			}
-		} 
-		else{
+		}
+		else {
 			g_plugin_logger.error("Fail to get the initialize point of the plugin {}!", file_name);
 			return false;
 		}
-		
+
 		return true;
 	}
 	catch (const std::exception& e) {

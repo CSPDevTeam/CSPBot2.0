@@ -5,7 +5,6 @@
 #include "logger.h"
 #include "ws_client.h"
 #include "regular_edit.h"
-#include "pluginManager.h"
 #include <QInputDialog>
 #include "Event.h"
 #include "message_box.h"
@@ -43,7 +42,8 @@ void CSPBot::slotSaveConsole() {
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 		msgbox::ShowError("日志文件保存失败!");
-	} else {
+	}
+	else {
 		QTextStream stream(&file);
 		stream << ui.botconsole->toPlainText();
 		stream.flush();
@@ -77,7 +77,8 @@ void CSPBot::slotConnectMirai() {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在连接Mirai...");
 		insertLog(QString::fromStdString(formatLog));
 		g_mirai->connectMirai();
-	} else {
+	}
+	else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在已处于已连接状态.");
 		insertLog(QString::fromStdString(formatLog));
 	}
@@ -88,7 +89,8 @@ void CSPBot::slotDisConnectMirai() {
 	if (g_mirai->logined == false) {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "现在未处于已连接状态.");
 		insertLog(QString::fromStdString(formatLog));
-	} else {
+	}
+	else {
 		string formatLog = fmt::format("<font color=\"#FFCC66\">{} W/Mirai: {}\n</font>", Logger::getTime(), "正在断开Mirai...");
 		insertLog(QString::fromStdString(formatLog));
 		g_wsc->shutdown();
@@ -110,12 +112,14 @@ void CSPBot::slotTimerFunc() {
 	bool flag = true;
 	if (mGetTime == 0) {
 		min = 0;
-	} else {
+	}
+	else {
 		int f = nowTime - mGetTime;
 		if (f < 60) {
 			min = f % 60;
 			flag = false;
-		} else {
+		}
+		else {
 			min = f / 60;
 		}
 	}
@@ -123,10 +127,12 @@ void CSPBot::slotTimerFunc() {
 	if (flag) {
 		if (min > 99) {
 			minString = "99+m";
-		} else {
+		}
+		else {
 			minString = minString + "m";
 		}
-	} else {
+	}
+	else {
 		minString = minString + "s";
 	}
 	// qDebug() << QString::fromStdString(minString);
@@ -136,7 +142,8 @@ void CSPBot::slotTimerFunc() {
 	//////// Mirai ////////
 	if (g_mirai->logined) {
 		ui.websocketStatus->setText("状态: 已连接");
-	} else {
+	}
+	else {
 		ui.websocketStatus->setText("状态: 未连接");
 	}
 
@@ -144,9 +151,9 @@ void CSPBot::slotTimerFunc() {
 	updateRegularData();
 	updatePlayerData();
 	updatePluginData();
-	//InitPlayerTableView();
-	//InitRegularTableView();
-	//InitPluginTableView();
+	// InitPlayerTableView();
+	// InitRegularTableView();
+	// InitPluginTableView();
 }
 
 ///////////////////////////////////////////// Main /////////////////////////////////////////////
@@ -164,30 +171,29 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 
 	//滚动条
 	vector<QScrollBar*> bars = {
-		ui.ServerLog->verticalScrollBar(),
-		ui.botconsole->verticalScrollBar(),
-		ui.playerAdmin->verticalScrollBar(),
-		ui.regularAdmin->verticalScrollBar(),
-		ui.pluginAdmin->verticalScrollBar()
-	};
+	    ui.ServerLog->verticalScrollBar(),
+	    ui.botconsole->verticalScrollBar(),
+	    ui.playerAdmin->verticalScrollBar(),
+	    ui.regularAdmin->verticalScrollBar(),
+	    ui.pluginAdmin->verticalScrollBar()};
 	for (QScrollBar* bar : bars) {
 		setAllScrollbar(bar);
 	}
 
 	//阴影设置
 	vector<QWidget*> buttons = {
-		ui.background,
-		ui.ServerLog,
-		ui.controlWidget,
-		ui.statusWidget,
-		ui.playerAdmin,
-		ui.regularAdmin,
-		ui.pluginAdmin,
-		ui.inputCmd,
-		ui.runCmd,
-		ui.consoleWidget,
-		ui.websocketWidget,
-		ui.regularWidget,
+	    ui.background,
+	    ui.ServerLog,
+	    ui.controlWidget,
+	    ui.statusWidget,
+	    ui.playerAdmin,
+	    ui.regularAdmin,
+	    ui.pluginAdmin,
+	    ui.inputCmd,
+	    ui.runCmd,
+	    ui.consoleWidget,
+	    ui.websocketWidget,
+	    ui.regularWidget,
 	};
 	for (auto bt : buttons) {
 		setGraphics(bt);
@@ -228,24 +234,24 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	connect(ui.stop, &QPushButton::clicked, this, &CSPBot::stopServer);
 	connect(ui.forceStop, &QPushButton::clicked, this, &CSPBot::forceStopServer);
 	connect(ui.clear, &QPushButton::clicked, this, &CSPBot::clear_console);
-	connect(ui.ServerCmd, &QPushButton::clicked, this, &CSPBot::startCmd); //绑定启动cmd
-	connect(ui.runCmd, &QPushButton::clicked, this, &CSPBot::insertCmd); //绑定运行命令
-	connect(this, &CSPBot::signalStartLogger, this, &CSPBot::startLogger); //开启Logger服务
+	connect(ui.ServerCmd, &QPushButton::clicked, this, &CSPBot::startCmd);//绑定启动cmd
+	connect(ui.runCmd, &QPushButton::clicked, this, &CSPBot::insertCmd);  //绑定运行命令
+	connect(this, &CSPBot::signalStartLogger, this, &CSPBot::startLogger);//开启Logger服务
 
 	//绑定快捷键
-	connect(this, &CSPBot::runCommand, this, &CSPBot::insertCmd); //绑定回车输入命令
-	connect(this, &CSPBot::runCmd, ui.ServerCmd, &QPushButton::click); //绑定启动cmd
+	connect(this, &CSPBot::runCommand, this, &CSPBot::insertCmd);     //绑定回车输入命令
+	connect(this, &CSPBot::runCmd, ui.ServerCmd, &QPushButton::click);//绑定启动cmd
 
 	//机器人Console
-	connect(ui.consoleSave, &QPushButton::clicked, this, &CSPBot::slotSaveConsole); //保存日志
+	connect(ui.consoleSave, &QPushButton::clicked, this, &CSPBot::slotSaveConsole);   //保存日志
 	connect(ui.consoleClear, &QPushButton::clicked, this, &CSPBot::slotClearConsole); //清空控制台
-	connect(ui.connect, &QPushButton::clicked, this, &CSPBot::slotConnectMirai); //连接Mirai
-	connect(ui.disConnect, &QPushButton::clicked, this, &CSPBot::slotDisConnectMirai); //断开连接
+	connect(ui.connect, &QPushButton::clicked, this, &CSPBot::slotConnectMirai);      //连接Mirai
+	connect(ui.disConnect, &QPushButton::clicked, this, &CSPBot::slotDisConnectMirai);//断开连接
 
 	//表格
 	connect(ui.regularAdmin, SIGNAL(pressed(QModelIndex)), this, SLOT(clickRegularTable(QModelIndex)));
 	connect(ui.regularAdmin, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClickedRegularTable(QModelIndex)));
-	connect(ui.regularNew, &QPushButton::clicked, this, &CSPBot::newRegular); //新建正则按钮
+	connect(ui.regularNew, &QPushButton::clicked, this, &CSPBot::newRegular);//新建正则按钮
 
 	//////// Debug ////////
 	connect(this, &CSPBot::signalDebug, this, &CSPBot::slotDebug);
@@ -270,13 +276,13 @@ CSPBot::CSPBot(QWidget* parent) : QMainWindow(parent) {
 	ui.botconsole->setReadOnly(true);
 	//设置Logger最大行数
 	ui.ServerLog->document()->setMaximumBlockCount(150);
-	
+
 	/////// Command /////////
 	g_cmd_api = new CommandAPI();
 	connect(g_cmd_api, &CommandAPI::signalStartServer, this, &CSPBot::startServer);
 	connect(g_cmd_api, SIGNAL(signalCommandCallback(QString, StringVector)), this, SLOT(slotCommandCallback(QString, StringVector)));
 	connect(g_cmd_api, SIGNAL(Callback(QString, StringMap)), this, SLOT(slotOtherCallback(QString, StringMap)));
-	
+
 	/////// timer /////////
 	QTimer* timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(slotTimerFunc()));
@@ -306,7 +312,6 @@ void CSPBot::deletePointer() {
 	close();
 }
 
-
 ///////////////////////////////////////////// Style /////////////////////////////////////////////
 void CSPBot::setGraphics(QWidget* bt) {
 	QGraphicsDropShadowEffect* shadow_effect = new QGraphicsDropShadowEffect(this);
@@ -319,56 +324,56 @@ void CSPBot::setGraphics(QWidget* bt) {
 
 void CSPBot::setAllScrollbar(QScrollBar* bar) {
 	bar->setStyleSheet("QScrollBar:vertical"
-					   "{"
-					   "width:8px;"
-					   "background:rgba(0,0,0,0%);"
-					   "margin:0px,0px,0px,0px;"
-					   "padding-top:9px;"
-					   "padding-bottom:9px;"
-					   "}"
-					   "QScrollBar::handle:vertical"
-					   "{"
-					   "width:8px;"
-					   "background:rgba(0,0,0,25%);"
-					   " border-radius:4px;"
-					   "min-height:20;"
-					   "}"
-					   "QScrollBar::handle:vertical:hover"
-					   "{"
-					   "width:8px;"
-					   "background:rgba(0,0,0,50%);"
-					   " border-radius:4px;"
-					   "min-height:20;"
-					   "}"
-					   "QScrollBar::add-line:vertical"
-					   "{"
-					   "height:9px;width:8px;"
-					   "border-image:url(:/a/Images/a/3.png);"
-					   "subcontrol-position:bottom;"
-					   "}"
-					   "QScrollBar::sub-line:vertical"
-					   "{"
-					   "height:9px;width:8px;"
-					   "border-image:url(:/a/image/a/1.png);"
-					   "subcontrol-position:top;"
-					   "}"
-					   "QScrollBar::add-line:vertical:hover"
-					   "{"
-					   "height:9px;width:8px;"
-					   "border-image:url(:/a/image/a/4.png);"
-					   "subcontrol-position:bottom;"
-					   "}"
-					   "QScrollBar::sub-line:vertical:hover"
-					   "{"
-					   "height:9px;width:8px;"
-					   "border-image:url(:/a/image/a/2.png);"
-					   "subcontrol-position:top;"
-					   "}"
-					   "QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical"
-					   "{"
-					   "background:rgba(0,0,0,10%);"
-					   "border-radius:4px;"
-					   "}");
+	                   "{"
+	                   "width:8px;"
+	                   "background:rgba(0,0,0,0%);"
+	                   "margin:0px,0px,0px,0px;"
+	                   "padding-top:9px;"
+	                   "padding-bottom:9px;"
+	                   "}"
+	                   "QScrollBar::handle:vertical"
+	                   "{"
+	                   "width:8px;"
+	                   "background:rgba(0,0,0,25%);"
+	                   " border-radius:4px;"
+	                   "min-height:20;"
+	                   "}"
+	                   "QScrollBar::handle:vertical:hover"
+	                   "{"
+	                   "width:8px;"
+	                   "background:rgba(0,0,0,50%);"
+	                   " border-radius:4px;"
+	                   "min-height:20;"
+	                   "}"
+	                   "QScrollBar::add-line:vertical"
+	                   "{"
+	                   "height:9px;width:8px;"
+	                   "border-image:url(:/a/Images/a/3.png);"
+	                   "subcontrol-position:bottom;"
+	                   "}"
+	                   "QScrollBar::sub-line:vertical"
+	                   "{"
+	                   "height:9px;width:8px;"
+	                   "border-image:url(:/a/image/a/1.png);"
+	                   "subcontrol-position:top;"
+	                   "}"
+	                   "QScrollBar::add-line:vertical:hover"
+	                   "{"
+	                   "height:9px;width:8px;"
+	                   "border-image:url(:/a/image/a/4.png);"
+	                   "subcontrol-position:bottom;"
+	                   "}"
+	                   "QScrollBar::sub-line:vertical:hover"
+	                   "{"
+	                   "height:9px;width:8px;"
+	                   "border-image:url(:/a/image/a/2.png);"
+	                   "subcontrol-position:top;"
+	                   "}"
+	                   "QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical"
+	                   "{"
+	                   "background:rgba(0,0,0,10%);"
+	                   "border-radius:4px;"
+	                   "}");
 }
 
 QPixmap PixmapToRound(QPixmap& src, int radius);
@@ -390,7 +395,7 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
 	QUrl url(szUrl);
 	QNetworkAccessManager manager;
 	QEventLoop loop;
-	//qDebug() << "Reading picture form " << url;
+	// qDebug() << "Reading picture form " << url;
 	QNetworkReply* reply = manager.get(QNetworkRequest(url));
 	//请求结束并下载完成后，退出子事件循环
 	QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
@@ -401,8 +406,9 @@ void CSPBot::setUserImage(QString qqNum, QString qqNick) {
 	QPixmap pixmap;
 	pixmap.loadFromData(jpegData);
 	if (!pixmap.isNull()) {
-		ui.userImage->setPixmap(PixmapToRound(pixmap, 45)); // 你在QLabel显示图片
-	} else {
+		ui.userImage->setPixmap(PixmapToRound(pixmap, 45));// 你在QLabel显示图片
+	}
+	else {
 		ui.userImage->setText("图片加载错误");
 	}
 
@@ -419,7 +425,7 @@ QPixmap PixmapToRound(QPixmap& src, int radius) {
 	QSize size2(radius * 2, radius * 2);
 	QBitmap mask(size);
 	QPainter painter(&mask);
-	painter.setRenderHints(QPainter::SmoothPixmapTransform); //消锯齿
+	painter.setRenderHints(QPainter::SmoothPixmapTransform);//消锯齿
 	painter.setRenderHints(QPainter::Antialiasing);
 	painter.setRenderHints(QPainter::TextAntialiasing);
 	painter.translate(0, 0);
@@ -434,20 +440,24 @@ QPixmap PixmapToRound(QPixmap& src, int radius) {
 
 ///////////////////////////////////////////// Basic /////////////////////////////////////////////
 void CSPBot::switchPage() {
-	QPushButton* button = qobject_cast<QPushButton*>(sender()); //得到按下的按钮的指针
+	QPushButton* button = qobject_cast<QPushButton*>(sender());//得到按下的按钮的指针
 	QPushButton* btns[5] = {ui.mainPage, ui.playerPage, ui.pluginPage, ui.regularPage, ui.logPage};
 	for (auto i : btns) {
 		i->setStyleSheet("QPushButton{background-color:#f0f3f8;color:#666666;border-radius:10px;qproperty-iconSize: 32px 32px;}QPushButton:hover{background-color:#e0e6ee;border-radius:10px;};");
 	}
 	if (button == ui.mainPage) {
 		ui.main->setCurrentIndex(0);
-	} else if (button == ui.playerPage) {
+	}
+	else if (button == ui.playerPage) {
 		ui.main->setCurrentIndex(1);
-	} else if (button == ui.regularPage) {
+	}
+	else if (button == ui.regularPage) {
 		ui.main->setCurrentIndex(2);
-	} else if (button == ui.pluginPage) {
+	}
+	else if (button == ui.pluginPage) {
 		ui.main->setCurrentIndex(3);
-	} else if (button == ui.logPage) {
+	}
+	else if (button == ui.logPage) {
 		ui.main->setCurrentIndex(4);
 	}
 	button->setStyleSheet("background-color:#ccdff8;\ncolor:#666666;\nborder-radius:10px;\nqproperty-iconSize: 32px 32px;\n");
@@ -510,7 +520,8 @@ bool CSPBot::checkClose() {
 			// else {
 			//	return false;
 			// }
-		} else {
+		}
+		else {
 			return false;
 		}
 	}
@@ -553,7 +564,7 @@ bool CSPBot::slotOtherCallback(QString listener, StringMap args) {
 	}
 	EventCode ct = event_code.value();
 	bool ret = 0;
-	for (auto &i : g_cb_functions[ct]) {
+	for (auto& i : g_cb_functions[ct]) {
 		i(args);
 	}
 	// Event Callbacker
@@ -590,7 +601,8 @@ void CSPBot::slotPacketCallback(QString msg) {
 void CSPBot::slotChangeStatus(bool a) {
 	if (a) {
 		ui.ServerStatus->setText("状态: 已启动");
-	} else {
+	}
+	else {
 		ui.ServerStatus->setText("状态: 未启动");
 	}
 };
@@ -599,9 +611,11 @@ void CSPBot::slotChangeStatus(bool a) {
 void CSPBot::slotChLabel(QString title, QString content) {
 	if (title == "world") {
 		ui.ServerWorld->setText("世界:" + content);
-	} else if (title == "g_VERSION") {
+	}
+	else if (title == "g_VERSION") {
 		ui.ServerVersion->setText("版本:" + content);
-	} else if (title == "difficult") {
+	}
+	else if (title == "difficult") {
 		ui.ServerDifficult->setText("难度:" + content);
 	}
 };
@@ -615,7 +629,8 @@ void CSPBot::slotChenableForce(bool a) {
 		ui.start->setEnabled(false);
 		ui.inputCmd->setEnabled(true);
 		ui.runCmd->setEnabled(true);
-	} else {
+	}
+	else {
 		/*ui.change->setText("启动");*/
 		ui.stop->setEnabled(false);
 		ui.start->setEnabled(true);
@@ -669,7 +684,8 @@ void CSPBot::insertCmd() {
 			ui.inputCmd->setText("");
 			g_server->sendCmd(cmd + "\n");
 		}
-	} catch (...) {
+	}
+	catch (...) {
 	}
 }
 
@@ -687,7 +703,8 @@ void CSPBot::slotDebug() {
 	if (text == "crash") {
 		int* x = 0;
 		*x = 1;
-	} else if (text == "cmd") {
+	}
+	else if (text == "cmd") {
 		emit runCommand();
 	}
 }
@@ -696,7 +713,8 @@ void CSPBot::slotDebug() {
 void CSPBot::keyPressEvent(QKeyEvent* e) {
 	if (e->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier) && e->key() == Qt::Key_C) {
 		emit runCmd();
-	} else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
+	}
+	else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
 		emit runCommand();
 	}
 	// DEBUG调试器
@@ -708,7 +726,9 @@ void CSPBot::keyPressEvent(QKeyEvent* e) {
 ///////////////////////////////////////////// Table /////////////////////////////////////////////
 void CSPBot::InitPlayerTableView() {
 	QStringList strHeader;
-	strHeader << "玩家名称" << "玩家Xuid" << "玩家QQ号";
+	strHeader << "玩家名称"
+	          << "玩家Xuid"
+	          << "玩家QQ号";
 	Player_model = new QStandardItemModel();
 	Player_model->setHorizontalHeaderLabels(strHeader);
 	Player_model->setColumnCount(strHeader.size());
@@ -724,7 +744,10 @@ void CSPBot::InitPlayerTableView() {
 
 void CSPBot::InitRegularTableView() {
 	QStringList strHeader;
-	strHeader << "正则" << "来源" << "执行" << "权限";
+	strHeader << "正则"
+	          << "来源"
+	          << "执行"
+	          << "权限";
 	Regular_model = new QStandardItemModel();
 	Regular_model->setHorizontalHeaderLabels(strHeader);
 	Regular_model->setColumnCount(strHeader.size());
@@ -740,7 +763,9 @@ void CSPBot::InitRegularTableView() {
 
 void CSPBot::InitPluginTableView() {
 	QStringList strHeader;
-	strHeader << "插件" << "介绍" << "版本";
+	strHeader << "插件"
+	          << "介绍"
+	          << "版本";
 	Plugin_model = new QStandardItemModel();
 	Plugin_model->setHorizontalHeaderLabels(strHeader);
 	Plugin_model->setColumnCount(strHeader.size());
@@ -755,8 +780,8 @@ void CSPBot::InitPluginTableView() {
 }
 
 //选中自动选中该行
-void CSPBot::clickRegularTable(QModelIndex index) { 
-	ui.regularAdmin->selectRow(index.row()); 
+void CSPBot::clickRegularTable(QModelIndex index) {
+	ui.regularAdmin->selectRow(index.row());
 }
 
 void CSPBot::doubleClickedRegularTable(QModelIndex index) {
@@ -778,9 +803,11 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	regularAction regular_action;
 	if (Action_type == "<<") {
 		regular_action = regularAction::Console;
-	} else if (Action_type == ">>") {
+	}
+	else if (Action_type == ">>") {
 		regular_action = regularAction::Group;
-	} else {
+	}
+	else {
 		regular_action = regularAction::Command;
 	};
 
@@ -792,7 +819,8 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 	transform(mFrom.begin(), mFrom.end(), mFrom.begin(), ::tolower);
 	if (mFrom == "group") {
 		regular_from = regularFrom::group;
-	} else {
+	}
+	else {
 		regular_from = regularFrom::console;
 	};
 
@@ -803,49 +831,49 @@ void CSPBot::doubleClickedRegularTable(QModelIndex index) {
 
 ///////////////////////////////////////////// Update Table /////////////////////////////////////////////
 void CSPBot::updateRegularData() {
-	int line_num = static_cast<int>(g_regular.raw().size()); //行数
-	ui.regularAdmin->setUpdatesEnabled(false); //暂停界面刷新
+	int line_num = static_cast<int>(g_regular.raw().size());//行数
+	ui.regularAdmin->setUpdatesEnabled(false);              //暂停界面刷新
 	QAbstractItemModel* s_model = ui.regularAdmin->model();
 	if (s_model == nullptr) {
 		return;
 	}
-	s_model->removeRows(0, s_model->rowCount()); //删除所有行
-	s_model->insertRows(0, line_num); //添加行
-	
+	s_model->removeRows(0, s_model->rowCount());//删除所有行
+	s_model->insertRows(0, line_num);           //添加行
+
 	int in = 0;
 	for (auto i : g_regular.raw()) {
 		QModelIndex index1 = s_model->index(in, 0);
 		QModelIndex index2 = s_model->index(in, 1);
 		QModelIndex index3 = s_model->index(in, 2);
 		QModelIndex index4 = s_model->index(in, 3);
-		
+
 		//设置数据
 		s_model->setData(index1, QString::fromStdString(i["Regular"].as<string>()));
 		s_model->setData(index2, QString::fromStdString(i["From"].as<string>()));
 		s_model->setData(index3, QString::fromStdString(i["Action"].as<string>()));
 		s_model->setData(index4, QString::fromStdString(i["Permissions"].as<bool>() ? "是" : "否"));
-		
+
 		//设置居中
 		Regular_model->item(in, 0)->setTextAlignment(Qt::AlignCenter);
 		Regular_model->item(in, 1)->setTextAlignment(Qt::AlignCenter);
 		Regular_model->item(in, 2)->setTextAlignment(Qt::AlignCenter);
 		Regular_model->item(in, 3)->setTextAlignment(Qt::AlignCenter);
-		
+
 		in++;
 	}
-	
-	ui.regularAdmin->setUpdatesEnabled(true); //恢复界面刷新
+
+	ui.regularAdmin->setUpdatesEnabled(true);//恢复界面刷新
 }
 
 void CSPBot::updatePlayerData() {
-	int line_num = static_cast<int>(g_player.raw().size()); //行数
-	ui.playerAdmin->setUpdatesEnabled(false); //暂停界面刷新
+	int line_num = static_cast<int>(g_player.raw().size());//行数
+	ui.playerAdmin->setUpdatesEnabled(false);              //暂停界面刷新
 	QAbstractItemModel* s_model = ui.playerAdmin->model();
 	if (s_model == nullptr) {
 		return;
 	}
-	s_model->removeRows(0, s_model->rowCount()); //删除所有行
-	s_model->insertRows(0, line_num); //添加行
+	s_model->removeRows(0, s_model->rowCount());//删除所有行
+	s_model->insertRows(0, line_num);           //添加行
 
 	int in = 0;
 	for (auto i : g_player.raw()) {
@@ -862,25 +890,25 @@ void CSPBot::updatePlayerData() {
 		Player_model->item(in, 0)->setTextAlignment(Qt::AlignCenter);
 		Player_model->item(in, 1)->setTextAlignment(Qt::AlignCenter);
 		Player_model->item(in, 2)->setTextAlignment(Qt::AlignCenter);
-		
+
 		in++;
 	}
 
-	ui.playerAdmin->setUpdatesEnabled(true); //恢复界面刷新
+	ui.playerAdmin->setUpdatesEnabled(true);//恢复界面刷新
 }
 
 void CSPBot::updatePluginData() {
-	int line_num = static_cast<int>(g_plugins.size()); //行数
-	ui.pluginAdmin->setUpdatesEnabled(false); //暂停界面刷新
+	int line_num = static_cast<int>(g_plugins.size());//行数
+	ui.pluginAdmin->setUpdatesEnabled(false);         //暂停界面刷新
 	QAbstractItemModel* s_model = ui.pluginAdmin->model();
 	if (s_model == nullptr) {
 		return;
 	}
-	s_model->removeRows(0, s_model->rowCount()); //删除所有行
-	s_model->insertRows(0, line_num); //添加行
+	s_model->removeRows(0, s_model->rowCount());//删除所有行
+	s_model->insertRows(0, line_num);           //添加行
 
 	int in = 0;
-	for (auto &i : g_plugins) {
+	for (auto& i : g_plugins) {
 		QModelIndex index1 = s_model->index(in, 0);
 		QModelIndex index2 = s_model->index(in, 1);
 		QModelIndex index3 = s_model->index(in, 2);
@@ -898,9 +926,8 @@ void CSPBot::updatePluginData() {
 		in++;
 	}
 
-	ui.pluginAdmin->setUpdatesEnabled(true); //恢复界面刷新
+	ui.pluginAdmin->setUpdatesEnabled(true);//恢复界面刷新
 }
-
 
 ///////////////////////////////////////////// Other Window /////////////////////////////////////////////
 //新建正则
@@ -916,7 +943,7 @@ void CSPBot::showAbout() {
 	QMessageBox msgBox;
 	msgBox.setWindowTitle("关于CSPbot 2.0");
 	msgBox.setText(QString::fromStdString(text));
-	//msgBox.setParent(this);
+	// msgBox.setParent(this);
 	int ret = msgBox.exec();
 	msgBox.deleteLater();
 }
