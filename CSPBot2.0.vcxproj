@@ -65,7 +65,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);CSPBot_EXPORTS;</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4996;4828;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -74,7 +74,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>$(Qt_DEFINES_);%(PreprocessorDefinitions);CSPBot_EXPORTS;</PreprocessorDefinitions>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4996;4828</DisableSpecificWarnings>
       <ExceptionHandling>Sync</ExceptionHandling>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -164,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\magic_enum.hpp" />
+    <ClInclude Include="pluginInfo.h" />
     <ClInclude Include="src\event.h" />
     <ClInclude Include="src\framework.h" />
     <ClInclude Include="src\global.h" />

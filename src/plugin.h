@@ -1,8 +1,5 @@
 ﻿#pragma once
-#include <map>
-#include <Windows.h>
-#include <vector>
-#include <string>
+#include "pluginInfo.h"
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -15,6 +12,7 @@ class Logger;
 #ifdef CSPBot_EXPORTS
 #define CSPAPI __declspec(dllexport)
 enum class EventCode;
+#include "pluginManager.h"
 #else
 #define CSPAPI __declspec(dllimport)
 enum class EventCode {
@@ -34,10 +32,11 @@ enum class EventCode {
 	onBinded,
 	onUnBinded,
 };
-//命令回调
-typedef void (*CommandCallback)(std::vector<std::string> args);
-//事件监听
-typedef void (*EventCallback)(std::unordered_map<std::string, std::string> data);
+namespace plugin {
+CSPAPI Plugin* getPlugin(std::string name); //获取插件
+CSPAPI Plugin* getPlugin(HMODULE handle); //获取插件
+CSPAPI bool registerPlugin(HMODULE handle, std::string name, std::string desc, Version version, std::map<std::string, std::string> others); //注册插件
+} // namespace plugin
 #endif
 
 //窗口类型
@@ -72,22 +71,39 @@ enum button_Type {
 };
 
 //向外导出
-CSPAPI bool runCommand(const string& cmd);
-CSPAPI void SendGroupMsg(const string& group, const string& msg);
-CSPAPI void SendAllGroupMsg(const string& msg);
-CSPAPI void RecallMsg(const string& target);
-CSPAPI void SendApp(const string& group, const string& code);
-CSPAPI void SendPacket(const string& packet);
+CSPAPI bool runCommand(string cmd);
+CSPAPI void SendGroupMsg(string group, string msg);
+CSPAPI void SendAllGroupMsg(string msg);
+CSPAPI void RecallMsg(string target);
+CSPAPI void SendApp(string group, string code);
+CSPAPI void SendPacket(string packet);
 CSPAPI bool SetListener(EventCode evc, EventCallback func);
-CSPAPI std::string MotdJE(const string& host);
-CSPAPI std::string MotdBE(const string& host);
-CSPAPI button_Type ShowTipWindow(window_Type type, const string& title, const string& content, const vector<button_Type>& buttonType);
-CSPAPI bool RegisterCommand(const string& cmd, CommandCallback cbf);
-CSPAPI json QueryInfo(const string& type, const string& arg);
+CSPAPI std::string MotdJE(string host);
+CSPAPI std::string MotdBE(string host);
+CSPAPI button_Type ShowTipWindow(window_Type type, string title, string content, const vector<button_Type>& buttonType);
+CSPAPI bool RegisterCommand(string cmd, CommandCallback cbf);
+CSPAPI json QueryInfo(string type, string arg);
 CSPAPI bool UnbindXbox(string qq);
 CSPAPI bool BindXbox(string name, string qq);
 CSPAPI std::vector<std::string> GetGroup();
 CSPAPI std::vector<std::string> GetAdmin();
+
+// Get Current DLL's module handle
+// (Must be header-only!)
+HMODULE inline GetCurrentModule() {
+	HMODULE hModule = nullptr;
+	if (GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+			(LPCWSTR)GetCurrentModule,
+			&hModule)) {
+		return hModule;
+	}
+	return nullptr;
+}
+
+//注册插件
+inline bool regPlugin(std::string name, std::string desc, Version version, std::map<std::string, std::string> others) {
+	return plugin::registerPlugin(GetCurrentModule(), name, desc, version, others);
+}
 
 //导出Logger
 class CSPAPI cspLogger {

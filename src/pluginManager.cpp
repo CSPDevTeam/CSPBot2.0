@@ -83,14 +83,14 @@ Plugin* GetPlugin_Raw(std::string name) {
 	return nullptr;
 }
 
-Plugin* plugin::plugin_manager::getPlugin(std::string name) {
+Plugin* plugin::getPlugin(std::string name) {
 	auto res = GetPlugin_Raw(name);
 	if (res)
 		return res;
 	return nullptr;
 }
 
-Plugin* plugin::plugin_manager::getPlugin(HMODULE handle) {
+Plugin* plugin::getPlugin(HMODULE handle) {
 	if (!handle)
 		return nullptr;
 
@@ -103,7 +103,7 @@ Plugin* plugin::plugin_manager::getPlugin(HMODULE handle) {
 }
 
 //注册插件
-bool plugin::plugin_manager::registerPlugin(HMODULE handle, std::string name, std::string desc, Version version, std::map<std::string, std::string> others) {
+bool plugin::registerPlugin(HMODULE handle, std::string name, std::string desc, Version version, std::map<std::string, std::string> others) {
 	if (handle != nullptr) // DLL Plugin
 	{
 		if (getPlugin(handle) != nullptr) {
@@ -131,7 +131,7 @@ bool plugin::plugin_manager::registerPlugin(HMODULE handle, std::string name, st
 	return true;
 }
 
-bool plugin::plugin_manager::load_plugin(string pluginFilePath, bool isHotLoad) {
+bool plugin::load_plugin(string pluginFilePath, bool isHotLoad) {
 	try {
 		filesystem::path path(filesystem::path(pluginFilePath).lexically_normal());
 		string file_name = path.filename().u8string();
@@ -197,7 +197,7 @@ bool plugin::plugin_manager::load_plugin(string pluginFilePath, bool isHotLoad) 
 	}
 }
 
-bool plugin::plugin_manager::load_all_plugin() {
+bool plugin::load_all_plugin() {
 	if (!fs::exists(PLUGIN_PATH)) {
 		fs::create_directory(PLUGIN_PATH);
 	}
@@ -216,5 +216,5 @@ bool plugin::plugin_manager::load_all_plugin() {
 }
 
 void plugin::initPluginModel() {
-	plugin::plugin_manager::load_all_plugin();
+	plugin::load_all_plugin();
 }

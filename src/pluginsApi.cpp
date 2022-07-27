@@ -11,7 +11,7 @@
 
 //######################### Server #########################
 
-bool runCommand(const string& cmd) {
+bool runCommand(string cmd) {
 	return g_server->sendCmd(cmd + '\n');
 }
 
@@ -40,33 +40,33 @@ bool ThreadMirai(string cbe, StringMap qm) {
 	return true;
 }
 // Mirai API
-void SendGroupMsg(const string& group, const string& msg) {
+void SendGroupMsg(string group, string msg) {
 	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("msg", msg);
 	ThreadMirai("sendGroup", data);
 }
 
-void SendAllGroupMsg(const string& msg) {
+void SendAllGroupMsg(string msg) {
 	std::unordered_map<string, string> data;
 	data.emplace("msg", msg);
 	ThreadMirai("sendAllGroup", data);
 }
 
-void RecallMsg(const string& target) {
+void RecallMsg(string target) {
 	std::unordered_map<string, string> data;
 	data.emplace("target", target);
 	ThreadMirai("recallMsg", data);
 }
 
-void SendApp(const string& group, const string& code) {
+void SendApp(string group, string code) {
 	std::unordered_map<string, string> data;
 	data.emplace("group", group);
 	data.emplace("code", code);
 	ThreadMirai("App", data);
 }
 
-void SendPacket(const string& packet) {
+void SendPacket(string packet) {
 	std::unordered_map<string, string> data;
 	data.emplace("packet", packet);
 	ThreadMirai("sendPacket", data);
@@ -82,7 +82,7 @@ bool SetListener(EventCode evc, EventCallback func) {
 
 //######################### Motd #########################
 
-string MotdJE(const string& host) {
+string MotdJE(string host) {
 	auto regex = QRegularExpression("(\\w.+):(\\w+)");
 	auto match = regex.match(QString::fromStdString(host));
 	if (match.hasMatch()) {
@@ -92,7 +92,7 @@ string MotdJE(const string& host) {
 	}
 }
 
-string MotdBE(const string& host) {
+string MotdBE(string host) {
 	auto regex = QRegularExpression("(\\w.+):(\\w+)");
 	auto matchs = regex.match(QString::fromStdString(host));
 	if (matchs.hasMatch()) {
@@ -105,7 +105,7 @@ string MotdBE(const string& host) {
 //######################### Window  #########################
 
 //构造弹窗
-button_Type ShowTipWindow(window_Type type, const string& title, const string& content, const vector<button_Type>& buttonType) {
+button_Type ShowTipWindow(window_Type type, string title, string content, const vector<button_Type>& buttonType) {
 	QFlags<QMessageBox::StandardButton> btn;
 	for (button_Type b : buttonType) {
 		QMessageBox::StandardButton s_btn = QMessageBox::StandardButton(b);
@@ -154,7 +154,7 @@ button_Type ShowTipWindow(window_Type type, const string& title, const string& c
 
 //######################### Command #########################
 
-bool RegisterCommand(const string& cmd, CommandCallback cbf) {
+bool RegisterCommand(string cmd, CommandCallback cbf) {
 	if (g_command.find(cmd) != g_command.end() &&
 		cmd != "bind" &&
 		cmd != "unbind" &&
@@ -170,7 +170,7 @@ bool RegisterCommand(const string& cmd, CommandCallback cbf) {
 }
 
 //######################### Player #########################
-json QueryInfo(const string& type, const string& arg) {
+json QueryInfo(string type, string arg) {
 	if (type != "qq" && type != "xuid" && type != "player") {
 		throw std::runtime_error("Invalid type:" + type);
 	}

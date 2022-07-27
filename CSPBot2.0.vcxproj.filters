@@ -325,6 +325,9 @@
     <ClInclude Include="src\plugin.h">
       <Filter>Header File\Plugins</Filter>
     </ClInclude>
+    <ClInclude Include="pluginInfo.h">
+      <Filter>Header File\Plugins</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\cspbot20.h">

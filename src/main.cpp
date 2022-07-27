@@ -54,9 +54,6 @@ int main(int argc, char* argv[]) {
 #endif
 
 	QApplication a(argc, argv);
-	
-	//展示ssl版本
-	//qDebug() << QSslSocket::sslLibraryBuildVersionString();
 
 	//设置缩放
 	qputenv("QT_ENABLE_HIGHDPI_SCALING", "1");
